@@ -1,10 +1,12 @@
 """
 Dialog for assembling and editing Master Test Suites in py-web-tester PySide6 GUI.
 Allows combining multiple Routine Groups and single Routines into a master test suite (suites/<name>.json).
+Supports duplicate items, Up/Down reordering, and item removal.
 """
 
 from typing import List, Optional
 from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit,
     QPushButton, QListWidget, QListWidgetItem, QMessageBox, QGroupBox,
@@ -23,7 +25,7 @@ class SuiteDialog(QDialog):
 
         title = f"Gesamt-Test bearbeiten: {suite_to_edit.get('suite_name')}" if suite_to_edit else "Neuen Gesamt-Test / Suite zusammenstellen"
         self.setWindowTitle(title)
-        self.resize(700, 500)
+        self.resize(740, 520)
 
         self._init_ui()
         self._load_data()
@@ -32,7 +34,7 @@ class SuiteDialog(QDialog):
         layout = QVBoxLayout(self)
 
         # Header Title
-        header = QLabel("Gesamt-Test (Master Test Suite) zusammenstellen")
+        header = QLabel("Gesamt-Test (Master Test Suite) zusammenstellen & anordnen")
         header.setObjectName("HeaderTitle")
         layout.addWidget(header)
 
@@ -69,6 +71,7 @@ class SuiteDialog(QDialog):
 
         self.add_item_btn = QPushButton("Hinzufügen →")
         self.add_item_btn.setObjectName("PrimaryButton")
+        self.add_item_btn.setMinimumWidth(130)
         self.add_item_btn.clicked.connect(self._add_item)
         add_layout.addWidget(self.add_item_btn)
 
@@ -76,22 +79,26 @@ class SuiteDialog(QDialog):
         lists_layout.addWidget(add_box)
 
         # Suite Components List
-        suite_box = QGroupBox("Inhalt des Gesamt-Tests (Ausführungsreihenfolge)")
+        suite_box = QGroupBox("Inhalt des Gesamt-Tests (Ausführungsreihenfolge - Doppelklick zum Entfernen)")
         suite_layout = QVBoxLayout(suite_box)
         self.suite_list = QListWidget()
+        self.suite_list.itemDoubleClicked.connect(self._on_item_double_clicked)
         suite_layout.addWidget(self.suite_list)
 
         # Reorder and remove buttons
         ctrl_layout = QHBoxLayout()
-        self.move_up_btn = QPushButton("▲ Oben")
+        self.move_up_btn = QPushButton("▲ Nach oben")
+        self.move_up_btn.setMinimumWidth(110)
         self.move_up_btn.clicked.connect(self._move_up)
         ctrl_layout.addWidget(self.move_up_btn)
 
-        self.move_down_btn = QPushButton("▼ Unten")
+        self.move_down_btn = QPushButton("▼ Nach unten")
+        self.move_down_btn.setMinimumWidth(110)
         self.move_down_btn.clicked.connect(self._move_down)
         ctrl_layout.addWidget(self.move_down_btn)
 
-        self.remove_btn = QPushButton("Entfernen")
+        self.remove_btn = QPushButton("← Entfernen")
+        self.remove_btn.setMinimumWidth(100)
         self.remove_btn.clicked.connect(self._remove_item)
         ctrl_layout.addWidget(self.remove_btn)
         suite_layout.addLayout(ctrl_layout)
@@ -109,11 +116,18 @@ class SuiteDialog(QDialog):
 
         save_btn = QPushButton("Gesamt-Test Speichern")
         save_btn.setObjectName("AccentButton")
-        save_btn.setStyleSheet("background-color: #a6e3a1; color: #11111b; font-weight: bold;")
+        save_btn.setStyleSheet("background-color: #a6e3a1; color: #11111b; font-weight: bold; padding: 6px 18px;")
         save_btn.clicked.connect(self._save_suite)
         bottom_layout.addWidget(save_btn)
 
         layout.addLayout(bottom_layout)
+
+    def keyPressEvent(self, event: QKeyEvent):
+        if event.key() in (Qt.Key_Delete, Qt.Key_Backspace):
+            if self.suite_list.hasFocus():
+                self._remove_item()
+                return
+        super().keyPressEvent(event)
 
     def _load_data(self):
         self._on_type_changed(0)
@@ -139,6 +153,10 @@ class SuiteDialog(QDialog):
             routines = self.manager.list_routines()
             for r in routines:
                 self.item_combo.addItem(r.get("routine_name"))
+
+    def _on_item_double_clicked(self, item: QListWidgetItem):
+        row = self.suite_list.row(item)
+        self.suite_list.takeItem(row)
 
     def _add_item(self):
         iname = self.item_combo.currentText().strip()

@@ -4,6 +4,7 @@ Features:
 - Header bar with "+ Neue Routine definieren" wizard trigger, search bar, and tag filter.
 - 3 Tab Views: "Einzelne Routinen", "Routinen-Gruppen", "Gesamt-Tests / Suiten".
 - Selection checkboxes & batch operations across ALL 3 tabs (Multi-Selection Run & Multi-Selection Delete).
+- Editing existing Groups & Master Test Suites with duplicate elements, Up/Down reordering, and item removal.
 - Execution benchmark timing comparison column (Original manual baseline duration vs last automated test duration, speedup factor, and timestamp).
 - Standardized German date formatting: "14.08.2026, 19:08 Uhr" across all creation dates and execution logs.
 - Direct opening of generated HTML test reports (report.html / log.html) in default web browser.
@@ -46,7 +47,7 @@ class MainWindow(QMainWindow):
         self.execution_thread: Optional[ExecutionControllerThread] = None
 
         self.setWindowTitle("py-web-tester — Web UI Automation Suite")
-        self.resize(1300, 840)
+        self.resize(1340, 840)
         self.setMinimumSize(1080, 720)
         self.setStyleSheet(DARK_THEME_QSS)
 
@@ -273,7 +274,6 @@ class MainWindow(QMainWindow):
             "Auswahl", "Routinen-Name", "Erstellungsdatum", "Ziel-URL", "Schritte", "Dauer (Aufnahme ➔ Letzter Test)", "Tags", "Aktion"
         ])
         
-        # Configure Header Section Resize Modes to prevent clipping
         header = self.routines_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QHeaderView.Stretch)
@@ -526,6 +526,11 @@ class MainWindow(QMainWindow):
             run_btn.clicked.connect(lambda _, grp=g: self._run_group(grp))
             btn_layout.addWidget(run_btn)
 
+            edit_btn = QPushButton("✏ Bearbeiten")
+            edit_btn.setMinimumWidth(100)
+            edit_btn.clicked.connect(lambda _, gname=gname: self._edit_group(gname))
+            btn_layout.addWidget(edit_btn)
+
             report_btn = QPushButton("📊 Bericht")
             report_btn.setStyleSheet("background-color: #89b4fa; color: #11111b; padding: 4px 8px; font-weight: bold;")
             report_btn.setMinimumWidth(85)
@@ -576,6 +581,11 @@ class MainWindow(QMainWindow):
             run_btn.setMinimumWidth(130)
             run_btn.clicked.connect(lambda _, ste=s: self._run_suite(ste))
             btn_layout.addWidget(run_btn)
+
+            edit_btn = QPushButton("✏ Bearbeiten")
+            edit_btn.setMinimumWidth(100)
+            edit_btn.clicked.connect(lambda _, sname=sname: self._edit_suite(sname))
+            btn_layout.addWidget(edit_btn)
 
             report_btn = QPushButton("📊 Bericht")
             report_btn.setStyleSheet("background-color: #89b4fa; color: #11111b; padding: 4px 8px; font-weight: bold;")
@@ -632,6 +642,20 @@ class MainWindow(QMainWindow):
         dialog = SuiteDialog(self, manager=self.manager)
         dialog.suite_saved_signal.connect(lambda _: self.refresh_all_views())
         dialog.exec()
+
+    def _edit_group(self, group_name: str):
+        grp = self.manager.get_group(group_name)
+        if grp:
+            dialog = GroupDialog(self, manager=self.manager, group_to_edit=grp)
+            dialog.group_saved_signal.connect(lambda _: self.refresh_all_views())
+            dialog.exec()
+
+    def _edit_suite(self, suite_name: str):
+        ste = self.manager.get_suite(suite_name)
+        if ste:
+            dialog = SuiteDialog(self, manager=self.manager, suite_to_edit=ste)
+            dialog.suite_saved_signal.connect(lambda _: self.refresh_all_views())
+            dialog.exec()
 
     def _delete_routine(self, routine_name: str):
         reply = QMessageBox.question(
@@ -945,7 +969,7 @@ class MainWindow(QMainWindow):
         self.stop_btn.setEnabled(False)
         self.next_step_btn.setEnabled(False)
 
-    # Refresh all views so the new timing benchmark results update in tables
+        # Refresh all views so the new timing benchmark results update in tables
         self.refresh_all_views()
 
         if success:

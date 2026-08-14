@@ -1,11 +1,12 @@
 """
 Dialog for creating and editing Routine Groups in py-web-tester PySide6 GUI.
-Allows selecting multiple subroutines from available routines, reordering them,
-and saving them as a named group (groups/<name>.json).
+Allows selecting multiple subroutines (including duplicate routines), reordering them
+with Up/Down buttons, removing subroutines, and saving them as a named group (groups/<name>.json).
 """
 
 from typing import List, Optional
 from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QTextEdit,
     QPushButton, QListWidget, QListWidgetItem, QMessageBox, QGroupBox
@@ -23,7 +24,7 @@ class GroupDialog(QDialog):
 
         title = f"Routinen-Gruppe bearbeiten: {group_to_edit.get('group_name')}" if group_to_edit else "Neue Routinen-Gruppe erstellen"
         self.setWindowTitle(title)
-        self.resize(650, 480)
+        self.resize(720, 520)
 
         self._init_ui()
         self._load_data()
@@ -32,7 +33,7 @@ class GroupDialog(QDialog):
         layout = QVBoxLayout(self)
 
         # Header Title
-        title_text = "Routinen-Gruppe definieren"
+        title_text = "Routinen-Gruppe definieren & anordnen"
         header = QLabel(title_text)
         header.setObjectName("HeaderTitle")
         layout.addWidget(header)
@@ -55,9 +56,10 @@ class GroupDialog(QDialog):
         lists_layout = QHBoxLayout()
 
         # Available Routines List
-        avail_box = QGroupBox("Verfügbare Testroutinen")
+        avail_box = QGroupBox("Verfügbare Testroutinen (Doppelklick zum Hinzufügen)")
         avail_layout = QVBoxLayout(avail_box)
         self.avail_list = QListWidget()
+        self.avail_list.itemDoubleClicked.connect(self._on_avail_double_clicked)
         avail_layout.addWidget(self.avail_list)
         lists_layout.addWidget(avail_box)
 
@@ -65,28 +67,33 @@ class GroupDialog(QDialog):
         btn_box = QVBoxLayout()
         btn_box.addStretch()
         self.add_btn = QPushButton("Hinzufügen →")
+        self.add_btn.setMinimumWidth(110)
         self.add_btn.clicked.connect(self._add_selected)
         btn_box.addWidget(self.add_btn)
 
         self.remove_btn = QPushButton("← Entfernen")
+        self.remove_btn.setMinimumWidth(110)
         self.remove_btn.clicked.connect(self._remove_selected)
         btn_box.addWidget(self.remove_btn)
         btn_box.addStretch()
         lists_layout.addLayout(btn_box)
 
         # Selected Subroutines List
-        selected_box = QGroupBox("In dieser Gruppe enthalten (Reihenfolge)")
+        selected_box = QGroupBox("Enthaltene Subroutinen (Ausführungsreihenfolge)")
         selected_layout = QVBoxLayout(selected_box)
         self.selected_list = QListWidget()
+        self.selected_list.itemDoubleClicked.connect(self._on_selected_double_clicked)
         selected_layout.addWidget(self.selected_list)
 
-        # Reorder buttons
+        # Reorder and remove buttons
         reorder_layout = QHBoxLayout()
         self.move_up_btn = QPushButton("▲ Nach oben")
+        self.move_up_btn.setMinimumWidth(110)
         self.move_up_btn.clicked.connect(self._move_up)
         reorder_layout.addWidget(self.move_up_btn)
 
         self.move_down_btn = QPushButton("▼ Nach unten")
+        self.move_down_btn.setMinimumWidth(110)
         self.move_down_btn.clicked.connect(self._move_down)
         reorder_layout.addWidget(self.move_down_btn)
         selected_layout.addLayout(reorder_layout)
@@ -104,11 +111,18 @@ class GroupDialog(QDialog):
 
         save_btn = QPushButton("Gruppe Speichern")
         save_btn.setObjectName("AccentButton")
-        save_btn.setStyleSheet("background-color: #a6e3a1; color: #11111b; font-weight: bold;")
+        save_btn.setStyleSheet("background-color: #a6e3a1; color: #11111b; font-weight: bold; padding: 6px 18px;")
         save_btn.clicked.connect(self._save_group)
         bottom_layout.addWidget(save_btn)
 
         layout.addLayout(bottom_layout)
+
+    def keyPressEvent(self, event: QKeyEvent):
+        if event.key() in (Qt.Key_Delete, Qt.Key_Backspace):
+            if self.selected_list.hasFocus():
+                self._remove_selected()
+                return
+        super().keyPressEvent(event)
 
     def _load_data(self):
         # Load available routines
@@ -123,6 +137,13 @@ class GroupDialog(QDialog):
             self.desc_edit.setText(self.group_to_edit.get("description", ""))
             for rname in self.group_to_edit.get("routine_names", []):
                 self.selected_list.addItem(QListWidgetItem(rname))
+
+    def _on_avail_double_clicked(self, item: QListWidgetItem):
+        self.selected_list.addItem(QListWidgetItem(item.text()))
+
+    def _on_selected_double_clicked(self, item: QListWidgetItem):
+        row = self.selected_list.row(item)
+        self.selected_list.takeItem(row)
 
     def _add_selected(self):
         selected = self.avail_list.selectedItems()
