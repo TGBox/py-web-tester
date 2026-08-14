@@ -2,7 +2,38 @@
 
 Ein modulares, hochflexibles und skalierbares Test-Framework für automatisierte Webanwendungs-Tests aus der **Nutzerperspektive**.
 
-Baut auf **Robot Framework**, der modernen **Browser Library (Playwright)** und **Python** auf.
+Baut auf **PySide6 (Qt Desktop GUI)**, **Robot Framework**, der modernen **Browser Library (Playwright)** und **Python** auf.
+
+---
+
+## 🖥️ Graphical User Interface (PySide6 GUI)
+
+Das Framework verfügt über eine moderne, interaktive PySide6 Desktop-Benutzeroberfläche:
+
+### GUI starten
+```bash
+python app.py
+# ODER
+python main.py  # Option 1 wählen
+```
+
+### Key Features der GUI
+1. **4-Schritt Routine-Wizard ("Neue Routine definieren")**:
+   - **Metadaten-Eingabe**: Routine-Name, Webseiten-URL, Beschreibung und beliebig viele Tags.
+   - **Interaktive Browser-Aufnahme**: Öffnet Chromium mit HUD-Overlay und Verlust-freier CDP-Event-Erfassung.
+   - **Vorschau & Prüfung**: Tabelle aller erfassten Aktionen, Aktionen-Anzahl und Dauer.
+   - **Speichern & Konvertieren**: Speichert JSON-Trace inkl. Erstellungsdatum (`recorded_at`) und generiert automatisch Robot Framework `.resource` und `.robot` Dateipaare.
+2. **3-Tab Hauptansicht**:
+   - **Einzelne Routinen**: Scrollbare Kartenansicht mit Suchfeld, Tag-Filter, kleinem Erstellungsdatum badge (`DD.MM.YYYY HH:MM`), Aktionen-Anzahl, Dauer und Mehrfachauswahl.
+   - **Routinen-Gruppen**: Beliebige Subroutinen zu wiederverwendbaren Gruppen zusammenstellen (`groups/<name>.json`).
+   - **Gesamt-Tests / Suiten**: Master-Testsuiten aus Gruppen und Einzelroutinen orchestrieren (`suites/<name>.json`).
+3. **Ausführungssteuerung & Modi**:
+   - **Headless / Headed Modus**: Per Umschalter konfigurierbar.
+   - **Geschwindigkeit & Stepping**:
+     - *Normal*: Maximale Geschwindigkeit.
+     - *Slow-Mo Slider*: Stufenlos einstellbare Verzögerung (100 ms – 2000 ms zwischen Schritten).
+     - *Manuell (Schritt-für-Schritt)*: Die Testausführung pausiert vor jedem Schritt. Über den Knopf **"Nächster Schritt"** schalten Sie Aktion für Aktion frei.
+   - **Echtzeit-Log**: Ausklappbares Konsolenfenster für Live-Testprotokolle.
 
 ---
 
@@ -10,36 +41,37 @@ Baut auf **Robot Framework**, der modernen **Browser Library (Playwright)** und 
 
 ```text
 py-web-tester/
-├── run_tests.py                # Python CLI Test Runner & Routine Recorder Entrypoint
-├── record_routine.py           # Eigenständiges CLI-Skript für den interaktiven Routine-Recorder
+├── app.py                      # Einstiegspunkt für die PySide6 Desktop GUI
 ├── main.py                     # Interaktives Konsolenmenü & Haupt-Einstiegspunkt
-├── pyproject.toml              # UV / Python Projekt-Abhängigkeiten
+├── run_tests.py                # Python CLI Test Runner & Routine Recorder Entrypoint
+├── record_routine.py           # Eigenständiges CLI-Skript für den Routine-Recorder
+├── pyproject.toml              # UV / Python Projekt-Abhängigkeiten (Robot, Playwright, PySide6)
+│
+├── gui/                        # PySide6 GUI Paket & Benutzeroberfläche
+│   ├── main_window.py          # Tab-basierte Hauptansicht mit Tag-Filter & Steuerung
+│   ├── routine_wizard.py       # 4-Schritt Modal-Wizard für neue Routinen
+│   ├── group_dialog.py         # Dialog für Subroutinen-Gruppen
+│   ├── suite_dialog.py         # Dialog für Gesamt-Tests (Master Test Suites)
+│   ├── execution_controller.py # Asynchroner QThread Test-Execution Engine
+│   └── theme.py                # QSS Dunkelmodus-Design
 │
 ├── routines/                   # Aufgezeichnete JSON-Interaktionsspuren (Traces)
-│   └── <routine_name>.json
+├── groups/                     # Gespeicherte Routinen-Gruppen
+├── suites/                     # Gespeicherte Master-Testsuiten
 │
-├── variables/                  # Konfigurationen & Umgebungsdaten
-│   └── env_config.py           # URLs, Timeouts, Browser-Optionen, Credentials
-│
-├── libraries/                  # Eigene Python-Klassen (Recorder, Converter & Custom Keywords)
-│   ├── routine_recorder.py     # Interaktiver Browser Recorder mit HUD-Overlay
+├── libraries/                  # Eigene Python-Klassen (Recorder, Converter & Listeners)
+│   ├── routine_manager.py      # Metadaten-Verwaltung, Gruppen, Suiten & Tag-Filterung
+│   ├── step_listener.py        # Robot Listener für Slow-Mo & Schritt-für-Schritt Stepping
+│   ├── routine_recorder.py     # Interaktiver Browser Recorder mit HUD-Overlay & CDP Stream
 │   ├── routine_converter.py    # Konvertiert JSON-Traces in Robot Resource Blöcke
 │   ├── routine_executor.py     # Replay-Logik für aufgezeichnete Routinen
-│   ├── custom_actions.py       # Fachliche Logik, Datenberechnung, Validierungen
-│   └── web_helpers.py          # Hilfsfunktionen (Dateien, JSON, API-Checks)
+│   └── custom_actions.py       # Fachliche Logik, Datenberechnung, Validierungen
 │
 ├── resources/                  # Wiederverwendbare Keywords & Page Objects
 │   ├── common.resource         # Globales Setup/Teardown, Browser-Start
 │   └── page_objects/           # Entwurfsmuster "Page Object Model" (POM)
-│       ├── login_page.resource # Selektoren & Aktionen für Login-Ansichten
-│       └── todo_page.resource  # Selektoren & Aktionen für Task/Todo-Interaktionen
 │
 ├── tests/                      # Ausführbare Test-Suiten & generierte Routine-Tests
-│   ├── 01_smoke_tests.robot    # Schnellchecks & Integrationstests
-│   ├── 02_todo_e2e_tests.robot # Interaktionstests & Workflows
-│   ├── 03_login_tests.robot    # Authentifizierungstests
-│   └── test_<routine>.robot    # Generierte Routine-Tests
-│
 └── results/                    # Generierte Testberichte (HTML-Log & Screenshots)
 ```
 
@@ -53,24 +85,6 @@ Mit dem **Test Block Recorder** können Sie neue Testroutinen interaktiv im Brow
 2. Der Recorder erfasst automatisch alle Event-Spuren, exakte Millisekunden-Zeitstempel und die vollständige DOM-/Seitenstruktur.
 3. Nach Klick auf **STOP RECORDING** (oder `Ctrl+Shift+S`) wird die Interaktionskette abgespeichert und automatisch in einen **wiederverwendbaren Robot Framework Testblock** (`resources/page_objects/<name>.resource`) sowie einen **ausführbaren Test** (`tests/test_<name>.robot`) konvertiert!
 
-### Aufzeichnung starten
-
-#### Option A: Interaktives Konsolen-Menü
-```bash
-python main.py
-# Wählen Sie Option 2, um eine neue Routine aufzuzeichnen
-```
-
-#### Option B: Über `record_routine.py`
-```bash
-python record_routine.py --url https://example.com --name login_flow
-```
-
-#### Option C: Über `run_tests.py`
-```bash
-python run_tests.py --record --record-url https://example.com --record-name checkout_routine
-```
-
 ---
 
 ## 🚀 Schnellstart & Testausführung
@@ -81,55 +95,31 @@ uv sync
 uv run rfbrowser init
 ```
 
-### 2. Tests ausführen
+### 2. GUI oder CLI starten
 
-#### Variante A: Über den Python-Runner
+#### Variante A: Graphical User Interface (GUI)
+```bash
+python app.py
+```
+
+#### Variante B: Über Konsolenmenü
+```bash
+python main.py
+```
+
+#### Variante C: Direkt über CLI Test Runner
 ```bash
 # Alle Tests ausführen
 python run_tests.py
 
-# Nur Smoke-Tests ausführen
+# Nur bestimmten Tag ausführen
 python run_tests.py --tag smoke
-
-# Aufgezeichneten Routine-Test ausführen
-python run_tests.py --suite tests/test_smoke_demo_routine.robot
 
 # Im sichtbaren Browser-Modus (Headed) testen
 python run_tests.py --headed
-```
-
-#### Variante B: Direkt über Robot Framework CLI
-```bash
-python -m robot --pythonpath . --outputdir results tests/
 ```
 
 ### 3. Berichte ansehen
 Nach der Testausführung finden Sie die detaillierten Testberichte unter:
 - `results/report.html` (Zusammenfassung & Status)
 - `results/log.html` (Detail-Protokoll aller Schritte & Fehlerscreenshots)
-
----
-
-## 🛠️ Erweiterungsanleitung: Neue Features & Regeln hinzufügen
-
-### 1. Aufgezeichnete Blöcke in bestehende Tests einbauen
-In `resources/page_objects/<routine_name>.resource` stehen Ihnen die aufgezeichneten Keywords zur Verfügung (z. B. `Execute Routine Login Flow`). Importieren Sie das Resource-File in Ihrer Test-Suite:
-
-```robot
-*** Settings ***
-Resource    ../resources/page_objects/login_flow.resource
-
-*** Test Cases ***
-Mein Komplett-Test
-    Execute Routine Login Flow
-```
-
-### 2. Neues Page Object manuell anlegen (`resources/page_objects/`)
-1. Erstellen Sie eine Datei `resources/page_objects/settings_page.resource`.
-2. Definieren Sie Selektoren im `*** Variables ***`-Block.
-3. Schreiben Sie Keywords im `*** Keywords ***`-Block.
-
-### 3. Neue Python-Aktion/Regel hinzufügen (`libraries/`)
-1. Öffnen Sie `libraries/custom_actions.py`.
-2. Erstellen Sie eine Methode mit `@keyword("Mein Keyword Name")`.
-3. Nutzen Sie das Keyword direkt in allen `.robot`-Dateien!

@@ -1,9 +1,11 @@
 *** Settings ***
 Documentation    Recorded test block routine for 'test'.
 Library          Browser
+Library          ../libraries/visual_hud.py
 
 *** Variables ***
 ${TEST_START_URL}    https://dr.data-al.cloud
+${ACTION_DELAY}                    150ms
 
 
 *** Keywords ***

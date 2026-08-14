@@ -4,7 +4,8 @@ Reads recorded routine JSON files and generates clean, reusable Robot Framework
 resource files (.resource) and executable test suites (.robot).
 Sanitizes selectors, comments, and values to guarantee single-line compliance for Robot Framework syntax.
 Smartly distinguishes input fields (Fill Text) from buttons/links/custom elements (Click).
-Uses resilient IF visibility guards and force-click fallbacks for robust playback of recorded routines.
+Uses resilient IF visibility guards, element readiness checks, and force-click fallbacks.
+Integrates visual pointer and bottom Keystroke HUD overlays during Headed test runs.
 """
 
 import json
@@ -27,9 +28,7 @@ class RoutineConverter:
     def _clean_single_line(self, text: str) -> str:
         if not text:
             return ""
-        # Replace newlines, carriage returns, and tabs with space
         cleaned = text.replace("\r\n", " ").replace("\n", " ").replace("\r", " ").replace("\t", " ")
-        # Collapse whitespace into single space
         return re.sub(r"\s+", " ", cleaned).strip()
 
     def convert_json_to_resource_and_test(self, json_file_path: str | Path) -> Dict[str, str]:
@@ -44,7 +43,6 @@ class RoutineConverter:
         start_url = data.get("start_url", "${BASE_URL}")
         actions = data.get("actions", [])
 
-        # Process and optimize actions
         processed_steps = self._process_actions(actions)
 
         # Build Resource File Content
@@ -68,9 +66,6 @@ class RoutineConverter:
         }
 
     def _process_actions(self, raw_actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """
-        Deduplicates and structures raw captured browser events into high-level Robot Framework steps.
-        """
         steps = []
         i = 0
         n = len(raw_actions)
@@ -97,7 +92,6 @@ class RoutineConverter:
                     })
             elif event_type in ["input", "change"]:
                 if tag in ["INPUT", "TEXTAREA", "SELECT"]:
-                    # Consolidate consecutive inputs on the same input element into one Fill Text step
                     final_val = val
                     j = i + 1
                     while j < n and raw_actions[j].get("event_type") in ["input", "change"]:
@@ -116,7 +110,6 @@ class RoutineConverter:
                         "comment": f"Fill input field '{elem_name}'"
                     })
                 else:
-                    # Non-input elements (buttons, links, custom divs) emitting change -> Click
                     elem_label = self._clean_single_line(text or elem.get("tag") or selector)
                     steps.append({
                         "keyword": "Click",
@@ -152,13 +145,14 @@ class RoutineConverter:
             "*** Settings ***",
             f"Documentation    Recorded test block routine for '{clean_routine_name}'.",
             "Library          Browser",
+            "Library          ../libraries/visual_hud.py",
             "",
             "*** Variables ***",
             f"${{{clean_var_name}_START_URL}}    {start_url}",
+            "${ACTION_DELAY}                    150ms",
             ""
         ]
 
-        # Generate variable selectors
         selectors_dict = {}
         var_count = 1
         for step in steps:
@@ -190,10 +184,20 @@ class RoutineConverter:
                 lines.append(f"    Go To    {step.get('url')}")
             else:
                 var_selector = selectors_dict.get(step["selector"], f'"{step["selector"]}"')
-                lines.append(f"    ${{is_visible}}=    Run Keyword And Return Status    Wait For Elements State    {var_selector}    visible    timeout=3s")
-                lines.append(f"    IF    ${{is_visible}}")
+                lines.append(f"    ${{is_ready}}=    Run Keyword And Return Status    Wait For Elements State    {var_selector}    visible    timeout=3s")
+                lines.append(f"    IF    ${{is_ready}}")
+                
+                # Visual HUD injection & stroke overlay with proper boolean IF check
+                lines.append(f"        IF    $HEADLESS is False or str($HEADLESS).upper() == 'FALSE'")
+                lines.append(f"            Run Keyword And Ignore Error    Inject Visual Pointer And Keystroke HUD")
+                lines.append(f"        END")
+
                 if kw == "Fill Text":
-                    lines.append(f"        Fill Text    {var_selector}    {step.get('value', '')}")
+                    val = step.get('value', '')
+                    lines.append(f"        IF    $HEADLESS is False or str($HEADLESS).upper() == 'FALSE'")
+                    lines.append(f"            Run Keyword And Ignore Error    Show Keystroke Overlay    Eingabe: \"{val}\"")
+                    lines.append(f"        END")
+                    lines.append(f"        Fill Text    {var_selector}    {val}")
                 elif kw == "Click":
                     lines.append(f"        ${{click_ok}}=    Run Keyword And Return Status    Click    {var_selector}")
                     lines.append(f"        IF    not ${{click_ok}}")
@@ -205,7 +209,7 @@ class RoutineConverter:
                     lines.append(f"        Run Keyword And Ignore Error    {kw}    {var_selector}")
                 lines.append(f"    END")
 
-            lines.append("    Sleep    200ms")
+            lines.append("    Sleep    ${ACTION_DELAY}")
 
         return "\n".join(lines) + "\n"
 
