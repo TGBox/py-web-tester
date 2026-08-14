@@ -140,7 +140,8 @@ class RoutineConverter:
     def _generate_resource_content(self, routine_name: str, start_url: str, steps: List[Dict[str, Any]]) -> str:
         clean_routine_name = self._clean_single_line(routine_name)
         kw_name = clean_routine_name.replace("_", " ").replace("-", " ").title()
-        clean_var_name = clean_routine_name.upper().replace("-", "_").replace(" ", "_")
+        raw_var_name = clean_routine_name.upper().replace("-", "_").replace(" ", "_")
+        clean_var_name = re.sub(r'_+', '_', raw_var_name).strip('_')
 
         lines = [
             "*** Settings ***",
@@ -150,7 +151,7 @@ class RoutineConverter:
             "",
             "*** Variables ***",
             f"${{{clean_var_name}_START_URL}}    {start_url}",
-            "${ACTION_DELAY}                    150ms",
+            "${ACTION_DELAY}                    300ms",
             ""
         ]
 
@@ -161,7 +162,7 @@ class RoutineConverter:
             if sel and sel not in selectors_dict:
                 var_name = f"${{SELECTOR_{clean_var_name}_{var_count}}}"
                 selectors_dict[sel] = var_name
-                lines.append(f"{var_name:<35} {sel}")
+                lines.append(f"{var_name:<60}    {sel}")
                 var_count += 1
 
         lines.extend([
@@ -185,22 +186,22 @@ class RoutineConverter:
                 lines.append(f"    Go To    {step.get('url')}")
             else:
                 var_selector = selectors_dict.get(step["selector"], f'"{step["selector"]}"')
-                lines.append(f"    ${{is_ready}}=    Run Keyword And Return Status    Wait For Elements State    {var_selector}    visible    timeout=3s")
-                lines.append(f"    IF    ${{is_ready}}")
+                lines.append(f"    Run Keyword And Ignore Error    Wait For Elements State    {var_selector}    visible    timeout=5s")
+                lines.append(f"    Run Keyword And Ignore Error    Animate Visual Pointer To Element    {var_selector}")
 
                 if kw == "Fill Text":
                     val = step.get('value', '')
-                    lines.append(f"        Fill Text    {var_selector}    {val}")
+                    lines.append(f"    Run Keyword And Ignore Error    Show Keystroke Overlay    Eingabe: \"{val}\"")
+                    lines.append(f"    ${{fill_ok}}=    Run Keyword And Return Status    Fill Text    {var_selector}    {val}")
                 elif kw == "Click":
-                    lines.append(f"        ${{click_ok}}=    Run Keyword And Return Status    Click    {var_selector}")
-                    lines.append(f"        IF    not ${{click_ok}}")
-                    lines.append(f"            Run Keyword And Ignore Error    Click    {var_selector}    force=True")
-                    lines.append(f"        END")
+                    lines.append(f"    ${{click_ok}}=    Run Keyword And Return Status    Click    {var_selector}")
+                    lines.append(f"    IF    not ${{click_ok}}")
+                    lines.append(f"        Run Keyword And Ignore Error    Click    {var_selector}    force=True")
+                    lines.append(f"    END")
                 elif kw == "Scroll To":
-                    lines.append(f"        Run Keyword And Ignore Error    Scroll To    {var_selector}")
+                    lines.append(f"    Run Keyword And Ignore Error    Scroll To    {var_selector}")
                 else:
-                    lines.append(f"        Run Keyword And Ignore Error    {kw}    {var_selector}")
-                lines.append(f"    END")
+                    lines.append(f"    Run Keyword And Ignore Error    {kw}    {var_selector}")
 
             lines.append("    Sleep    ${ACTION_DELAY}")
 

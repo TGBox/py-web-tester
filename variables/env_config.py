@@ -10,8 +10,8 @@ LOGIN_URL = "https://the-internet.herokuapp.com/login"
 
 # Browser Configuration
 BROWSER = "chromium"  # Options: chromium, firefox, webkit
-HEADLESS = True       # Set to False to watch browser interaction visually
-SLOWMO = "0s"         # Delay between actions for debugging e.g. "500ms"
+HEADLESS = False      # Set to False to watch browser interaction visually (mouse cursor & HUD overlay active)
+SLOWMO = "300ms"      # Delay between actions for comfortable visual observation
 TIMEOUT = "10s"       # Default wait timeout for elements
 
 # User Credentials for Demo Login Tests

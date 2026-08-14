@@ -1,0 +1,15 @@
+{"level":"info","time":"2026-08-14T21:05:27.679Z","seq":1,"component":"browser-library","msg":"Listening on 127.0.0.1:57279"}
+{"level":"info","time":"2026-08-14T21:05:27.905Z","seq":2,"component":"browser-library","event_kind":"grpc","action":"newBrowser","status":"started"}
+{"level":"info","time":"2026-08-14T21:05:27.947Z","seq":3,"component":"browser-library","msg":"Adding browser to stack: chromium, version: 151.0.7922.34"}
+{"level":"info","time":"2026-08-14T21:05:27.947Z","seq":4,"component":"browser-library","msg":"Adding 0 contexts to browser"}
+{"level":"info","time":"2026-08-14T21:05:27.947Z","seq":5,"component":"browser-library","event_kind":"grpc","action":"newBrowser","status":"succeeded"}
+{"level":"info","time":"2026-08-14T21:05:27.949Z","seq":6,"component":"browser-library","event_kind":"grpc","action":"newPage","status":"started"}
+{"level":"info","time":"2026-08-14T21:05:27.949Z","seq":7,"component":"browser-library","msg":"currentBrowser: {\"_contextStack\":[],\"browser\":{\"_type\":\"Browser\",\"_guid\":\"browser@9b65292858a0f3a0441bde461076da5c\"},\"name\":\"chromium\",\"id\":\"browser=80efdbdd-2f83-437c-80b6-f2e6ab93b0de\",\"headless\":true}"}
+{"level":"info","time":"2026-08-14T21:05:27.954Z","seq":8,"component":"browser-library","msg":"Setting default timeout for context context=7cd00dc8-37fd-4eb3-a8ac-00fef345daff to 10000"}
+{"level":"info","time":"2026-08-14T21:05:27.954Z","seq":9,"component":"browser-library","msg":"Changed active context: context=7cd00dc8-37fd-4eb3-a8ac-00fef345daff"}
+{"level":"info","time":"2026-08-14T21:05:27.985Z","seq":10,"component":"browser-library","msg":"Video path: undefined"}
+{"level":"info","time":"2026-08-14T21:05:27.985Z","seq":11,"component":"browser-library","msg":"Changed active page"}
+{"level":"info","time":"2026-08-14T21:05:28.126Z","seq":12,"component":"browser-library","event_kind":"grpc","action":"newPage","status":"succeeded"}
+{"level":"info","time":"2026-08-14T21:05:28.128Z","seq":13,"component":"browser-library","event_kind":"grpc","action":"closeAllBrowsers","status":"started"}
+{"level":"info","time":"2026-08-14T21:05:28.130Z","seq":14,"component":"browser-library","msg":"Removed page=e9bdd8d7-8ac9-4413-9fc9-04145c0b7532 from context=7cd00dc8-37fd-4eb3-a8ac-00fef345daff page stack"}
+{"level":"info","time":"2026-08-14T21:05:28.146Z","seq":15,"component":"browser-library","event_kind":"grpc","action":"closeAllBrowsers","status":"succeeded"}

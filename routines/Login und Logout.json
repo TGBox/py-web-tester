@@ -1,0 +1,1157 @@
+{
+  "routine_name": "Login und Logout",
+  "recorded_at": "2026-08-14T23:03:54.649722",
+  "start_url": "https://dr.data-al.cloud",
+  "description": "Login und Logout in meine Instanz von Data-Cur.",
+  "tags": [
+    "login",
+    "logout",
+    "data-cur",
+    "credentials"
+  ],
+  "duration_ms": 21876,
+  "total_actions": 26,
+  "actions": [
+    {
+      "action_id": 1,
+      "delta_ms": 1765,
+      "elapsed_ms": 1765,
+      "element": null,
+      "event_type": "navigate",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/",
+      "timestamp_iso": "2026-08-14T23:03:25.343574",
+      "timestamp_ms": 1786741405343
+    },
+    {
+      "action_id": 2,
+      "delta_ms": 2835,
+      "elapsed_ms": 4600,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched ng-pristine ng-valid cdk-text-field-autofill-monitored",
+        "elem_coords": {
+          "x": 128,
+          "x_pct": 43.8,
+          "y": 4,
+          "y_pct": 25.4
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin@demo.de",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 642,
+        "client_y": 128,
+        "page_x": 642,
+        "page_y": 128
+      },
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:28.177Z",
+      "timestamp_ms": 1786741408177
+    },
+    {
+      "action_id": 3,
+      "delta_ms": 936,
+      "elapsed_ms": 5536,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 227,
+          "left": 41,
+          "top": 66,
+          "width": 1238
+        },
+        "class_name": "ng-star-inserted",
+        "elem_coords": {
+          "x": 368,
+          "x_pct": 29.7,
+          "y": 50,
+          "y_pct": 22
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-SIDENAV-CONTAINER.mat-drawer-container",
+          "MAT-SIDENAV-CONTENT.mat-drawer-content",
+          "DIV.with-sidebar",
+          "DIV",
+          "APP-LOGIN.ng-star-inserted"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-login.ng-star-inserted",
+        "tag": "APP-LOGIN",
+        "text": "Anmelden E-Mail * Passwort * check",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-login[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 409,
+        "client_y": 116,
+        "page_x": 409,
+        "page_y": 116
+      },
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:29.113Z",
+      "timestamp_ms": 1786741409113
+    },
+    {
+      "action_id": 4,
+      "delta_ms": 1399,
+      "elapsed_ms": 6935,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched ng-pristine ng-valid cdk-text-field-autofill-monitored",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:30.310Z",
+      "timestamp_ms": 1786741410310,
+      "value": ""
+    },
+    {
+      "action_id": 5,
+      "delta_ms": 489,
+      "elapsed_ms": 7424,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-invalid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "a",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:30.794Z",
+      "timestamp_ms": 1786741410794,
+      "value": "a"
+    },
+    {
+      "action_id": 6,
+      "delta_ms": 534,
+      "elapsed_ms": 7958,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "ad",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:31.330Z",
+      "timestamp_ms": 1786741411330,
+      "value": "ad"
+    },
+    {
+      "action_id": 7,
+      "delta_ms": 767,
+      "elapsed_ms": 8725,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "adm",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:32.097Z",
+      "timestamp_ms": 1786741412097,
+      "value": "adm"
+    },
+    {
+      "action_id": 8,
+      "delta_ms": 309,
+      "elapsed_ms": 9034,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admi",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:32.405Z",
+      "timestamp_ms": 1786741412405,
+      "value": "admi"
+    },
+    {
+      "action_id": 9,
+      "delta_ms": 274,
+      "elapsed_ms": 9308,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:32.676Z",
+      "timestamp_ms": 1786741412676,
+      "value": "admin"
+    },
+    {
+      "action_id": 10,
+      "delta_ms": 500,
+      "elapsed_ms": 9808,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin@",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:33.178Z",
+      "timestamp_ms": 1786741413178,
+      "value": "admin@"
+    },
+    {
+      "action_id": 11,
+      "delta_ms": 529,
+      "elapsed_ms": 10337,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin@de",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:33.707Z",
+      "timestamp_ms": 1786741413707,
+      "value": "admin@de"
+    },
+    {
+      "action_id": 12,
+      "delta_ms": 234,
+      "elapsed_ms": 10571,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin@dem",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:33.942Z",
+      "timestamp_ms": 1786741413942,
+      "value": "admin@dem"
+    },
+    {
+      "action_id": 13,
+      "delta_ms": 232,
+      "elapsed_ms": 10803,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin@demo",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:34.175Z",
+      "timestamp_ms": 1786741414175,
+      "value": "admin@demo"
+    },
+    {
+      "action_id": 14,
+      "delta_ms": 419,
+      "elapsed_ms": 11222,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin@demo.",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:34.598Z",
+      "timestamp_ms": 1786741414598,
+      "value": "admin@demo."
+    },
+    {
+      "action_id": 15,
+      "delta_ms": 434,
+      "elapsed_ms": 11656,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin@demo.de",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:35.022Z",
+      "timestamp_ms": 1786741415022,
+      "value": "admin@demo.de"
+    },
+    {
+      "action_id": 16,
+      "delta_ms": 139,
+      "elapsed_ms": 11795,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 124,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-1 ng-untouched cdk-text-field-autofill-monitored ng-dirty ng-valid",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-0",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#email",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-0",
+        "tag": "INPUT",
+        "text": "",
+        "type": null,
+        "value": "admin@demo.de",
+        "xpath": "//*[@id=\"mat-input-0\"]"
+      },
+      "event_type": "change",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:35.372Z",
+      "timestamp_ms": 1786741415372,
+      "value": "admin@demo.de"
+    },
+    {
+      "action_id": 17,
+      "delta_ms": 1899,
+      "elapsed_ms": 13694,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 189,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-2 ng-untouched ng-valid cdk-text-field-autofill-monitored ng-dirty",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-1",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#password",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-1"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-1",
+        "tag": "INPUT",
+        "text": "",
+        "type": "password",
+        "value": "admin",
+        "xpath": "//*[@id=\"mat-input-1\"]"
+      },
+      "event_type": "input",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:37.061Z",
+      "timestamp_ms": 1786741417061,
+      "value": "admin"
+    },
+    {
+      "action_id": 18,
+      "delta_ms": 1763,
+      "elapsed_ms": 15457,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 16,
+          "left": 514,
+          "top": 189,
+          "width": 292
+        },
+        "class_name": "mat-input-element mat-form-field-autofill-control ng-tns-c51-2 ng-untouched ng-valid cdk-text-field-autofill-monitored ng-dirty",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-input-1",
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-FORM-FIELD#password",
+          "DIV.mat-form-field-wrapper",
+          "DIV.mat-form-field-flex",
+          "DIV.mat-form-field-infix",
+          "INPUT#mat-input-1"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-input-1",
+        "tag": "INPUT",
+        "text": "",
+        "type": "password",
+        "value": "admin",
+        "xpath": "//*[@id=\"mat-input-1\"]"
+      },
+      "event_type": "change",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:39.034Z",
+      "timestamp_ms": 1786741419034,
+      "value": "admin"
+    },
+    {
+      "action_id": 19,
+      "delta_ms": 95,
+      "elapsed_ms": 15552,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 24,
+          "left": 790,
+          "top": 244,
+          "width": 24
+        },
+        "class_name": "mat-icon notranslate material-icons mat-icon-no-color",
+        "elem_coords": {
+          "x": 13,
+          "x_pct": 54.2,
+          "y": 12,
+          "y_pct": 50
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.row",
+          "DIV.col",
+          "BUTTON.mat-focus-indicator",
+          "SPAN.mat-button-wrapper",
+          "MAT-ICON.mat-icon"
+        ],
+        "placeholder": null,
+        "role": "img",
+        "selector": "mat-icon[role=\"img\"]",
+        "tag": "MAT-ICON",
+        "text": "check",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-login[1]/div[1]/form[1]/div[5]/div[1]/button[1]/span[1]/mat-icon[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 803,
+        "client_y": 256,
+        "page_x": 803,
+        "page_y": 256
+      },
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T21:03:39.129Z",
+      "timestamp_ms": 1786741419129
+    },
+    {
+      "action_id": 20,
+      "delta_ms": 286,
+      "elapsed_ms": 15838,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 56,
+          "left": 767,
+          "top": 228,
+          "width": 56
+        },
+        "class_name": "mat-focus-indicator mb-2 mat-fab mat-button-base mat-primary",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mt-4",
+          "FORM.ng-dirty",
+          "DIV.row",
+          "DIV.col",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button:has-text(\"check\")",
+        "tag": "BUTTON",
+        "text": "check",
+        "type": "submit",
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-login[1]/div[1]/form[1]/div[5]/div[1]/button[1]"
+      },
+      "event_type": "change",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T21:03:39.413Z",
+      "timestamp_ms": 1786741419413,
+      "value": ""
+    },
+    {
+      "action_id": 21,
+      "delta_ms": 2970,
+      "elapsed_ms": 18808,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 32,
+          "left": 4,
+          "top": 4,
+          "width": 32
+        },
+        "class_name": null,
+        "elem_coords": {
+          "x": 14,
+          "x_pct": 43.8,
+          "y": 16,
+          "y_pct": 50
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.with-sidebar",
+          "DIV.sbar",
+          "BUTTON.mat-focus-indicator",
+          "SPAN.mat-button-wrapper",
+          "IMG"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-root > mat-sidenav-container > mat-sidenav-content > div > div > button > span > img",
+        "tag": "IMG",
+        "text": "",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[1]/button[1]/span[1]/img[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 18,
+        "client_y": 20,
+        "page_x": 18,
+        "page_y": 20
+      },
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T21:03:42.385Z",
+      "timestamp_ms": 1786741422385
+    },
+    {
+      "action_id": 22,
+      "delta_ms": 408,
+      "elapsed_ms": 19216,
+      "element": {
+        "aria_label": "Toggle sidenav",
+        "bounding_rect": {
+          "height": 40,
+          "left": 0,
+          "top": 0,
+          "width": 40
+        },
+        "class_name": "mat-focus-indicator mat-icon-button mat-button-base cdk-focused cdk-mouse-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-SIDENAV-CONTAINER.mat-drawer-container",
+          "MAT-SIDENAV-CONTENT.mat-drawer-content",
+          "DIV.with-sidebar",
+          "DIV.sbar",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button[aria-label=\"Toggle sidenav\"]",
+        "tag": "BUTTON",
+        "text": "",
+        "type": "button",
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[1]/button[1]"
+      },
+      "event_type": "change",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T21:03:42.793Z",
+      "timestamp_ms": 1786741422793,
+      "value": ""
+    },
+    {
+      "action_id": 23,
+      "delta_ms": 665,
+      "elapsed_ms": 19881,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 40,
+          "left": 87,
+          "top": 1,
+          "width": 40
+        },
+        "class_name": "mat-focus-indicator mat-tooltip-trigger mat-icon-button mat-button-base cdk-focused cdk-program-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-SIDENAV-CONTAINER.mat-drawer-container",
+          "MAT-SIDENAV.mat-drawer",
+          "DIV.mat-drawer-inner-container",
+          "MAT-TOOLBAR.mat-toolbar",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button:has-text(\"settings\")",
+        "tag": "BUTTON",
+        "text": "settings",
+        "type": null,
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav[1]/div[1]/mat-toolbar[1]/button[2]"
+      },
+      "event_type": "change",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T21:03:43.458Z",
+      "timestamp_ms": 1786741423458,
+      "value": ""
+    },
+    {
+      "action_id": 24,
+      "delta_ms": 95,
+      "elapsed_ms": 19976,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 15,
+          "left": 66,
+          "top": 67,
+          "width": 82
+        },
+        "class_name": null,
+        "elem_coords": {
+          "x": 56,
+          "x_pct": 68.3,
+          "y": 6,
+          "y_pct": 40
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-NAV-LIST.mat-nav-list",
+          "A.mat-list-item",
+          "DIV.mat-list-item-content",
+          "DIV.ng-star-inserted",
+          "SPAN"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "span:has-text(\"Administrator\")",
+        "tag": "SPAN",
+        "text": "Administrator",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav[1]/div[1]/mat-nav-list[1]/a[1]/div[1]/div[3]/span[2]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 122,
+        "client_y": 72,
+        "page_x": 122,
+        "page_y": 72
+      },
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T21:03:43.553Z",
+      "timestamp_ms": 1786741423553
+    },
+    {
+      "action_id": 25,
+      "delta_ms": 0,
+      "elapsed_ms": 19976,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 48,
+          "left": 0,
+          "top": 50,
+          "width": 285
+        },
+        "class_name": "mat-list-item mat-focus-indicator",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-SIDENAV-CONTAINER.mat-drawer-container",
+          "MAT-SIDENAV.mat-drawer",
+          "DIV.mat-drawer-inner-container",
+          "MAT-NAV-LIST.mat-nav-list",
+          "A.mat-list-item"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "a:has-text(\"Logout Administrator\")",
+        "tag": "A",
+        "text": "Logout Administrator",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav[1]/div[1]/mat-nav-list[1]/a[1]"
+      },
+      "event_type": "change",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T21:03:43.554Z",
+      "timestamp_ms": 1786741423554,
+      "value": null
+    },
+    {
+      "action_id": 26,
+      "delta_ms": 1537,
+      "elapsed_ms": 21513,
+      "element": {
+        "aria_label": "Toggle sidenav",
+        "bounding_rect": {
+          "height": 40,
+          "left": 0,
+          "top": 0,
+          "width": 40
+        },
+        "class_name": "mat-focus-indicator mat-icon-button mat-button-base cdk-focused cdk-program-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-SIDENAV-CONTAINER.mat-drawer-container",
+          "MAT-SIDENAV-CONTENT.mat-drawer-content",
+          "DIV.with-sidebar",
+          "DIV.sbar",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button[aria-label=\"Toggle sidenav\"]",
+        "tag": "BUTTON",
+        "text": "",
+        "type": "button",
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[1]/button[1]"
+      },
+      "event_type": "change",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login",
+      "timestamp_iso": "2026-08-14T21:03:45.089Z",
+      "timestamp_ms": 1786741425089,
+      "value": ""
+    }
+  ]
+}

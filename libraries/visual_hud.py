@@ -2,7 +2,7 @@
 Visual HUD Helper for py-web-tester.
 Injects a visual mouse pointer cursor and a bottom-screen Keystroke HUD overlay
 during Headed test execution so users can clearly see clicks, cursor movements, and typed text.
-Native browser DOM event listeners & automatic StepListener hooks guarantee the pointer is 100% visible and animated on every page.
+Includes robust selector parser for Playwright :has-text(), XPath, and escaped CSS selectors.
 """
 
 from robot.api.deco import keyword
@@ -26,20 +26,21 @@ VISUAL_HUD_SCRIPT = """
                 position: fixed !important;
                 top: 50%;
                 left: 50%;
-                width: 28px !important;
-                height: 28px !important;
+                width: 30px !important;
+                height: 30px !important;
                 border-radius: 50% !important;
                 background: rgba(255, 0, 110, 0.95) !important;
                 border: 3px solid #ffffff !important;
-                box-shadow: 0 0 18px rgba(255, 0, 110, 1), 0 0 10px rgba(0,0,0,0.8) !important;
+                box-shadow: 0 0 20px rgba(255, 0, 110, 1), 0 0 10px rgba(0,0,0,0.9) !important;
                 pointer-events: none !important;
                 z-index: 2147483647 !important;
-                transition: left 0.15s ease-out, top 0.15s ease-out, transform 0.1s ease !important;
+                transition: left 0.18s ease-out, top 0.18s ease-out, transform 0.1s ease !important;
                 transform: translate(-50%, -50%) !important;
                 display: block !important;
+                opacity: 1 !important;
             `;
             const dot = document.createElement('div');
-            dot.style.cssText = 'width:8px; height:8px; background:#ffffff; border-radius:50%; margin:7px auto; box-shadow: 0 0 4px #000;';
+            dot.style.cssText = 'width:8px; height:8px; background:#ffffff; border-radius:50%; margin:8px auto; box-shadow: 0 0 4px #000;';
             cursor.appendChild(dot);
             parent.appendChild(cursor);
         }
@@ -109,6 +110,7 @@ VISUAL_HUD_SCRIPT = """
             cursorEl.style.left = x + 'px';
             cursorEl.style.top = y + 'px';
             cursorEl.style.display = 'block';
+            cursorEl.style.opacity = '1';
         }
     };
 
@@ -201,7 +203,7 @@ class visual_hud:
         """Injects visual mouse cursor and keystroke HUD into the current browser page."""
         try:
             browser_lib = BuiltIn().get_library_instance("Browser")
-            browser_lib.evaluate_javascript("css=body", VISUAL_HUD_SCRIPT)
+            browser_lib.evaluate_javascript(None, VISUAL_HUD_SCRIPT)
         except Exception:
             pass
 
@@ -209,8 +211,79 @@ class visual_hud:
     def show_keystroke_overlay(self, message: str):
         """Displays custom text in the bottom Keystroke HUD bar."""
         try:
+            import json
             browser_lib = BuiltIn().get_library_instance("Browser")
-            js_code = f"window.__showKeystroke && window.__showKeystroke({repr(message)});"
-            browser_lib.evaluate_javascript("css=body", js_code)
+            browser_lib.evaluate_javascript(None, VISUAL_HUD_SCRIPT)
+            js_code = f"window.__showKeystroke && window.__showKeystroke({json.dumps(message)});"
+            browser_lib.evaluate_javascript(None, js_code)
+        except Exception:
+            pass
+
+    @keyword("Animate Visual Pointer To Element")
+    def animate_visual_pointer(self, selector: str):
+        """Glides the visual mouse pointer to the center of the given element selector and triggers a click ripple."""
+        try:
+            import json
+            browser_lib = BuiltIn().get_library_instance("Browser")
+            browser_lib.evaluate_javascript(None, VISUAL_HUD_SCRIPT)
+
+            js_code = f"""
+            (function() {{
+                try {{
+                    const sel = {json.dumps(selector)};
+                    if (!sel) return;
+
+                    function findElement(s) {{
+                        if (!s) return null;
+                        let clean = s.trim();
+                        if (clean.startsWith('css=')) clean = clean.substring(4);
+                        if (clean.startsWith('xpath=')) {{
+                            try {{
+                                return document.evaluate(clean.substring(6), document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                            }} catch(e) {{ return null; }}
+                        }}
+
+                        // Handle Playwright :has-text("...") pseudo-selector
+                        const hasTextMatch = clean.match(/^([a-z0-9_*#-]+)?:has-text\\("([^"]+)"\\)$/i) || clean.match(/^([a-z0-9_*#-]+)?:has-text\\('([^']+)'\\)$/i);
+                        if (hasTextMatch) {{
+                            const tag = hasTextMatch[1] || '*';
+                            const txt = hasTextMatch[2];
+                            const candidates = document.querySelectorAll(tag);
+                            for (let cand of candidates) {{
+                                if ((cand.innerText || cand.textContent || '').includes(txt)) {{
+                                    return cand;
+                                }}
+                            }}
+                        }}
+
+                        try {{
+                            return document.querySelector(clean);
+                        }} catch(e) {{
+                            try {{
+                                const rawId = clean.replace(/^#/, '').replace(/\\\\/g, '');
+                                const elById = document.getElementById(rawId);
+                                if (elById) return elById;
+                            }} catch(ex) {{}}
+                        }}
+                        return null;
+                    }}
+
+                    const el = findElement(sel);
+                    if (el) {{
+                        let rect = el.getBoundingClientRect();
+                        if (rect.width === 0 && rect.height === 0 && el.parentElement) {{
+                            rect = el.parentElement.getBoundingClientRect();
+                        }}
+                        const x = Math.round(rect.left + rect.width / 2);
+                        const y = Math.round(rect.top + rect.height / 2);
+                        if (x > 0 || y > 0) {{
+                            if (window.__moveCursorTo) window.__moveCursorTo(x, y);
+                            if (window.__createClickRipple) window.__createClickRipple(x, y);
+                        }}
+                    }}
+                }} catch(ex) {{}}
+            }})();
+            """
+            browser_lib.evaluate_javascript(None, js_code)
         except Exception:
             pass
