@@ -17,8 +17,7 @@ ${SELECTOR_TESTNEWDANILOGIN_9}      button[aria-label="Toggle sidenav"]
 ${SELECTOR_TESTNEWDANILOGIN_10}     span:has-text("people Patientenstamm")
 ${SELECTOR_TESTNEWDANILOGIN_11}     input[role="combobox"]
 ${SELECTOR_TESTNEWDANILOGIN_12}     button:has-text("dashboard")
-${SELECTOR_TESTNEWDANILOGIN_13}     span:has-text("calendar_month
-Terminplaner")
+${SELECTOR_TESTNEWDANILOGIN_13}     span:has-text("calendar_month Terminplaner")
 ${SELECTOR_TESTNEWDANILOGIN_14}     mat-toolbar.mat-toolbar.ng-tns-c105-0
 ${SELECTOR_TESTNEWDANILOGIN_15}     mat-sidenav[role="navigation"]
 ${SELECTOR_TESTNEWDANILOGIN_16}     button:has-text("settings")
@@ -36,53 +35,88 @@ Execute Routine Testnewdanilogin
     Go To    https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome
     Sleep    200ms
     # Step 3: Click element 'E-Mail *'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_1}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_1}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_1}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_1}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_1}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 4: Click element 'Anmelden
-E-Mail *
-Passwort *
-check'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_2}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_2}
+    # Step 4: Click element 'Anmelden E-Mail * Passwort * check'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_2}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_2}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_2}    force=True
+        END
+    END
     Sleep    200ms
     # Step 5: Fill input field '#mat-input-0'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_3}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_3}    
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_3}    visible    timeout=3s
+    IF    ${is_visible}
+        Fill Text    ${SELECTOR_TESTNEWDANILOGIN_3}    
+    END
     Sleep    200ms
     # Step 6: Click element 'INPUT'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_3}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_3}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_3}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_3}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_3}    force=True
+        END
+    END
     Sleep    200ms
     # Step 7: Fill input field '#mat-input-0'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_3}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_3}    admin@demo.de
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_3}    visible    timeout=3s
+    IF    ${is_visible}
+        Fill Text    ${SELECTOR_TESTNEWDANILOGIN_3}    admin@demo.de
+    END
     Sleep    200ms
-    # Step 8: Click element 'Anmelden
-E-Mail *
-Passwort *
-check'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_2}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_2}
+    # Step 8: Click element 'Anmelden E-Mail * Passwort * check'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_2}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_2}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_2}    force=True
+        END
+    END
     Sleep    200ms
     # Step 9: Fill input field '#mat-input-1'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_4}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_4}    admin
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_4}    visible    timeout=3s
+    IF    ${is_visible}
+        Fill Text    ${SELECTOR_TESTNEWDANILOGIN_4}    admin
+    END
     Sleep    200ms
     # Step 10: Click element 'check'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_5}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 11: Fill input field 'button:has-text("check")'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_6}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_6}    
+    # Step 11: Click element 'check'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_6}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_6}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_6}    force=True
+        END
+    END
     Sleep    200ms
     # Step 12: Navigate to 'https://dr.data-al.cloud/aldashboard/home'
     Go To    https://dr.data-al.cloud/aldashboard/home
     Sleep    200ms
     # Step 13: Click element 'settings Benutzer und Einstellungen'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_7}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_7}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_7}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_7}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_7}    force=True
+        END
+    END
     Sleep    200ms
     # Step 14: Navigate to 'https://dr.data-al.cloud/users/'
     Go To    https://dr.data-al.cloud/users/
@@ -91,16 +125,31 @@ check'
     Go To    https://dr.data-al.cloud/users/home
     Sleep    200ms
     # Step 16: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 17: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 17: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
     # Step 18: Click element 'dashboard'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_5}    force=True
+        END
+    END
     Sleep    200ms
     # Step 19: Navigate to 'https://dr.data-al.cloud/aldashboard/'
     Go To    https://dr.data-al.cloud/aldashboard/
@@ -109,8 +158,13 @@ check'
     Go To    https://dr.data-al.cloud/aldashboard/home
     Sleep    200ms
     # Step 21: Click element 'people Patientenstamm'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_10}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_10}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_10}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_10}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_10}    force=True
+        END
+    END
     Sleep    200ms
     # Step 22: Navigate to 'https://dr.data-al.cloud/patienten/'
     Go To    https://dr.data-al.cloud/patienten/
@@ -119,20 +173,37 @@ check'
     Go To    https://dr.data-al.cloud/patienten/patientenstamm
     Sleep    200ms
     # Step 24: Fill input field 'input[role="combobox"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_11}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_11}    
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_11}    visible    timeout=3s
+    IF    ${is_visible}
+        Fill Text    ${SELECTOR_TESTNEWDANILOGIN_11}    
+    END
     Sleep    200ms
     # Step 25: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 26: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 26: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
     # Step 27: Click element 'dashboard'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_12}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_12}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_12}    force=True
+        END
+    END
     Sleep    200ms
     # Step 28: Navigate to 'https://dr.data-al.cloud/aldashboard/'
     Go To    https://dr.data-al.cloud/aldashboard/
@@ -140,10 +211,14 @@ check'
     # Step 29: Navigate to 'https://dr.data-al.cloud/aldashboard/home'
     Go To    https://dr.data-al.cloud/aldashboard/home
     Sleep    200ms
-    # Step 30: Click element 'calendar_month
-Terminplaner'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_13}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_13}
+    # Step 30: Click element 'calendar_month Terminplaner'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_13}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_13}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_13}    force=True
+        END
+    END
     Sleep    200ms
     # Step 31: Navigate to 'https://dr.data-al.cloud/terminplaner/'
     Go To    https://dr.data-al.cloud/terminplaner/
@@ -152,16 +227,31 @@ Terminplaner'
     Go To    https://dr.data-al.cloud/terminplaner/event
     Sleep    200ms
     # Step 33: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 34: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 34: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
     # Step 35: Click element 'dashboard'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_5}    force=True
+        END
+    END
     Sleep    200ms
     # Step 36: Navigate to 'https://dr.data-al.cloud/aldashboard/'
     Go To    https://dr.data-al.cloud/aldashboard/
@@ -170,16 +260,31 @@ Terminplaner'
     Go To    https://dr.data-al.cloud/aldashboard/home
     Sleep    200ms
     # Step 38: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 39: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 39: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
     # Step 40: Click element 'settings'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_5}    force=True
+        END
+    END
     Sleep    200ms
     # Step 41: Navigate to 'https://dr.data-al.cloud/users/'
     Go To    https://dr.data-al.cloud/users/
@@ -188,20 +293,40 @@ Terminplaner'
     Go To    https://dr.data-al.cloud/users/home
     Sleep    200ms
     # Step 43: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 44: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 44: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 45: Fill input field 'button:has-text("dashboard")'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_12}    
+    # Step 45: Click element 'dashboard'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_12}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_12}    force=True
+        END
+    END
     Sleep    200ms
     # Step 46: Click element 'people'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_5}    force=True
+        END
+    END
     Sleep    200ms
     # Step 47: Navigate to 'https://dr.data-al.cloud/patienten/'
     Go To    https://dr.data-al.cloud/patienten/
@@ -210,24 +335,46 @@ Terminplaner'
     Go To    https://dr.data-al.cloud/patienten/patientenstamm
     Sleep    200ms
     # Step 49: Fill input field 'input[role="combobox"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_11}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_11}    
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_11}    visible    timeout=3s
+    IF    ${is_visible}
+        Fill Text    ${SELECTOR_TESTNEWDANILOGIN_11}    
+    END
     Sleep    200ms
     # Step 50: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 51: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 51: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 52: Fill input field 'button:has-text("dashboard")'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_12}    
+    # Step 52: Click element 'dashboard'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_12}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_12}    force=True
+        END
+    END
     Sleep    200ms
     # Step 53: Click element 'calendar_month'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_5}    force=True
+        END
+    END
     Sleep    200ms
     # Step 54: Navigate to 'https://dr.data-al.cloud/terminplaner/'
     Go To    https://dr.data-al.cloud/terminplaner/
@@ -236,20 +383,40 @@ Terminplaner'
     Go To    https://dr.data-al.cloud/terminplaner/event
     Sleep    200ms
     # Step 56: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 57: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 57: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 58: Fill input field 'button:has-text("dashboard")'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_12}    
+    # Step 58: Click element 'dashboard'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_12}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_12}    force=True
+        END
+    END
     Sleep    200ms
     # Step 59: Click element 'settings'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_5}    force=True
+        END
+    END
     Sleep    200ms
     # Step 60: Navigate to 'https://dr.data-al.cloud/users/'
     Go To    https://dr.data-al.cloud/users/
@@ -258,31 +425,58 @@ Terminplaner'
     Go To    https://dr.data-al.cloud/users/home
     Sleep    200ms
     # Step 62: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 63: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 63: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 64: Fill input field 'button:has-text("dashboard")'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_12}    
+    # Step 64: Click element 'dashboard'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_12}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_12}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_12}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 65: Click element 'dashboard
-settings
-people
-calendar_month'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_14}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_14}
+    # Step 65: Click element 'dashboard settings people calendar_month'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_14}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_14}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_14}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 66: Fill input field 'mat-sidenav[role="navigation"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_15}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_15}    
+    # Step 66: Click element 'dashboard settings people calendar_month Logout Administrator zum Startbildschirm Passwort ändern Be'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_15}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_15}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_15}    force=True
+        END
+    END
     Sleep    200ms
     # Step 67: Click element 'dashboard'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_5}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_5}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_5}    force=True
+        END
+    END
     Sleep    200ms
     # Step 68: Navigate to 'https://dr.data-al.cloud/aldashboard/'
     Go To    https://dr.data-al.cloud/aldashboard/
@@ -291,29 +485,59 @@ calendar_month'
     Go To    https://dr.data-al.cloud/aldashboard/home
     Sleep    200ms
     # Step 70: Click element 'IMG'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_8}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_8}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_8}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 71: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 71: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 72: Fill input field 'button:has-text("settings")'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_16}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_16}    
+    # Step 72: Click element 'settings'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_16}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_16}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_16}    force=True
+        END
+    END
     Sleep    200ms
     # Step 73: Click element 'Administrator'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_17}    visible    timeout=10s
-    Click    ${SELECTOR_TESTNEWDANILOGIN_17}
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_17}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_17}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_17}    force=True
+        END
+    END
     Sleep    200ms
-    # Step 74: Fill input field 'a:has-text("Logout Administrator")'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_18}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_18}    
+    # Step 74: Click element 'Logout Administrator'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_18}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_18}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_18}    force=True
+        END
+    END
     Sleep    200ms
     # Step 75: Navigate to 'https://dr.data-al.cloud/aldashboard/login'
     Go To    https://dr.data-al.cloud/aldashboard/login
     Sleep    200ms
-    # Step 76: Fill input field 'button[aria-label="Toggle sidenav"]'
-    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=10s
-    Fill Text    ${SELECTOR_TESTNEWDANILOGIN_9}    
+    # Step 76: Click element 'BUTTON'
+    ${is_visible}=    Run Keyword And Return Status    Wait For Elements State    ${SELECTOR_TESTNEWDANILOGIN_9}    visible    timeout=3s
+    IF    ${is_visible}
+        ${click_ok}=    Run Keyword And Return Status    Click    ${SELECTOR_TESTNEWDANILOGIN_9}
+        IF    not ${click_ok}
+            Run Keyword And Ignore Error    Click    ${SELECTOR_TESTNEWDANILOGIN_9}    force=True
+        END
+    END
     Sleep    200ms

@@ -215,7 +215,8 @@ class RoutineRecorder:
                     type: target.getAttribute('type') || null,
                     role: target.getAttribute('role') || null,
                     aria_label: target.getAttribute('aria-label') || null,
-                    text: (target.innerText || target.textContent || '').trim().substring(0, 100),
+                    text: (target.innerText || target.textContent || '').replace(/[\r\n\t]+/g, ' ').trim().substring(0, 100),
+
                     value: target.value !== undefined ? String(target.value) : null,
                     bounding_rect: {
                         left: Math.round(rect.left),
