@@ -2,7 +2,7 @@
 Documentation    Automated test execution suite for recorded routine 'qwer'.
 Resource         ../resources/common.resource
 Resource         ../resources/page_objects/qwer.resource
-Test Setup       Setup Web Test Browser
+Test Setup       Setup Web Test Browser    ${QWER_START_URL}
 Test Teardown    Teardown Web Test Browser
 
 *** Test Cases ***

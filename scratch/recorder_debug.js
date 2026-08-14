@@ -1,57 +1,4 @@
-"""
-Interactive Test Routine Recorder for py-web-tester.
-Launches an interactive browser, captures user actions (clicks, inputs, keypresses, navigation)
-along with precise coordinates, timestamps, and page/DOM structures until Stop is pressed.
-Injects real-time Visual Mouse Pointer Cursor and bottom Keystroke HUD overlay during recording.
-Uses CDP console stream and persistent sessionStorage counter for 100% loss-free event recording across page reloads and navigations.
-"""
 
-import os
-import sys
-import time
-import json
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-
-try:
-    from playwright.sync_api import sync_playwright, Page, BrowserContext
-except ImportError:
-    sync_playwright = None
-
-class RoutineRecorder:
-    def __init__(
-        self,
-        output_dir: str = "routines",
-        resources_dir: str = "resources/page_objects",
-        tests_dir: str = "tests"
-    ):
-        self.output_dir = Path(output_dir).resolve()
-        self.resources_dir = Path(resources_dir).resolve()
-        self.tests_dir = Path(tests_dir).resolve()
-        
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.resources_dir.mkdir(parents=True, exist_ok=True)
-        self.tests_dir.mkdir(parents=True, exist_ok=True)
-
-        self.recorded_events: List[Dict[str, Any]] = []
-        self.last_trace_data: Dict[str, Any] = {}
-        self.start_time: float = 0.0
-        self.is_recording: bool = False
-        self.stop_requested: bool = False
-
-    def get_last_trace(self) -> Dict[str, Any]:
-        """Returns the dictionary data of the last recorded trace session."""
-        return self.last_trace_data
-
-    def get_js_recorder_script(self) -> str:
-        """
-        Returns JavaScript to be injected into the browser context.
-        Monitors user interactions, emits CDP console events, and manages the HUD bar.
-        Injects a glowing red/cyan visual mouse pointer cursor and bottom Keystroke HUD bar during recording.
-        Preserves action count and session start time in sessionStorage across page reloads.
-        """
-        return """
         (function() {
             if (window.__PY_WEB_TESTER_RECORDING_INITIALIZED__) return;
             window.__PY_WEB_TESTER_RECORDING_INITIALIZED__ = true;
@@ -130,7 +77,7 @@ class RoutineRecorder:
                 if (!el || el.nodeType !== Node.ELEMENT_NODE) return '';
                 try {
                     const id = getSafeId(el);
-                    if (id && !id.match(/^\\d/) && !id.includes(':')) {
+                    if (id && !id.match(/^\d/) && !id.includes(':')) {
                         return `#${CSS.escape(id)}`;
                     }
 
@@ -152,15 +99,15 @@ class RoutineRecorder:
                     const type = el.getAttribute ? el.getAttribute('type') : null;
                     if (type && el.tagName === 'INPUT') return `input[type="${type}"]`;
 
-                    const text = (el.innerText || el.textContent || '').replace(/[\\r\\n\\t]+/g, ' ').trim();
+                    const text = (el.innerText || el.textContent || '').replace(/[\r\n\t]+/g, ' ').trim();
                     if (text && text.length > 0 && text.length < 35 && ['BUTTON', 'A', 'SPAN', 'LABEL', 'H1', 'H2', 'H3', 'LI'].includes(el.tagName)) {
-                        return `${el.tagName.toLowerCase()}:has-text("${text.replace(/"/g, '\\"')}")`;
+                        return `${el.tagName.toLowerCase()}:has-text("${text.replace(/"/g, '\"')}")`;
                     }
 
                     const cls = getSafeClass(el);
                     if (cls) {
-                        const validClasses = cls.split(/\\s+/)
-                            .filter(c => c && !c.includes(':') && !c.match(/^\\d/))
+                        const validClasses = cls.split(/\s+/)
+                            .filter(c => c && !c.includes(':') && !c.match(/^\d/))
                             .slice(0, 2);
                         if (validClasses.length > 0) {
                             const classSelector = `${el.tagName.toLowerCase()}.${validClasses.map(c => CSS.escape(c)).join('.')}`;
@@ -177,7 +124,7 @@ class RoutineRecorder:
                     while (current && current.nodeType === Node.ELEMENT_NODE && current.tagName !== 'BODY') {
                         let selector = current.tagName.toLowerCase();
                         const currId = getSafeId(current);
-                        if (currId && !currId.match(/^\\d/)) {
+                        if (currId && !currId.match(/^\d/)) {
                             selector += `#${CSS.escape(currId)}`;
                             path.unshift(selector);
                             break;
@@ -232,7 +179,7 @@ class RoutineRecorder:
                         const cls = getSafeClass(curr);
                         if (id) label += '#' + id;
                         else if (cls) {
-                            const firstClass = cls.split(/\\s+/)[0];
+                            const firstClass = cls.split(/\s+/)[0];
                             if (firstClass) label += '.' + firstClass;
                         }
                         hierarchy.unshift(label);
@@ -268,7 +215,7 @@ class RoutineRecorder:
                     type: target.getAttribute ? (target.getAttribute('type') || null) : null,
                     role: target.getAttribute ? (target.getAttribute('role') || null) : null,
                     aria_label: target.getAttribute ? (target.getAttribute('aria-label') || null) : null,
-                    text: (target.innerText || target.textContent || '').replace(/[\\r\\n\\t]+/g, ' ').trim().substring(0, 100),
+                    text: (target.innerText || target.textContent || '').replace(/[\r\n\t]+/g, ' ').trim().substring(0, 100),
 
                     value: target.value !== undefined ? String(target.value) : null,
                     bounding_rect: {
@@ -648,172 +595,4 @@ class RoutineRecorder:
                 createHudOverlays();
             }
         })();
-        """
-
-    def record_routine(
-        self,
-        start_url: str = "https://example.com",
-        routine_name: str = "interactive_routine",
-        headless: bool = False,
-        timeout_seconds: int = 0,
-        url: Optional[str] = None,
-        **kwargs
-    ) -> Dict[str, Any]:
-        """
-        Launches Playwright, opens start_url, injects recorder & HUD, and records all user interactions.
-        Returns dictionary with saved JSON routine file, generated Robot resource file, and test file paths.
-        """
-        if url is not None:
-            start_url = url
-        if sync_playwright is None:
-            raise RuntimeError("Playwright library is not installed! Run `uv add playwright` to enable recording.")
-
-        self.recorded_events.clear()
-        self.start_time = time.time()
-        self.is_recording = True
-        self.stop_requested = False
-
-        print(f"\n=======================================================")
-        print(f" [REC] INTERACTIVE TEST ROUTINE RECORDER")
-        print(f" Target URL  : {start_url}")
-        print(f" Routine Name: {routine_name}")
-        print(f" Instructions: Perform your test steps in the browser.")
-        print(f"               Click 'STOP RECORDING' in the HUD or")
-        print(f"               press Ctrl+Shift+S when done.")
-        print(f"=======================================================\n")
-
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=headless, args=["--start-maximized"])
-            context = browser.new_context(viewport=None)
-
-            # Handler for Console Messages sent by browser JS
-            def on_console_message(msg):
-                text = msg.text
-                if text.startswith("__PY_WEB_TESTER_EVENT__"):
-                    try:
-                        event_json_str = text[len("__PY_WEB_TESTER_EVENT__"):]
-                        event_data = json.loads(event_json_str)
-                        elapsed_ms = int((time.time() - self.start_time) * 1000)
-                        
-                        prev_ms = self.recorded_events[-1]["elapsed_ms"] if self.recorded_events else 0
-                        delta_ms = elapsed_ms - prev_ms
-
-                        event_data["action_id"] = len(self.recorded_events) + 1
-                        event_data["elapsed_ms"] = elapsed_ms
-                        event_data["delta_ms"] = delta_ms
-
-                        # Deduplicate rapid duplicate events (<100ms on same element)
-                        if self.recorded_events:
-                            last_ev = self.recorded_events[-1]
-                            if (
-                                last_ev.get("event_type") == event_data.get("event_type")
-                                and last_ev.get("page_url") == event_data.get("page_url")
-                                and delta_ms < 100
-                            ):
-                                last_elem = last_ev.get("element") or {}
-                                curr_elem = event_data.get("element") or {}
-                                if last_elem.get("selector") == curr_elem.get("selector"):
-                                    return
-
-                        self.recorded_events.append(event_data)
-                        
-                        elem = event_data.get("element") or {}
-                        tag = elem.get("tag", "ELEMENT")
-                        selector = elem.get("selector", "")
-                        evt_type = event_data.get("event_type", "").upper()
-                        print(f"  [REC #{event_data['action_id']:02d}] {evt_type:6s} -> {tag} ({selector})")
-                    except Exception as ex:
-                        print(f"Error recording console event: {ex}", file=sys.stderr)
-                elif text.startswith("__PY_WEB_TESTER_STOP__"):
-                    print("\n[STOP] Stop recording signal received!")
-                    self.stop_requested = True
-                    self.is_recording = False
-
-            # Attach console listener to every page opened in context
-            context.on("page", lambda new_p: new_p.on("console", on_console_message))
-
-            # Inject script on every new document
-            context.add_init_script(self.get_js_recorder_script())
-
-            page = context.new_page()
-            page.on("console", on_console_message)
-
-            # Automatic navigation listener: Only record NAVIGATE for initial load or manual URL changes
-            def on_frame_navigated(frame):
-                if frame == page.main_frame:
-                    url_nav = frame.url
-                    if url_nav and url_nav != "about:blank":
-                        elapsed_ms = int((time.time() - self.start_time) * 1000)
-                        # Only record NAVIGATE if it is the very first step (initial start_url)
-                        if not self.recorded_events:
-                            nav_event = {
-                                "action_id": len(self.recorded_events) + 1,
-                                "event_type": "navigate",
-                                "timestamp_iso": datetime.now().isoformat(),
-                                "timestamp_ms": int(time.time() * 1000),
-                                "elapsed_ms": elapsed_ms,
-                                "delta_ms": elapsed_ms,
-                                "page_url": url_nav,
-                                "page_title": page.title() if not page.is_closed() else "",
-                                "element": None
-                            }
-                            self.recorded_events.append(nav_event)
-                            print(f"  [REC #{nav_event['action_id']:02d}] NAVIGATE -> {url_nav}")
-
-            page.on("framenavigated", on_frame_navigated)
-            page.goto(start_url)
-
-            # Wait loop until user clicks STOP or time expires
-            loop_start = time.time()
-            try:
-                while not self.stop_requested and page.is_closed() is False:
-                    page.wait_for_timeout(200)
-                    if timeout_seconds > 0 and (time.time() - loop_start) > timeout_seconds:
-                        print(f"Timeout reached ({timeout_seconds}s). Stopping recording.")
-                        break
-            except Exception:
-                pass
-
-            try:
-                if not page.is_closed():
-                    page.close()
-                browser.close()
-            except Exception:
-                pass
-
-        # Package recorded session into JSON
-        total_duration_ms = int((time.time() - self.start_time) * 1000)
-        routine_data = {
-            "routine_name": routine_name,
-            "recorded_at": datetime.now().isoformat(),
-            "start_url": start_url,
-            "duration_ms": total_duration_ms,
-            "total_actions": len(self.recorded_events),
-            "actions": self.recorded_events
-        }
-
-        # Save JSON file
-        json_file_path = self.output_dir / f"{routine_name}.json"
-        with open(json_file_path, "w", encoding="utf-8") as f:
-            json.dump(routine_data, f, indent=2, ensure_ascii=False)
-
-        print(f"\n[OK] Routine successfully saved to: {json_file_path}")
-
-        # Automatically convert JSON into Robot Framework Resource & Test files
-        from libraries.routine_converter import RoutineConverter
-        converter = RoutineConverter(
-            resources_dir=self.resources_dir,
-            tests_dir=self.tests_dir
-        )
-        conversion_result = converter.convert_json_to_resource_and_test(json_file_path)
-
-        result_summary = {
-            "json_path": str(json_file_path),
-            "resource_path": conversion_result["resource_path"],
-            "test_path": conversion_result["test_path"],
-            "total_actions": len(self.recorded_events),
-            "duration_ms": total_duration_ms,
-            "actions": self.recorded_events
-        }
-        self.last_trace_data = result_summary
-        return result_summary
+        

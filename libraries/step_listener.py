@@ -78,6 +78,50 @@ class StepListener:
 
         self.step_count += 1
 
+        # Check if running in Headed mode (HEADLESS=FALSE)
+        try:
+            from robot.libraries.BuiltIn import BuiltIn
+            headless_var = BuiltIn().get_variable_value("${HEADLESS}", "TRUE")
+            is_headed = str(headless_var).upper() in ["FALSE", "0", "OFF", "NO"]
+        except Exception:
+            is_headed = False
+
+        if is_headed:
+            try:
+                from libraries.visual_hud import VISUAL_HUD_SCRIPT
+                import json
+                browser_lib = BuiltIn().get_library_instance("Browser")
+                browser_lib.evaluate_javascript("css=body", VISUAL_HUD_SCRIPT)
+
+                # If first arg is a selector, glide cursor to it
+                if hasattr(data, "args") and data.args:
+                    first_arg = str(data.args[0])
+                    if not first_arg.startswith("http") and not first_arg.isdigit() and len(first_arg) > 1:
+                        js_anim = f"""
+                        (function() {{
+                            try {{
+                                if (!window.__moveCursorTo) return;
+                                const cleanSel = {json.dumps(first_arg)};
+                                let el = null;
+                                if (cleanSel.startsWith('css=')) {{
+                                    el = document.querySelector(cleanSel.substring(4));
+                                }} else {{
+                                    try {{ el = document.querySelector(cleanSel); }} catch(e) {{}}
+                                }}
+                                if (el) {{
+                                    const rect = el.getBoundingClientRect();
+                                    const x = Math.round(rect.left + rect.width / 2);
+                                    const y = Math.round(rect.top + rect.height / 2);
+                                    window.__moveCursorTo(x, y);
+                                    if (window.__createClickRipple) window.__createClickRipple(x, y);
+                                }}
+                            }} catch(ex) {{}}
+                        }})();
+                        """
+                        browser_lib.evaluate_javascript("css=body", js_anim)
+            except Exception:
+                pass
+
         # Emit step notification to GUI if callback attached
         if self.state.callback:
             self.state.callback("step_start", {

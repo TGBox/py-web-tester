@@ -7,7 +7,7 @@ Variables        ../variables/env_config.py
 *** Keywords ***
 Setup Web Test Browser
     [Documentation]    Initializes browser, context and navigates to target URL.
-    [Arguments]        ${url}=${BASE_URL}
+    [Arguments]        ${url}=about:blank
     New Browser        browser=${BROWSER}    headless=${HEADLESS}
     New Context        viewport={'width': 1280, 'height': 720}
     New Page           ${url}

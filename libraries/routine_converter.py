@@ -5,7 +5,7 @@ resource files (.resource) and executable test suites (.robot).
 Sanitizes selectors, comments, and values to guarantee single-line compliance for Robot Framework syntax.
 Smartly distinguishes input fields (Fill Text) from buttons/links/custom elements (Click).
 Uses resilient IF visibility guards, element readiness checks, and force-click fallbacks.
-Integrates visual pointer animation and bottom Keystroke HUD overlays during Headed test runs.
+Passes routine target START_URL to Setup Web Test Browser so tests start immediately on the target page.
 """
 
 import json
@@ -83,7 +83,8 @@ class RoutineConverter:
 
             if event_type == "navigate":
                 url = self._clean_single_line(curr.get("page_url") or "")
-                if url and url != "about:blank":
+                # Only emit Go To for initial page load if not already opened by Setup
+                if url and url != "about:blank" and not steps:
                     steps.append({
                         "keyword": "Go To",
                         "selector": None,
@@ -186,17 +187,9 @@ class RoutineConverter:
                 var_selector = selectors_dict.get(step["selector"], f'"{step["selector"]}"')
                 lines.append(f"    ${{is_ready}}=    Run Keyword And Return Status    Wait For Elements State    {var_selector}    visible    timeout=3s")
                 lines.append(f"    IF    ${{is_ready}}")
-                
-                # Visual pointer animation to target element
-                lines.append(f"        IF    $HEADLESS is False or str($HEADLESS).upper() == 'FALSE'")
-                lines.append(f"            Run Keyword And Ignore Error    Animate Visual Pointer To Element    {var_selector}")
-                lines.append(f"        END")
 
                 if kw == "Fill Text":
                     val = step.get('value', '')
-                    lines.append(f"        IF    $HEADLESS is False or str($HEADLESS).upper() == 'FALSE'")
-                    lines.append(f"            Run Keyword And Ignore Error    Show Keystroke Overlay    Eingabe: \"{val}\"")
-                    lines.append(f"        END")
                     lines.append(f"        Fill Text    {var_selector}    {val}")
                 elif kw == "Click":
                     lines.append(f"        ${{click_ok}}=    Run Keyword And Return Status    Click    {var_selector}")
@@ -216,13 +209,14 @@ class RoutineConverter:
     def _generate_test_content(self, routine_name: str) -> str:
         clean_routine_name = self._clean_single_line(routine_name)
         kw_name = clean_routine_name.replace("_", " ").replace("-", " ").title()
-        
+        clean_var_name = clean_routine_name.upper().replace("-", "_").replace(" ", "_")
+
         lines = [
             "*** Settings ***",
             f"Documentation    Automated test execution suite for recorded routine '{clean_routine_name}'.",
             "Resource         ../resources/common.resource",
             f"Resource         ../resources/page_objects/{clean_routine_name}.resource",
-            "Test Setup       Setup Web Test Browser",
+            f"Test Setup       Setup Web Test Browser    ${{{clean_var_name}_START_URL}}",
             "Test Teardown    Teardown Web Test Browser",
             "",
             "*** Test Cases ***",
