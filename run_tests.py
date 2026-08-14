@@ -16,12 +16,23 @@ def main():
     parser.add_argument("--browser", "-b", type=str, choices=["chromium", "firefox", "webkit"], help="Override browser engine")
     parser.add_argument("--headed", action="store_true", help="Run browser in visible (headed) mode")
     parser.add_argument("--suite", "-s", type=str, help="Path to specific robot suite file")
+    parser.add_argument("--record", "-r", action="store_true", help="Launch interactive browser test routine recorder")
+    parser.add_argument("--record-url", type=str, default="https://example.com", help="Target URL for interactive recorder")
+    parser.add_argument("--record-name", type=str, default="interactive_routine", help="Name for recorded routine block")
     
     args = parser.parse_args()
 
     project_root = Path(__file__).parent.resolve()
     results_dir = project_root / "results"
     tests_dir = project_root / "tests"
+
+    if args.record:
+        from libraries.routine_recorder import RoutineRecorder
+        recorder = RoutineRecorder()
+        res = recorder.record_routine(start_url=args.record_url, routine_name=args.record_name)
+        print(f"\nRecording completed. Run test suite with: python run_tests.py --suite {res['test_path']}")
+        sys.exit(0)
+
 
     robot_args = [
         "--outputdir", str(results_dir),

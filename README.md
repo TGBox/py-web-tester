@@ -10,14 +10,21 @@ Baut auf **Robot Framework**, der modernen **Browser Library (Playwright)** und 
 
 ```text
 py-web-tester/
-├── run_tests.py                # Python CLI Test Runner
-├── main.py                     # Einstiegspunkt zum Ausführen der Tests
+├── run_tests.py                # Python CLI Test Runner & Routine Recorder Entrypoint
+├── record_routine.py           # Eigenständiges CLI-Skript für den interaktiven Routine-Recorder
+├── main.py                     # Interaktives Konsolenmenü & Haupt-Einstiegspunkt
 ├── pyproject.toml              # UV / Python Projekt-Abhängigkeiten
+│
+├── routines/                   # Aufgezeichnete JSON-Interaktionsspuren (Traces)
+│   └── <routine_name>.json
 │
 ├── variables/                  # Konfigurationen & Umgebungsdaten
 │   └── env_config.py           # URLs, Timeouts, Browser-Optionen, Credentials
 │
-├── libraries/                  # Eigene Python-Klassen (Custom Keywords & Logik)
+├── libraries/                  # Eigene Python-Klassen (Recorder, Converter & Custom Keywords)
+│   ├── routine_recorder.py     # Interaktiver Browser Recorder mit HUD-Overlay
+│   ├── routine_converter.py    # Konvertiert JSON-Traces in Robot Resource Blöcke
+│   ├── routine_executor.py     # Replay-Logik für aufgezeichnete Routinen
 │   ├── custom_actions.py       # Fachliche Logik, Datenberechnung, Validierungen
 │   └── web_helpers.py          # Hilfsfunktionen (Dateien, JSON, API-Checks)
 │
@@ -27,12 +34,41 @@ py-web-tester/
 │       ├── login_page.resource # Selektoren & Aktionen für Login-Ansichten
 │       └── todo_page.resource  # Selektoren & Aktionen für Task/Todo-Interaktionen
 │
-├── tests/                      # Ausführbare Test-Suiten (Bhaiovior/User Perspective)
+├── tests/                      # Ausführbare Test-Suiten & generierte Routine-Tests
 │   ├── 01_smoke_tests.robot    # Schnellchecks & Integrationstests
 │   ├── 02_todo_e2e_tests.robot # Interaktionstests & Workflows
-│   └── 03_login_tests.robot    # Authentifizierungstests
+│   ├── 03_login_tests.robot    # Authentifizierungstests
+│   └── test_<routine>.robot    # Generierte Routine-Tests
 │
 └── results/                    # Generierte Testberichte (HTML-Log & Screenshots)
+```
+
+---
+
+## 🔴 Interaktive Testroutinen-Aufzeichnung (Test Block Recorder)
+
+Mit dem **Test Block Recorder** können Sie neue Testroutinen interaktiv im Browser aufzeichnen:
+
+1. Führen Sie Aktionen im Browser durch (Mausklicks mit genauen relativen und absoluten Koordinaten, Texteingaben, Tastatur-Shortcuts, Scrollen, Formularinteraktionen).
+2. Der Recorder erfasst automatisch alle Event-Spuren, exakte Millisekunden-Zeitstempel und die vollständige DOM-/Seitenstruktur.
+3. Nach Klick auf **STOP RECORDING** (oder `Ctrl+Shift+S`) wird die Interaktionskette abgespeichert und automatisch in einen **wiederverwendbaren Robot Framework Testblock** (`resources/page_objects/<name>.resource`) sowie einen **ausführbaren Test** (`tests/test_<name>.robot`) konvertiert!
+
+### Aufzeichnung starten
+
+#### Option A: Interaktives Konsolen-Menü
+```bash
+python main.py
+# Wählen Sie Option 2, um eine neue Routine aufzuzeichnen
+```
+
+#### Option B: Über `record_routine.py`
+```bash
+python record_routine.py --url https://example.com --name login_flow
+```
+
+#### Option C: Über `run_tests.py`
+```bash
+python run_tests.py --record --record-url https://example.com --record-name checkout_routine
 ```
 
 ---
@@ -47,24 +83,24 @@ uv run rfbrowser init
 
 ### 2. Tests ausführen
 
-#### Variante A: Über den komfortablen Python-Runner
+#### Variante A: Über den Python-Runner
 ```bash
 # Alle Tests ausführen
-uv run python run_tests.py
+python run_tests.py
 
 # Nur Smoke-Tests ausführen
-uv run python run_tests.py --tag smoke
+python run_tests.py --tag smoke
+
+# Aufgezeichneten Routine-Test ausführen
+python run_tests.py --suite tests/test_smoke_demo_routine.robot
 
 # Im sichtbaren Browser-Modus (Headed) testen
-uv run python run_tests.py --headed
-
-# Mit spezifischer Browser-Engine testen (chromium, firefox, webkit)
-uv run python run_tests.py --browser firefox
+python run_tests.py --headed
 ```
 
 #### Variante B: Direkt über Robot Framework CLI
 ```bash
-uv run robot --pythonpath . --outputdir results tests/
+python -m robot --pythonpath . --outputdir results tests/
 ```
 
 ### 3. Berichte ansehen
@@ -76,21 +112,24 @@ Nach der Testausführung finden Sie die detaillierten Testberichte unter:
 
 ## 🛠️ Erweiterungsanleitung: Neue Features & Regeln hinzufügen
 
-Das Framework ist darauf ausgelegt, mit minimalem Aufwand erweitert zu werden:
+### 1. Aufgezeichnete Blöcke in bestehende Tests einbauen
+In `resources/page_objects/<routine_name>.resource` stehen Ihnen die aufgezeichneten Keywords zur Verfügung (z. B. `Execute Routine Login Flow`). Importieren Sie das Resource-File in Ihrer Test-Suite:
 
-### 1. Neues Page Object anlegen (`resources/page_objects/`)
-Wenn ein neues Feature / eine neue Seite hinzugefügt wird (z. B. Einstellungen):
+```robot
+*** Settings ***
+Resource    ../resources/page_objects/login_flow.resource
+
+*** Test Cases ***
+Mein Komplett-Test
+    Execute Routine Login Flow
+```
+
+### 2. Neues Page Object manuell anlegen (`resources/page_objects/`)
 1. Erstellen Sie eine Datei `resources/page_objects/settings_page.resource`.
 2. Definieren Sie Selektoren im `*** Variables ***`-Block.
-3. Schreiben Sie benutzerlesbare Keywords im `*** Keywords ***`-Block.
+3. Schreiben Sie Keywords im `*** Keywords ***`-Block.
 
-### 2. Neue Python-Aktion/Regel hinzufügen (`libraries/`)
-Für komplexe Business-Logik, Prüfregeln oder Testdatengenerierung:
-1. Öffnen Sie `libraries/custom_actions.py` (oder erstellen Sie eine neue Python-Datei).
-2. Erstellen Sie eine Methode mit dem Decorator `@keyword("Mein Keyword Name")`.
+### 3. Neue Python-Aktion/Regel hinzufügen (`libraries/`)
+1. Öffnen Sie `libraries/custom_actions.py`.
+2. Erstellen Sie eine Methode mit `@keyword("Mein Keyword Name")`.
 3. Nutzen Sie das Keyword direkt in allen `.robot`-Dateien!
-
-### 3. Neue Test-Suite anlegen (`tests/`)
-1. Erstellen Sie eine neue `.robot`-Datei in `tests/` (z. B. `04_settings_tests.robot`).
-2. Importieren Sie `common.resource` sowie die benötigten Page Objects.
-3. Formulieren Sie Testfälle aus der Perspektive des Endanwenders.

@@ -7,4 +7,6 @@ requires-python = ">=3.14"
 dependencies = [
     "robotframework>=7.0.0",
     "robotframework-browser>=0.2.0",
+    "playwright>=1.40.0",
 ]
+

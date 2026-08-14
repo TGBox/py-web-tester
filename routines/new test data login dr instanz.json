@@ -1,0 +1,130 @@
+{
+  "routine_name": "new test data login dr instanz",
+  "recorded_at": "2026-08-14T16:37:23.184142",
+  "start_url": "https://dr.data-al.cloud",
+  "duration_ms": 34889,
+  "total_actions": 11,
+  "actions": [
+    {
+      "action_id": 1,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:36:50.769941",
+      "timestamp_ms": 1786718210769,
+      "elapsed_ms": 2475,
+      "delta_ms": 2475,
+      "page_url": "https://dr.data-al.cloud/aldashboard/",
+      "page_title": "Al-Start",
+      "element": null
+    },
+    {
+      "action_id": 2,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:36:51.384853",
+      "timestamp_ms": 1786718211384,
+      "elapsed_ms": 3090,
+      "delta_ms": 615,
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "page_title": "Al-Start",
+      "element": null
+    },
+    {
+      "action_id": 3,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:36:53.748851",
+      "timestamp_ms": 1786718213748,
+      "elapsed_ms": 5454,
+      "delta_ms": 2364,
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "page_title": "Al-Start",
+      "element": null
+    },
+    {
+      "action_id": 4,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:36:58.822122",
+      "timestamp_ms": 1786718218822,
+      "elapsed_ms": 10527,
+      "delta_ms": 5073,
+      "page_url": "https://dr.data-al.cloud/users/",
+      "page_title": "Benutzerverwaltung",
+      "element": null
+    },
+    {
+      "action_id": 5,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:37:00.289940",
+      "timestamp_ms": 1786718220289,
+      "elapsed_ms": 11995,
+      "delta_ms": 1468,
+      "page_url": "https://dr.data-al.cloud/users/home",
+      "page_title": "Benutzerverwaltung",
+      "element": null
+    },
+    {
+      "action_id": 6,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:37:03.138253",
+      "timestamp_ms": 1786718223138,
+      "elapsed_ms": 14843,
+      "delta_ms": 2848,
+      "page_url": "https://dr.data-al.cloud/patienten/",
+      "page_title": "Patienten",
+      "element": null
+    },
+    {
+      "action_id": 7,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:37:04.542085",
+      "timestamp_ms": 1786718224542,
+      "elapsed_ms": 16247,
+      "delta_ms": 1404,
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "page_title": "Patienten",
+      "element": null
+    },
+    {
+      "action_id": 8,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:37:08.003754",
+      "timestamp_ms": 1786718228003,
+      "elapsed_ms": 19709,
+      "delta_ms": 3462,
+      "page_url": "https://dr.data-al.cloud/terminplaner/",
+      "page_title": "Terminplaner",
+      "element": null
+    },
+    {
+      "action_id": 9,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:37:09.576113",
+      "timestamp_ms": 1786718229576,
+      "elapsed_ms": 21281,
+      "delta_ms": 1572,
+      "page_url": "https://dr.data-al.cloud/terminplaner/event",
+      "page_title": "Terminplaner",
+      "element": null
+    },
+    {
+      "action_id": 10,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:37:18.906069",
+      "timestamp_ms": 1786718238906,
+      "elapsed_ms": 30611,
+      "delta_ms": 9330,
+      "page_url": "https://dr.data-al.cloud/users/",
+      "page_title": "Benutzerverwaltung",
+      "element": null
+    },
+    {
+      "action_id": 11,
+      "event_type": "navigate",
+      "timestamp_iso": "2026-08-14T16:37:19.124143",
+      "timestamp_ms": 1786718239124,
+      "elapsed_ms": 30829,
+      "delta_ms": 218,
+      "page_url": "https://dr.data-al.cloud/users/home",
+      "page_title": "Benutzerverwaltung",
+      "element": null
+    }
+  ]
+}
