@@ -32,11 +32,12 @@ class RecorderThread(QThread):
     def run(self):
         try:
             recorder = RoutineRecorder()
-            trace_path = recorder.record_routine(
+            data = recorder.record_routine(
                 routine_name=self.routine_name,
-                url=self.target_url
+                start_url=self.target_url
             )
-            data = recorder.get_last_trace()
+            if not data:
+                data = recorder.get_last_trace()
             self.finished_signal.emit(data)
         except Exception as e:
             self.error_signal.emit(str(e))

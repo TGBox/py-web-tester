@@ -5,7 +5,7 @@ resource files (.resource) and executable test suites (.robot).
 Sanitizes selectors, comments, and values to guarantee single-line compliance for Robot Framework syntax.
 Smartly distinguishes input fields (Fill Text) from buttons/links/custom elements (Click).
 Uses resilient IF visibility guards, element readiness checks, and force-click fallbacks.
-Integrates visual pointer and bottom Keystroke HUD overlays during Headed test runs.
+Integrates visual pointer animation and bottom Keystroke HUD overlays during Headed test runs.
 """
 
 import json
@@ -187,9 +187,9 @@ class RoutineConverter:
                 lines.append(f"    ${{is_ready}}=    Run Keyword And Return Status    Wait For Elements State    {var_selector}    visible    timeout=3s")
                 lines.append(f"    IF    ${{is_ready}}")
                 
-                # Visual HUD injection & stroke overlay with proper boolean IF check
+                # Visual pointer animation to target element
                 lines.append(f"        IF    $HEADLESS is False or str($HEADLESS).upper() == 'FALSE'")
-                lines.append(f"            Run Keyword And Ignore Error    Inject Visual Pointer And Keystroke HUD")
+                lines.append(f"            Run Keyword And Ignore Error    Animate Visual Pointer To Element    {var_selector}")
                 lines.append(f"        END")
 
                 if kw == "Fill Text":

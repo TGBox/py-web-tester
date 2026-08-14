@@ -1,0 +1,1480 @@
+{
+  "routine_name": "teste",
+  "recorded_at": "2026-08-14T18:38:54.542023",
+  "start_url": "https://dr.data-al.cloud",
+  "description": "",
+  "tags": [],
+  "duration_ms": 31954,
+  "total_actions": 37,
+  "actions": [
+    {
+      "action_id": 1,
+      "delta_ms": 1706,
+      "elapsed_ms": 1706,
+      "element": null,
+      "event_type": "navigate",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/",
+      "timestamp_iso": "2026-08-14T18:38:18.008799",
+      "timestamp_ms": 1786725498008
+    },
+    {
+      "action_id": 2,
+      "delta_ms": 633,
+      "elapsed_ms": 2339,
+      "element": null,
+      "event_type": "navigate",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T18:38:18.641533",
+      "timestamp_ms": 1786725498641
+    },
+    {
+      "action_id": 3,
+      "delta_ms": 1309,
+      "elapsed_ms": 3648,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 24,
+          "left": 790,
+          "top": 244,
+          "width": 24
+        },
+        "class_name": "mat-icon notranslate material-icons mat-icon-no-color",
+        "elem_coords": {
+          "x": 1,
+          "x_pct": 4.2,
+          "y": 15,
+          "y_pct": 62.5
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.row",
+          "DIV.col",
+          "BUTTON.mat-focus-indicator",
+          "SPAN.mat-button-wrapper",
+          "MAT-ICON.mat-icon"
+        ],
+        "placeholder": null,
+        "role": "img",
+        "selector": "mat-icon[role=\"img\"]",
+        "tag": "MAT-ICON",
+        "text": "check",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-login[1]/div[1]/form[1]/div[5]/div[1]/button[1]/span[1]/mat-icon[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 791,
+        "client_y": 259,
+        "page_x": 791,
+        "page_y": 259
+      },
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/login?returnUrl=%2Fhome",
+      "timestamp_iso": "2026-08-14T16:38:19.949Z",
+      "timestamp_ms": 1786725499949
+    },
+    {
+      "action_id": 4,
+      "delta_ms": 274,
+      "elapsed_ms": 3922,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 56,
+          "left": 767,
+          "top": 228,
+          "width": 56
+        },
+        "class_name": "mat-focus-indicator mb-2 mat-fab mat-button-base mat-primary",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mt-4",
+          "FORM.ng-untouched",
+          "DIV.row",
+          "DIV.col",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button:has-text(\"check\")",
+        "tag": "BUTTON",
+        "text": "check",
+        "type": "submit",
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-login[1]/div[1]/form[1]/div[5]/div[1]/button[1]"
+      },
+      "event_type": "change",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T16:38:20.222Z",
+      "timestamp_ms": 1786725500222,
+      "value": ""
+    },
+    {
+      "action_id": 4,
+      "delta_ms": 254,
+      "elapsed_ms": 3902,
+      "element": null,
+      "event_type": "navigate",
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T18:38:20.204369",
+      "timestamp_ms": 1786725500204
+    },
+    {
+      "action_id": 6,
+      "delta_ms": 1553,
+      "elapsed_ms": 5455,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 17,
+          "left": 352,
+          "top": 59,
+          "width": 131
+        },
+        "class_name": "mat-button-wrapper",
+        "elem_coords": {
+          "x": 61,
+          "x_pct": 46.5,
+          "y": 5,
+          "y_pct": 29.4
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV",
+          "DIV.app_container-topbar",
+          "DIV.dashboardtoolbar",
+          "BUTTON.mat-focus-indicator",
+          "SPAN.mat-button-wrapper"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "span:has-text(\"people Patientenstamm\")",
+        "tag": "SPAN",
+        "text": "people Patientenstamm",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-karteidefinition[1]/div[1]/div[1]/div[1]/button[2]/span[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 413,
+        "client_y": 64,
+        "page_x": 413,
+        "page_y": 64
+      },
+      "page_title": "Al-Start",
+      "page_url": "https://dr.data-al.cloud/aldashboard/home",
+      "timestamp_iso": "2026-08-14T16:38:21.756Z",
+      "timestamp_ms": 1786725501756
+    },
+    {
+      "action_id": 7,
+      "delta_ms": 111,
+      "elapsed_ms": 5566,
+      "element": null,
+      "event_type": "navigate",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/",
+      "timestamp_iso": "2026-08-14T18:38:21.868271",
+      "timestamp_ms": 1786725501868
+    },
+    {
+      "action_id": 8,
+      "delta_ms": 2982,
+      "elapsed_ms": 8548,
+      "element": null,
+      "event_type": "navigate",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T18:38:24.850527",
+      "timestamp_ms": 1786725504850
+    },
+    {
+      "action_id": 9,
+      "delta_ms": 859,
+      "elapsed_ms": 9407,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 28,
+          "left": 195,
+          "top": 50,
+          "width": 168
+        },
+        "class_name": "mat-tooltip-trigger mat-autocomplete-trigger alinput ng-untouched ng-pristine ng-valid cdk-focused cdk-program-focused",
+        "elem_coords": {
+          "x": 66,
+          "x_pct": 39.3,
+          "y": 16,
+          "y_pct": 57.1
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-STAMMFORM.ng-star-inserted",
+          "DIV.app_container-topbar",
+          "DIV",
+          "DIV.buttonshadow",
+          "INPUT.mat-tooltip-trigger"
+        ],
+        "placeholder": null,
+        "role": "combobox",
+        "selector": "input[role=\"combobox\"]",
+        "tag": "INPUT",
+        "text": "",
+        "type": "text",
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-stammform[1]/div[1]/div[1]/div[1]/input[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 261,
+        "client_y": 66,
+        "page_x": 261,
+        "page_y": 66
+      },
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T16:38:25.709Z",
+      "timestamp_ms": 1786725505709
+    },
+    {
+      "action_id": 10,
+      "delta_ms": 1202,
+      "elapsed_ms": 10609,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 28,
+          "left": 195,
+          "top": 50,
+          "width": 168
+        },
+        "class_name": "mat-tooltip-trigger mat-autocomplete-trigger alinput ng-untouched ng-pristine ng-valid cdk-focused cdk-program-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-STAMMFORM.ng-star-inserted",
+          "DIV.app_container-topbar",
+          "DIV",
+          "DIV.buttonshadow",
+          "INPUT.mat-tooltip-trigger"
+        ],
+        "placeholder": null,
+        "role": "combobox",
+        "selector": "input[role=\"combobox\"]",
+        "tag": "INPUT",
+        "text": "",
+        "type": "text",
+        "value": "m",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-stammform[1]/div[1]/div[1]/div[1]/input[1]"
+      },
+      "event_type": "input",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T16:38:26.707Z",
+      "timestamp_ms": 1786725506707,
+      "value": "m"
+    },
+    {
+      "action_id": 11,
+      "delta_ms": 368,
+      "elapsed_ms": 10977,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 28,
+          "left": 189,
+          "top": 50,
+          "width": 152
+        },
+        "class_name": "mat-tooltip-trigger mat-autocomplete-trigger alinput ng-untouched ng-valid cdk-focused cdk-program-focused ng-dirty",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-STAMMFORM.ng-star-inserted",
+          "DIV.app_container-topbar",
+          "DIV",
+          "DIV.buttonshadow",
+          "INPUT.mat-tooltip-trigger"
+        ],
+        "placeholder": null,
+        "role": "combobox",
+        "selector": "input[role=\"combobox\"]",
+        "tag": "INPUT",
+        "text": "",
+        "type": "text",
+        "value": "mus",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-stammform[1]/div[1]/div[1]/div[1]/input[1]"
+      },
+      "event_type": "input",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T16:38:27.071Z",
+      "timestamp_ms": 1786725507071,
+      "value": "mus"
+    },
+    {
+      "action_id": 12,
+      "delta_ms": 466,
+      "elapsed_ms": 11443,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 28,
+          "left": 189,
+          "top": 50,
+          "width": 152
+        },
+        "class_name": "mat-tooltip-trigger mat-autocomplete-trigger alinput ng-untouched ng-valid cdk-focused cdk-program-focused ng-dirty",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-STAMMFORM.ng-star-inserted",
+          "DIV.app_container-topbar",
+          "DIV",
+          "DIV.buttonshadow",
+          "INPUT.mat-tooltip-trigger"
+        ],
+        "placeholder": null,
+        "role": "combobox",
+        "selector": "input[role=\"combobox\"]",
+        "tag": "INPUT",
+        "text": "",
+        "type": "text",
+        "value": "muster",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-stammform[1]/div[1]/div[1]/div[1]/input[1]"
+      },
+      "event_type": "input",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T16:38:27.542Z",
+      "timestamp_ms": 1786725507542,
+      "value": "muster"
+    },
+    {
+      "action_id": 13,
+      "delta_ms": 884,
+      "elapsed_ms": 12327,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 28,
+          "left": 189,
+          "top": 50,
+          "width": 152
+        },
+        "class_name": "mat-tooltip-trigger mat-autocomplete-trigger alinput ng-untouched ng-valid cdk-focused cdk-program-focused ng-dirty",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-STAMMFORM.ng-star-inserted",
+          "DIV.app_container-topbar",
+          "DIV",
+          "DIV.buttonshadow",
+          "INPUT.mat-tooltip-trigger"
+        ],
+        "placeholder": null,
+        "role": "combobox",
+        "selector": "input[role=\"combobox\"]",
+        "tag": "INPUT",
+        "text": "",
+        "type": "text",
+        "value": "mustermann",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-stammform[1]/div[1]/div[1]/div[1]/input[1]"
+      },
+      "event_type": "input",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T16:38:28.418Z",
+      "timestamp_ms": 1786725508418,
+      "value": "mustermann"
+    },
+    {
+      "action_id": 14,
+      "delta_ms": 1146,
+      "elapsed_ms": 13473,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 28,
+          "left": 189,
+          "top": 50,
+          "width": 152
+        },
+        "class_name": "mat-tooltip-trigger mat-autocomplete-trigger alinput ng-untouched ng-valid cdk-focused cdk-program-focused ng-dirty",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-STAMMFORM.ng-star-inserted",
+          "DIV.app_container-topbar",
+          "DIV",
+          "DIV.buttonshadow",
+          "INPUT.mat-tooltip-trigger"
+        ],
+        "placeholder": null,
+        "role": "combobox",
+        "selector": "input[role=\"combobox\"]",
+        "tag": "INPUT",
+        "text": "",
+        "type": "text",
+        "value": "mustermann",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-stammform[1]/div[1]/div[1]/div[1]/input[1]"
+      },
+      "event_type": "change",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T16:38:29.774Z",
+      "timestamp_ms": 1786725509774,
+      "value": "mustermann"
+    },
+    {
+      "action_id": 15,
+      "delta_ms": 71,
+      "elapsed_ms": 13544,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 48,
+          "left": 205,
+          "top": 78,
+          "width": 308
+        },
+        "class_name": "mat-option-text",
+        "elem_coords": {
+          "x": 74,
+          "x_pct": 24,
+          "y": 13,
+          "y_pct": 27.1
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.cdk-overlay-connected-position-bounding-box",
+          "DIV#cdk-overlay-0",
+          "DIV#mat-autocomplete-0",
+          "MAT-OPTION#[object Object]",
+          "SPAN.mat-option-text"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "span:has-text(\"Mustermann, Max 01.01.2000\")",
+        "tag": "SPAN",
+        "text": "Mustermann, Max 01.01.2000",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/div[4]/div[1]/div[1]/div[1]/mat-option[1]/span[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 279,
+        "client_y": 91,
+        "page_x": 279,
+        "page_y": 91
+      },
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T16:38:29.845Z",
+      "timestamp_ms": 1786725509845
+    },
+    {
+      "action_id": 16,
+      "delta_ms": 2,
+      "elapsed_ms": 13546,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 48,
+          "left": 189,
+          "top": 78,
+          "width": 340
+        },
+        "class_name": "mat-option mat-focus-indicator ng-star-inserted",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "[object Object]",
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.cdk-overlay-container",
+          "DIV.cdk-overlay-connected-position-bounding-box",
+          "DIV#cdk-overlay-0",
+          "DIV#mat-autocomplete-0",
+          "MAT-OPTION#[object Object]"
+        ],
+        "placeholder": null,
+        "role": "option",
+        "selector": "#\\[object\\ Object\\]",
+        "tag": "MAT-OPTION",
+        "text": "Mustermann, Max 01.01.2000",
+        "type": null,
+        "value": null,
+        "xpath": "//*[@id=\"[object Object]\"]"
+      },
+      "event_type": "change",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm",
+      "timestamp_iso": "2026-08-14T16:38:29.847Z",
+      "timestamp_ms": 1786725509847,
+      "value": null
+    },
+    {
+      "action_id": 17,
+      "delta_ms": 31,
+      "elapsed_ms": 13577,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 28,
+          "left": 195,
+          "top": 50,
+          "width": 168
+        },
+        "class_name": "mat-tooltip-trigger mat-autocomplete-trigger alinput ng-valid ng-dirty ng-touched",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-STAMMFORM.ng-star-inserted",
+          "DIV.app_container-topbar",
+          "DIV",
+          "DIV.buttonshadow",
+          "INPUT.mat-tooltip-trigger"
+        ],
+        "placeholder": null,
+        "role": "combobox",
+        "selector": "input[role=\"combobox\"]",
+        "tag": "INPUT",
+        "text": "",
+        "type": "text",
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-stammform[1]/div[1]/div[1]/div[1]/input[1]"
+      },
+      "event_type": "change",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm/MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:29.877Z",
+      "timestamp_ms": 1786725509877,
+      "value": ""
+    },
+    {
+      "action_id": 17,
+      "delta_ms": 6,
+      "elapsed_ms": 13552,
+      "element": null,
+      "event_type": "navigate",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm/MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T18:38:29.854030",
+      "timestamp_ms": 1786725509854
+    },
+    {
+      "action_id": 19,
+      "delta_ms": 4113,
+      "elapsed_ms": 17665,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 28,
+          "left": 195,
+          "top": 50,
+          "width": 168
+        },
+        "class_name": "mat-tooltip-trigger mat-autocomplete-trigger alinput ng-untouched ng-pristine ng-valid cdk-focused cdk-program-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-STAMMFORM.ng-star-inserted",
+          "DIV.app_container-topbar",
+          "DIV",
+          "DIV.buttonshadow",
+          "INPUT.mat-tooltip-trigger"
+        ],
+        "placeholder": null,
+        "role": "combobox",
+        "selector": "input[role=\"combobox\"]",
+        "tag": "INPUT",
+        "text": "",
+        "type": "text",
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/app-stammform[1]/div[1]/div[1]/div[1]/input[1]"
+      },
+      "event_type": "change",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm/MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:33.966Z",
+      "timestamp_ms": 1786725513966,
+      "value": ""
+    },
+    {
+      "action_id": 20,
+      "delta_ms": 111,
+      "elapsed_ms": 17776,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 32,
+          "left": 4,
+          "top": 4,
+          "width": 32
+        },
+        "class_name": null,
+        "elem_coords": {
+          "x": 14,
+          "x_pct": 43.8,
+          "y": 12,
+          "y_pct": 37.5
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.with-sidebar",
+          "DIV.sbar",
+          "BUTTON.mat-focus-indicator",
+          "SPAN.mat-button-wrapper",
+          "IMG"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-root > mat-sidenav-container > mat-sidenav-content > div > div > button > span > img",
+        "tag": "IMG",
+        "text": "",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[1]/button[1]/span[1]/img[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 18,
+        "client_y": 16,
+        "page_x": 18,
+        "page_y": 16
+      },
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm/MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:34.077Z",
+      "timestamp_ms": 1786725514077
+    },
+    {
+      "action_id": 21,
+      "delta_ms": 407,
+      "elapsed_ms": 18183,
+      "element": {
+        "aria_label": "Toggle sidenav",
+        "bounding_rect": {
+          "height": 40,
+          "left": 0,
+          "top": 0,
+          "width": 40
+        },
+        "class_name": "mat-focus-indicator mat-icon-button mat-button-base cdk-focused cdk-mouse-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-SIDENAV-CONTAINER.mat-drawer-container",
+          "MAT-SIDENAV-CONTENT.mat-drawer-content",
+          "DIV.with-sidebar",
+          "DIV.sbar",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button[aria-label=\"Toggle sidenav\"]",
+        "tag": "BUTTON",
+        "text": "",
+        "type": "button",
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[1]/button[1]"
+      },
+      "event_type": "change",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm/MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:34.484Z",
+      "timestamp_ms": 1786725514484,
+      "value": ""
+    },
+    {
+      "action_id": 22,
+      "delta_ms": 706,
+      "elapsed_ms": 18889,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 40,
+          "left": 16,
+          "top": 1,
+          "width": 40
+        },
+        "class_name": "mat-focus-indicator mat-tooltip-trigger mat-icon-button mat-button-base cdk-focused cdk-program-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-SIDENAV-CONTAINER.mat-drawer-container",
+          "MAT-SIDENAV.mat-drawer",
+          "DIV.mat-drawer-inner-container",
+          "MAT-TOOLBAR.mat-toolbar",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button:has-text(\"dashboard\")",
+        "tag": "BUTTON",
+        "text": "dashboard",
+        "type": null,
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav[1]/div[1]/mat-toolbar[1]/button[1]"
+      },
+      "event_type": "change",
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm/MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:35.190Z",
+      "timestamp_ms": 1786725515190,
+      "value": ""
+    },
+    {
+      "action_id": 23,
+      "delta_ms": 103,
+      "elapsed_ms": 18992,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 40,
+          "left": 229,
+          "top": 1,
+          "width": 40
+        },
+        "class_name": "mat-focus-indicator mat-tooltip-trigger mat-icon-button mat-button-base cdk-focused cdk-mouse-focused",
+        "elem_coords": {
+          "x": 3,
+          "x_pct": 7.5,
+          "y": 22,
+          "y_pct": 55
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-SIDENAV-CONTAINER.mat-drawer-container",
+          "MAT-SIDENAV.mat-drawer",
+          "DIV.mat-drawer-inner-container",
+          "MAT-TOOLBAR.mat-toolbar",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button:has-text(\"calendar_month\")",
+        "tag": "BUTTON",
+        "text": "calendar_month",
+        "type": null,
+        "value": "",
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav[1]/div[1]/mat-toolbar[1]/button[4]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 232,
+        "client_y": 23,
+        "page_x": 232,
+        "page_y": 23
+      },
+      "page_title": "Patienten",
+      "page_url": "https://dr.data-al.cloud/patienten/patientenstamm/MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:35.293Z",
+      "timestamp_ms": 1786725515293
+    },
+    {
+      "action_id": 24,
+      "delta_ms": 39,
+      "elapsed_ms": 19031,
+      "element": null,
+      "event_type": "navigate",
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T18:38:35.333007",
+      "timestamp_ms": 1786725515333
+    },
+    {
+      "action_id": 25,
+      "delta_ms": 6154,
+      "elapsed_ms": 25185,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 50,
+          "left": 572,
+          "top": 439,
+          "width": 230
+        },
+        "class_name": "mbsc-flex-1-0 mbsc-material mbsc-schedule-item ng-star-inserted",
+        "elem_coords": {
+          "x": 91,
+          "x_pct": 39.6,
+          "y": 1,
+          "y_pct": 2
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex-1-0",
+          "DIV.mbsc-flex-1-1",
+          "DIV.mbsc-flex-1-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-root > mat-sidenav-container > mat-sidenav-content > div > div:nth-of-type(2) > eventcalendar > mat-drawer-container > mat-drawer-content > div > div:nth-of-type(2) > mbsc-eventcalendar > mbsc-calendar-view > mbsc-scheduler > div:nth-of-type(3) > div:nth-of-type(2) > div > div > div > div:nth-of-type(3) > div > div:nth-of-type(54)",
+        "tag": "DIV",
+        "text": "",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/eventcalendar[1]/mat-drawer-container[1]/mat-drawer-content[1]/div[1]/div[2]/mbsc-eventcalendar[1]/mbsc-calendar-view[1]/mbsc-scheduler[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[54]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 663,
+        "client_y": 440,
+        "page_x": 663,
+        "page_y": 440
+      },
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:41.486Z",
+      "timestamp_ms": 1786725521486
+    },
+    {
+      "action_id": 26,
+      "delta_ms": 143,
+      "elapsed_ms": 25328,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 50,
+          "left": 572,
+          "top": 439,
+          "width": 230
+        },
+        "class_name": "mbsc-flex-1-0 mbsc-material mbsc-schedule-item ng-star-inserted",
+        "elem_coords": {
+          "x": 91,
+          "x_pct": 39.6,
+          "y": 1,
+          "y_pct": 2
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex-1-0",
+          "DIV.mbsc-flex-1-1",
+          "DIV.mbsc-flex-1-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-root > mat-sidenav-container > mat-sidenav-content > div > div:nth-of-type(2) > eventcalendar > mat-drawer-container > mat-drawer-content > div > div:nth-of-type(2) > mbsc-eventcalendar > mbsc-calendar-view > mbsc-scheduler > div:nth-of-type(3) > div:nth-of-type(2) > div > div > div > div:nth-of-type(3) > div > div:nth-of-type(54)",
+        "tag": "DIV",
+        "text": "",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/eventcalendar[1]/mat-drawer-container[1]/mat-drawer-content[1]/div[1]/div[2]/mbsc-eventcalendar[1]/mbsc-calendar-view[1]/mbsc-scheduler[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[54]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 663,
+        "client_y": 440,
+        "page_x": 663,
+        "page_y": 440
+      },
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:41.630Z",
+      "timestamp_ms": 1786725521630
+    },
+    {
+      "action_id": 27,
+      "delta_ms": 2,
+      "elapsed_ms": 25330,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 50,
+          "left": 572,
+          "top": 439,
+          "width": 230
+        },
+        "class_name": "mbsc-flex-1-0 mbsc-material mbsc-schedule-item ng-star-inserted",
+        "elem_coords": {
+          "x": 91,
+          "x_pct": 39.6,
+          "y": 1,
+          "y_pct": 2
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex-1-0",
+          "DIV.mbsc-flex-1-1",
+          "DIV.mbsc-flex-1-0"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-root > mat-sidenav-container > mat-sidenav-content > div > div:nth-of-type(2) > eventcalendar > mat-drawer-container > mat-drawer-content > div > div:nth-of-type(2) > mbsc-eventcalendar > mbsc-calendar-view > mbsc-scheduler > div:nth-of-type(3) > div:nth-of-type(2) > div > div > div > div:nth-of-type(3) > div > div:nth-of-type(54)",
+        "tag": "DIV",
+        "text": "",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/eventcalendar[1]/mat-drawer-container[1]/mat-drawer-content[1]/div[1]/div[2]/mbsc-eventcalendar[1]/mbsc-calendar-view[1]/mbsc-scheduler[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[54]"
+      },
+      "event_type": "dblclick",
+      "mouse": {
+        "button": 0,
+        "client_x": 663,
+        "client_y": 440,
+        "page_x": 663,
+        "page_y": 440
+      },
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:41.631Z",
+      "timestamp_ms": 1786725521631
+    },
+    {
+      "action_id": 28,
+      "delta_ms": 1191,
+      "elapsed_ms": 26521,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 12,
+          "left": 624,
+          "top": 458,
+          "width": 51
+        },
+        "class_name": null,
+        "elem_coords": {
+          "x": 44,
+          "x_pct": 85.9,
+          "y": 4,
+          "y_pct": 33.3
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mbsc-ltr",
+          "MBSC-SCHEDULE-EVENT.mbsc-ltr",
+          "DIV.ng-star-inserted",
+          "DIV",
+          "SPAN"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "span:has-text(\"18:45 - 19:00\")",
+        "tag": "SPAN",
+        "text": "18:45 - 19:00",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/eventcalendar[1]/mat-drawer-container[1]/mat-drawer-content[1]/div[1]/div[2]/mbsc-eventcalendar[1]/mbsc-calendar-view[1]/mbsc-scheduler[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/mbsc-schedule-event[5]/div[3]/div[3]/span[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 668,
+        "client_y": 462,
+        "page_x": 668,
+        "page_y": 462
+      },
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:42.822Z",
+      "timestamp_ms": 1786725522822
+    },
+    {
+      "action_id": 29,
+      "delta_ms": 262,
+      "elapsed_ms": 26783,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 50,
+          "left": 572,
+          "top": 439,
+          "width": 222
+        },
+        "class_name": "mbsc-ltr mbsc-material mbsc-schedule-event mbsc-schedule-event-end mbsc-schedule-event-start ng-star-inserted mbsc-schedule-event-active",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex-1-0",
+          "DIV.mbsc-flex-1-1",
+          "DIV.mbsc-ltr",
+          "MBSC-SCHEDULE-EVENT.mbsc-ltr"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-root > mat-sidenav-container > mat-sidenav-content > div > div:nth-of-type(2) > eventcalendar > mat-drawer-container > mat-drawer-content > div > div:nth-of-type(2) > mbsc-eventcalendar > mbsc-calendar-view > mbsc-scheduler > div:nth-of-type(3) > div:nth-of-type(2) > div > div > div > div:nth-of-type(3) > div > div > mbsc-schedule-event:nth-of-type(5)",
+        "tag": "MBSC-SCHEDULE-EVENT",
+        "text": "Mustermann Max Behandlung 18:45 - 19:00",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/eventcalendar[1]/mat-drawer-container[1]/mat-drawer-content[1]/div[1]/div[2]/mbsc-eventcalendar[1]/mbsc-calendar-view[1]/mbsc-scheduler[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/mbsc-schedule-event[5]"
+      },
+      "event_type": "change",
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:43.084Z",
+      "timestamp_ms": 1786725523084,
+      "value": null
+    },
+    {
+      "action_id": 30,
+      "delta_ms": 1100,
+      "elapsed_ms": 27883,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 586,
+          "left": 400,
+          "top": 67,
+          "width": 480
+        },
+        "class_name": "mat-dialog-container ng-tns-c45-12 ng-trigger ng-trigger-dialogContainer ng-star-inserted",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-dialog-0",
+        "name": null,
+        "parent_hierarchy": [
+          "BODY.mat-typography",
+          "DIV.cdk-overlay-container",
+          "DIV.cdk-global-overlay-wrapper",
+          "DIV#cdk-overlay-1",
+          "MAT-DIALOG-CONTAINER#mat-dialog-0"
+        ],
+        "placeholder": null,
+        "role": "dialog",
+        "selector": "#mat-dialog-0",
+        "tag": "MAT-DIALOG-CONTAINER",
+        "text": "Termin bearbeiten help_outline Umwandeln zu Gruppentermin Zum Patienten Termin (Leistung) help_outli",
+        "type": null,
+        "value": null,
+        "xpath": "//*[@id=\"mat-dialog-0\"]"
+      },
+      "event_type": "change",
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:44.184Z",
+      "timestamp_ms": 1786725524184,
+      "value": null
+    },
+    {
+      "action_id": 31,
+      "delta_ms": 93,
+      "elapsed_ms": 27976,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 36,
+          "left": 426,
+          "top": 589,
+          "width": 100
+        },
+        "class_name": "mat-focus-indicator btn mat-stroked-button mat-button-base cdk-focused cdk-mouse-focused",
+        "elem_coords": {
+          "x": 31,
+          "x_pct": 31,
+          "y": 28,
+          "y_pct": 77.8
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-EVENTEDIT.ng-star-inserted",
+          "DIV.Mymat-dialog-actions",
+          "DIV",
+          "DIV",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button:has-text(\"Löschen\")",
+        "tag": "BUTTON",
+        "text": "Löschen",
+        "type": null,
+        "value": "",
+        "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/mat-dialog-container[1]/app-eventedit[1]/div[2]/div[1]/div[2]/button[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 457,
+        "client_y": 617,
+        "page_x": 457,
+        "page_y": 617
+      },
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:44.277Z",
+      "timestamp_ms": 1786725524277
+    },
+    {
+      "action_id": 32,
+      "delta_ms": 91,
+      "elapsed_ms": 28067,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 36,
+          "left": 426,
+          "top": 589,
+          "width": 100
+        },
+        "class_name": "mat-focus-indicator btn mat-stroked-button mat-button-base cdk-focused cdk-mouse-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "APP-EVENTEDIT.ng-star-inserted",
+          "DIV.Mymat-dialog-actions",
+          "DIV",
+          "DIV",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button:has-text(\"Löschen\")",
+        "tag": "BUTTON",
+        "text": "Löschen",
+        "type": null,
+        "value": "",
+        "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/mat-dialog-container[1]/app-eventedit[1]/div[2]/div[1]/div[2]/button[1]"
+      },
+      "event_type": "change",
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:44.368Z",
+      "timestamp_ms": 1786725524368,
+      "value": ""
+    },
+    {
+      "action_id": 33,
+      "delta_ms": 152,
+      "elapsed_ms": 28219,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 50,
+          "left": 572,
+          "top": 439,
+          "width": 222
+        },
+        "class_name": "mbsc-ltr mbsc-material mbsc-schedule-event mbsc-schedule-event-end mbsc-schedule-event-start ng-star-inserted mbsc-schedule-event-active",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex-1-0",
+          "DIV.mbsc-flex-1-1",
+          "DIV.mbsc-ltr",
+          "MBSC-SCHEDULE-EVENT.mbsc-ltr"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-root > mat-sidenav-container > mat-sidenav-content > div > div:nth-of-type(2) > eventcalendar > mat-drawer-container > mat-drawer-content > div > div:nth-of-type(2) > mbsc-eventcalendar > mbsc-calendar-view > mbsc-scheduler > div:nth-of-type(3) > div:nth-of-type(2) > div > div > div > div:nth-of-type(3) > div > div > mbsc-schedule-event:nth-of-type(5)",
+        "tag": "MBSC-SCHEDULE-EVENT",
+        "text": "Mustermann Max Behandlung 18:45 - 19:00",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/eventcalendar[1]/mat-drawer-container[1]/mat-drawer-content[1]/div[1]/div[2]/mbsc-eventcalendar[1]/mbsc-calendar-view[1]/mbsc-scheduler[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/mbsc-schedule-event[5]"
+      },
+      "event_type": "change",
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:44.520Z",
+      "timestamp_ms": 1786725524520,
+      "value": null
+    },
+    {
+      "action_id": 34,
+      "delta_ms": 719,
+      "elapsed_ms": 28938,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 1,
+          "left": 455,
+          "top": 431,
+          "width": 1
+        },
+        "class_name": "mat-checkbox-input cdk-visually-hidden",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": "mat-checkbox-9-input",
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.ng-star-inserted",
+          "MAT-CHECKBOX#mat-checkbox-9",
+          "LABEL.mat-checkbox-layout",
+          "SPAN.mat-checkbox-inner-container",
+          "INPUT#mat-checkbox-9-input"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "#mat-checkbox-9-input",
+        "tag": "INPUT",
+        "text": "",
+        "type": "checkbox",
+        "value": "on",
+        "xpath": "//*[@id=\"mat-checkbox-9-input\"]"
+      },
+      "event_type": "change",
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:45.239Z",
+      "timestamp_ms": 1786725525239,
+      "value": "on"
+    },
+    {
+      "action_id": 35,
+      "delta_ms": 78,
+      "elapsed_ms": 29016,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 17,
+          "left": 464,
+          "top": 458,
+          "width": 53
+        },
+        "class_name": "mat-button-wrapper",
+        "elem_coords": {
+          "x": 8,
+          "x_pct": 15,
+          "y": 0,
+          "y_pct": 0
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "MAT-DIALOG-CONTAINER#mat-dialog-1",
+          "APP-CONFIRMDIALOG.ng-star-inserted",
+          "MAT-DIALOG-ACTIONS.mat-dialog-actions",
+          "BUTTON.mat-focus-indicator",
+          "SPAN.mat-button-wrapper"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "span:has-text(\"Löschen\")",
+        "tag": "SPAN",
+        "text": "Löschen",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/mat-dialog-container[1]/app-confirmdialog[1]/mat-dialog-actions[1]/button[1]/span[1]"
+      },
+      "event_type": "click",
+      "mouse": {
+        "button": 0,
+        "client_x": 471,
+        "client_y": 457,
+        "page_x": 471,
+        "page_y": 457
+      },
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:45.317Z",
+      "timestamp_ms": 1786725525317
+    },
+    {
+      "action_id": 36,
+      "delta_ms": 84,
+      "elapsed_ms": 29100,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 36,
+          "left": 448,
+          "top": 449,
+          "width": 85
+        },
+        "class_name": "mat-focus-indicator mat-raised-button mat-button-base mat-warn cdk-focused cdk-mouse-focused",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV#cdk-overlay-4",
+          "MAT-DIALOG-CONTAINER#mat-dialog-1",
+          "APP-CONFIRMDIALOG.ng-star-inserted",
+          "MAT-DIALOG-ACTIONS.mat-dialog-actions",
+          "BUTTON.mat-focus-indicator"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "button:has-text(\"Löschen\")",
+        "tag": "BUTTON",
+        "text": "Löschen",
+        "type": null,
+        "value": "",
+        "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/mat-dialog-container[1]/app-confirmdialog[1]/mat-dialog-actions[1]/button[1]"
+      },
+      "event_type": "change",
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:45.401Z",
+      "timestamp_ms": 1786725525401,
+      "value": ""
+    },
+    {
+      "action_id": 37,
+      "delta_ms": 122,
+      "elapsed_ms": 29222,
+      "element": {
+        "aria_label": null,
+        "bounding_rect": {
+          "height": 50,
+          "left": 572,
+          "top": 439,
+          "width": 222
+        },
+        "class_name": "mbsc-ltr mbsc-material mbsc-schedule-event mbsc-schedule-event-end mbsc-schedule-event-start ng-star-inserted mbsc-schedule-event-active",
+        "elem_coords": {
+          "x": null,
+          "x_pct": null,
+          "y": null,
+          "y_pct": null
+        },
+        "id": null,
+        "name": null,
+        "parent_hierarchy": [
+          "DIV.mbsc-flex",
+          "DIV.mbsc-flex-1-0",
+          "DIV.mbsc-flex-1-1",
+          "DIV.mbsc-ltr",
+          "MBSC-SCHEDULE-EVENT.mbsc-ltr"
+        ],
+        "placeholder": null,
+        "role": null,
+        "selector": "app-root > mat-sidenav-container > mat-sidenav-content > div > div:nth-of-type(2) > eventcalendar > mat-drawer-container > mat-drawer-content > div > div:nth-of-type(2) > mbsc-eventcalendar > mbsc-calendar-view > mbsc-scheduler > div:nth-of-type(3) > div:nth-of-type(2) > div > div > div > div:nth-of-type(3) > div > div > mbsc-schedule-event:nth-of-type(5)",
+        "tag": "MBSC-SCHEDULE-EVENT",
+        "text": "Mustermann Max Behandlung 18:45 - 19:00",
+        "type": null,
+        "value": null,
+        "xpath": "/html[1]/body[1]/app-root[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[2]/eventcalendar[1]/mat-drawer-container[1]/mat-drawer-content[1]/div[1]/div[2]/mbsc-eventcalendar[1]/mbsc-calendar-view[1]/mbsc-scheduler[1]/div[3]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/mbsc-schedule-event[5]"
+      },
+      "event_type": "change",
+      "page_title": "Terminplaner",
+      "page_url": "https://dr.data-al.cloud/terminplaner/event?patientid=MST4PMPX-8M5AI",
+      "timestamp_iso": "2026-08-14T16:38:45.523Z",
+      "timestamp_ms": 1786725525523,
+      "value": null
+    }
+  ]
+}

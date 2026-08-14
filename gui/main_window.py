@@ -3,13 +3,14 @@ Main PySide6 Window for py-web-tester Desktop Application.
 Features:
 - Header bar with "+ Neue Routine definieren" wizard trigger, search bar, and tag filter.
 - 3 Tab Views: "Einzelne Routinen", "Routinen-Gruppen", "Gesamt-Tests / Suiten".
+- Direct opening of generated HTML test reports (report.html / log.html) in the default web browser.
 - Generous auto-sizing for all table headers, labels, buttons, and combo boxes to avoid text truncation.
 - Small creation date badge display for all routines.
 - Bottom Execution Control Bar:
   * Headless / Headed toggle switch.
   * Speed mode selection: Maximal (Instant ready), 2x Speed, Normal, Slow-Mo slider, Manual step-by-step.
   * Visual mouse pointer and bottom Keystroke HUD enabled for Headed tests.
-  * Control buttons ("Start", "Nächster Schritt", "Pause", "Stopp").
+  * Control buttons ("Start", "Nächster Schritt", "Stopp", "📊 Bericht öffnen").
   * Real-time Log Console Drawer.
 """
 
@@ -17,7 +18,8 @@ import sys
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-from PySide6.QtCore import Qt, Slot
+from PySide6.QtCore import Qt, QUrl, Slot
+from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit,
     QPushButton, QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView,
@@ -179,6 +181,13 @@ class MainWindow(QMainWindow):
         self.stop_btn.clicked.connect(self._stop_execution)
         ctrl_row.addWidget(self.stop_btn)
 
+        # Button: Report / Bericht im Browser öffnen
+        self.open_report_btn = QPushButton("📊 Testbericht öffnen")
+        self.open_report_btn.setStyleSheet("background-color: #89b4fa; color: #11111b; font-weight: bold; padding: 8px 16px;")
+        self.open_report_btn.setMinimumWidth(160)
+        self.open_report_btn.clicked.connect(self._open_test_report)
+        ctrl_row.addWidget(self.open_report_btn)
+
         exec_layout.addLayout(ctrl_row)
 
         # Progress & Status Row
@@ -205,6 +214,27 @@ class MainWindow(QMainWindow):
         exec_layout.addWidget(self.log_console)
 
         main_layout.addWidget(exec_group)
+
+    # -------------------------------------------------------------------------
+    # REPORT OPENER HELPER
+    # -------------------------------------------------------------------------
+
+    def _open_test_report(self):
+        """Opens the Robot Framework HTML report (report.html or log.html) in default web browser."""
+        report_file = Path("results/report.html").resolve()
+        log_file = Path("results/log.html").resolve()
+
+        target_file = report_file if report_file.exists() else log_file
+
+        if target_file.exists():
+            QDesktopServices.openUrl(QUrl.fromLocalFile(str(target_file)))
+        else:
+            QMessageBox.information(
+                self,
+                "Kein Bericht vorhanden",
+                "Es wurde bisher noch kein Testbericht generiert.\n\n"
+                "Bitte führen Sie zuerst eine Testroutine, Gruppe oder Suite aus!"
+            )
 
     # -------------------------------------------------------------------------
     # TAB CREATION HELPERS
@@ -377,6 +407,12 @@ class MainWindow(QMainWindow):
             run_btn.clicked.connect(lambda _, rname=name: self._run_single_routine(rname))
             btn_layout.addWidget(run_btn)
 
+            report_btn = QPushButton("📊 Bericht")
+            report_btn.setStyleSheet("background-color: #89b4fa; color: #11111b; padding: 4px 8px; font-weight: bold;")
+            report_btn.setMinimumWidth(85)
+            report_btn.clicked.connect(self._open_test_report)
+            btn_layout.addWidget(report_btn)
+
             del_btn = QPushButton("🗑")
             del_btn.setObjectName("DangerButton")
             del_btn.setStyleSheet("background-color: #f38ba8; color: #11111b; padding: 4px 10px; font-weight: bold;")
@@ -410,6 +446,12 @@ class MainWindow(QMainWindow):
             run_btn.clicked.connect(lambda _, grp=g: self._run_group(grp))
             btn_layout.addWidget(run_btn)
 
+            report_btn = QPushButton("📊 Bericht")
+            report_btn.setStyleSheet("background-color: #89b4fa; color: #11111b; padding: 4px 8px; font-weight: bold;")
+            report_btn.setMinimumWidth(85)
+            report_btn.clicked.connect(self._open_test_report)
+            btn_layout.addWidget(report_btn)
+
             del_btn = QPushButton("🗑")
             del_btn.setObjectName("DangerButton")
             del_btn.setStyleSheet("background-color: #f38ba8; color: #11111b; padding: 4px 10px; font-weight: bold;")
@@ -442,6 +484,12 @@ class MainWindow(QMainWindow):
             run_btn.setMinimumWidth(130)
             run_btn.clicked.connect(lambda _, ste=s: self._run_suite(ste))
             btn_layout.addWidget(run_btn)
+
+            report_btn = QPushButton("📊 Bericht")
+            report_btn.setStyleSheet("background-color: #89b4fa; color: #11111b; padding: 4px 8px; font-weight: bold;")
+            report_btn.setMinimumWidth(85)
+            report_btn.clicked.connect(self._open_test_report)
+            btn_layout.addWidget(report_btn)
 
             del_btn = QPushButton("🗑")
             del_btn.setObjectName("DangerButton")
@@ -686,8 +734,8 @@ class MainWindow(QMainWindow):
         self.next_step_btn.setEnabled(False)
 
         if success:
-            self.status_label.setText(f"Status: Testausführung ERFOLGREICH beendet!")
+            self.status_label.setText("Status: Testausführung ERFOLGREICH beendet! (Klicken Sie auf '📊 Testbericht öffnen', um Ergebnisse anzuzeigen)")
             self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
         else:
-            self.status_label.setText(f"Status: Testausführung FEHLGESCHLAGEN. Siehe Log unten.")
+            self.status_label.setText("Status: Testausführung FEHLGESCHLAGEN. (Klicken Sie auf '📊 Testbericht öffnen' für Details)")
             self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
