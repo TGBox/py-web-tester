@@ -3,10 +3,10 @@ Main PySide6 Window for py-web-tester Desktop Application.
 Features:
 - Header bar with "+ Neue Routine definieren" wizard trigger, search bar, and tag filter.
 - 3 Tab Views: "Einzelne Routinen", "Routinen-Gruppen", "Gesamt-Tests / Suiten".
-- Selection checkboxes for both Routines and Routine Groups.
+- Selection checkboxes & batch operations across ALL 3 tabs (Multi-Selection Run & Multi-Selection Delete).
 - Execution benchmark timing comparison column (Original manual baseline duration vs last automated test duration, speedup factor, and timestamp).
 - Standardized German date formatting: "14.08.2026, 19:08 Uhr" across all creation dates and execution logs.
-- Direct opening of generated HTML test reports (report.html / log.html) in the default web browser.
+- Direct opening of generated HTML test reports (report.html / log.html) in default web browser.
 - Generous auto-sizing for all table headers, labels, buttons, and combo boxes to avoid text truncation.
 - Bottom Execution Control Bar:
   * Headless / Headed toggle switch.
@@ -46,8 +46,8 @@ class MainWindow(QMainWindow):
         self.execution_thread: Optional[ExecutionControllerThread] = None
 
         self.setWindowTitle("py-web-tester — Web UI Automation Suite")
-        self.resize(1280, 820)
-        self.setMinimumSize(1050, 700)
+        self.resize(1300, 840)
+        self.setMinimumSize(1080, 720)
         self.setStyleSheet(DARK_THEME_QSS)
 
         self._init_ui()
@@ -257,6 +257,13 @@ class MainWindow(QMainWindow):
         self.create_group_from_sel_btn.clicked.connect(self._create_group_from_selection)
         top_bar.addWidget(self.create_group_from_sel_btn)
 
+        self.delete_selected_routines_btn = QPushButton("🗑 Markierte Routinen löschen")
+        self.delete_selected_routines_btn.setObjectName("DangerButton")
+        self.delete_selected_routines_btn.setStyleSheet("background-color: #f38ba8; color: #11111b; font-weight: bold; padding: 6px 14px;")
+        self.delete_selected_routines_btn.setMinimumWidth(200)
+        self.delete_selected_routines_btn.clicked.connect(self._delete_selected_routines)
+        top_bar.addWidget(self.delete_selected_routines_btn)
+
         top_bar.addStretch()
         layout.addLayout(top_bar)
 
@@ -298,6 +305,13 @@ class MainWindow(QMainWindow):
         self.run_selected_groups_btn.clicked.connect(self._run_selected_groups)
         top_bar.addWidget(self.run_selected_groups_btn)
 
+        self.delete_selected_groups_btn = QPushButton("🗑 Markierte Gruppen löschen")
+        self.delete_selected_groups_btn.setObjectName("DangerButton")
+        self.delete_selected_groups_btn.setStyleSheet("background-color: #f38ba8; color: #11111b; font-weight: bold; padding: 6px 14px;")
+        self.delete_selected_groups_btn.setMinimumWidth(200)
+        self.delete_selected_groups_btn.clicked.connect(self._delete_selected_groups)
+        top_bar.addWidget(self.delete_selected_groups_btn)
+
         top_bar.addStretch()
         layout.addLayout(top_bar)
 
@@ -329,21 +343,35 @@ class MainWindow(QMainWindow):
         new_suite_btn.setMinimumWidth(250)
         new_suite_btn.clicked.connect(self._open_new_suite_dialog)
         top_bar.addWidget(new_suite_btn)
+
+        self.run_selected_suites_btn = QPushButton("▶ Markierte Suiten ausführen")
+        self.run_selected_suites_btn.setMinimumWidth(200)
+        self.run_selected_suites_btn.clicked.connect(self._run_selected_suites)
+        top_bar.addWidget(self.run_selected_suites_btn)
+
+        self.delete_selected_suites_btn = QPushButton("🗑 Markierte Suiten löschen")
+        self.delete_selected_suites_btn.setObjectName("DangerButton")
+        self.delete_selected_suites_btn.setStyleSheet("background-color: #f38ba8; color: #11111b; font-weight: bold; padding: 6px 14px;")
+        self.delete_selected_suites_btn.setMinimumWidth(200)
+        self.delete_selected_suites_btn.clicked.connect(self._delete_selected_suites)
+        top_bar.addWidget(self.delete_selected_suites_btn)
+
         top_bar.addStretch()
         layout.addLayout(top_bar)
 
         self.suites_table = QTableWidget()
-        self.suites_table.setColumnCount(5)
+        self.suites_table.setColumnCount(6)
         self.suites_table.setHorizontalHeaderLabels([
-            "Suite-Name", "Anzahl Elemente", "Beschreibung", "Erstellt am", "Aktion"
+            "Auswahl", "Suite-Name", "Anzahl Elemente", "Beschreibung", "Erstellt am", "Aktion"
         ])
 
         header = self.suites_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QHeaderView.Stretch)
-        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.Stretch)
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
 
         layout.addWidget(self.suites_table)
 
@@ -522,14 +550,22 @@ class MainWindow(QMainWindow):
             desc = s.get("description", "")
             cdate = format_datetime_de(s.get("created_at", ""))
 
-            self.suites_table.setItem(idx, 0, QTableWidgetItem(sname))
-            self.suites_table.setItem(idx, 1, QTableWidgetItem(f"{icount} Elemente"))
-            self.suites_table.setItem(idx, 2, QTableWidgetItem(desc))
+            chk = QCheckBox()
+            chk_widget = QWidget()
+            chk_layout = QHBoxLayout(chk_widget)
+            chk_layout.addWidget(chk)
+            chk_layout.setAlignment(Qt.AlignCenter)
+            chk_layout.setContentsMargins(0,0,0,0)
+            self.suites_table.setCellWidget(idx, 0, chk_widget)
+
+            self.suites_table.setItem(idx, 1, QTableWidgetItem(sname))
+            self.suites_table.setItem(idx, 2, QTableWidgetItem(f"{icount} Elemente"))
+            self.suites_table.setItem(idx, 3, QTableWidgetItem(desc))
 
             cdate_item = QTableWidgetItem(cdate)
             cdate_item.setTextAlignment(Qt.AlignCenter)
             cdate_item.setForeground(Qt.GlobalColor.darkGray)
-            self.suites_table.setItem(idx, 3, cdate_item)
+            self.suites_table.setItem(idx, 4, cdate_item)
 
             btn_widget = QWidget()
             btn_layout = QHBoxLayout(btn_widget)
@@ -553,7 +589,7 @@ class MainWindow(QMainWindow):
             del_btn.clicked.connect(lambda _, sname=sname: self._delete_suite(sname))
             btn_layout.addWidget(del_btn)
 
-            self.suites_table.setCellWidget(idx, 4, btn_widget)
+            self.suites_table.setCellWidget(idx, 5, btn_widget)
 
     # -------------------------------------------------------------------------
     # FILTER & UI ACTIONS
@@ -608,6 +644,24 @@ class MainWindow(QMainWindow):
             self.manager.delete_routine(routine_name)
             self.refresh_all_views()
 
+    def _delete_selected_routines(self):
+        selected_names = self._get_checked_routine_names()
+        if not selected_names:
+            QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie in der Tabelle mindestens eine Routine aus.")
+            return
+
+        names_list_str = "\n".join([f"• {n}" for n in selected_names])
+        reply = QMessageBox.question(
+            self,
+            "Mehrere Routinen löschen",
+            f"Möchten Sie die folgenden {len(selected_names)} ausgewählten Routinen wirklich unwiderruflich löschen?\n\n{names_list_str}",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            for rname in selected_names:
+                self.manager.delete_routine(rname)
+            self.refresh_all_views()
+
     def _delete_group(self, group_name: str):
         reply = QMessageBox.question(
             self,
@@ -619,6 +673,24 @@ class MainWindow(QMainWindow):
             self.manager.delete_group(group_name)
             self.refresh_all_views()
 
+    def _delete_selected_groups(self):
+        selected_groups = self._get_checked_group_names()
+        if not selected_groups:
+            QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie in der Gruppen-Tabelle mindestens eine Gruppe aus.")
+            return
+
+        names_list_str = "\n".join([f"• {g}" for g in selected_groups])
+        reply = QMessageBox.question(
+            self,
+            "Mehrere Gruppen löschen",
+            f"Möchten Sie die folgenden {len(selected_groups)} ausgewählten Gruppen wirklich unwiderruflich löschen?\n\n{names_list_str}",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            for gname in selected_groups:
+                self.manager.delete_group(gname)
+            self.refresh_all_views()
+
     def _delete_suite(self, suite_name: str):
         reply = QMessageBox.question(
             self,
@@ -628,6 +700,24 @@ class MainWindow(QMainWindow):
         )
         if reply == QMessageBox.Yes:
             self.manager.delete_suite(suite_name)
+            self.refresh_all_views()
+
+    def _delete_selected_suites(self):
+        selected_suites = self._get_checked_suite_names()
+        if not selected_suites:
+            QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie in der Suiten-Tabelle mindestens eine Suite aus.")
+            return
+
+        names_list_str = "\n".join([f"• {s}" for s in selected_suites])
+        reply = QMessageBox.question(
+            self,
+            "Mehrere Suiten löschen",
+            f"Möchten Sie die folgenden {len(selected_suites)} ausgewählten Gesamt-Tests (Suiten) wirklich unwiderruflich löschen?\n\n{names_list_str}",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            for sname in selected_suites:
+                self.manager.delete_suite(sname)
             self.refresh_all_views()
 
     def _create_group_from_selection(self):
@@ -660,6 +750,16 @@ class MainWindow(QMainWindow):
                 chk = widget.findChild(QCheckBox)
                 if chk and chk.isChecked():
                     names.append(self.groups_table.item(idx, 1).text())
+        return names
+
+    def _get_checked_suite_names(self) -> List[str]:
+        names = []
+        for idx in range(self.suites_table.rowCount()):
+            widget = self.suites_table.cellWidget(idx, 0)
+            if widget:
+                chk = widget.findChild(QCheckBox)
+                if chk and chk.isChecked():
+                    names.append(self.suites_table.item(idx, 1).text())
         return names
 
     # -------------------------------------------------------------------------
@@ -707,6 +807,29 @@ class MainWindow(QMainWindow):
         files = self._get_execution_files_for_routines(routine_names)
         self._start_execution_for_files(files)
 
+    def _run_selected_suites(self):
+        snames = self._get_checked_suite_names()
+        if not snames:
+            QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie in der Suiten-Tabelle mindestens eine Suite aus.")
+            return
+
+        routine_names = []
+        for sname in snames:
+            ste = self.manager.get_suite(sname)
+            if ste:
+                for item in ste.get("items", []):
+                    itype = item.get("type")
+                    iname = item.get("name")
+                    if itype == "routine":
+                        routine_names.append(iname)
+                    elif itype == "group":
+                        grp = self.manager.get_group(iname)
+                        if grp:
+                            routine_names.extend(grp.get("routine_names", []))
+
+        files = self._get_execution_files_for_routines(routine_names)
+        self._start_execution_for_files(files)
+
     def _run_group(self, group: dict):
         rnames = group.get("routine_names", [])
         files = self._get_execution_files_for_routines(rnames)
@@ -745,14 +868,18 @@ class MainWindow(QMainWindow):
                 else:
                     QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie eine Gruppe in der Tabelle aus.")
         elif curr_tab == 2:
-            curr_row = self.suites_table.currentRow()
-            if curr_row >= 0:
-                sname = self.suites_table.item(curr_row, 0).text()
-                ste = self.manager.get_suite(sname)
-                if ste:
-                    self._run_suite(ste)
+            checked_suites = self._get_checked_suite_names()
+            if checked_suites:
+                self._run_selected_suites()
             else:
-                QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie eine Suite in der Tabelle aus.")
+                curr_row = self.suites_table.currentRow()
+                if curr_row >= 0:
+                    sname = self.suites_table.item(curr_row, 1).text()
+                    ste = self.manager.get_suite(sname)
+                    if ste:
+                        self._run_suite(ste)
+                else:
+                    QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie eine Suite in der Tabelle aus.")
 
     def _start_execution_for_files(self, file_paths: List[str]):
         if not file_paths:
@@ -818,7 +945,7 @@ class MainWindow(QMainWindow):
         self.stop_btn.setEnabled(False)
         self.next_step_btn.setEnabled(False)
 
-        # Refresh all views so the new timing benchmark results update in tables
+    # Refresh all views so the new timing benchmark results update in tables
         self.refresh_all_views()
 
         if success:
