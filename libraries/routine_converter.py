@@ -4,7 +4,8 @@ Reads recorded routine JSON files and generates clean, reusable Robot Framework
 resource files (.resource) and executable test suites (.robot).
 Sanitizes selectors, comments, and values to guarantee single-line compliance for Robot Framework syntax.
 Smartly distinguishes input fields (Fill Text) from buttons/links/custom elements (Click).
-Uses resilient IF visibility guards and force-click fallbacks for robust playback of recorded routines.
+Uses resilient IF visibility guards, element readiness checks, and force-click fallbacks.
+Passes routine target START_URL to Setup Web Test Browser so tests start immediately on the target page.
 """
 
 import json
@@ -27,9 +28,7 @@ class RoutineConverter:
     def _clean_single_line(self, text: str) -> str:
         if not text:
             return ""
-        # Replace newlines, carriage returns, and tabs with space
         cleaned = text.replace("\r\n", " ").replace("\n", " ").replace("\r", " ").replace("\t", " ")
-        # Collapse whitespace into single space
         return re.sub(r"\s+", " ", cleaned).strip()
 
     def convert_json_to_resource_and_test(self, json_file_path: str | Path) -> Dict[str, str]:
@@ -44,7 +43,6 @@ class RoutineConverter:
         start_url = data.get("start_url", "${BASE_URL}")
         actions = data.get("actions", [])
 
-        # Process and optimize actions
         processed_steps = self._process_actions(actions)
 
         # Build Resource File Content
@@ -68,9 +66,6 @@ class RoutineConverter:
         }
 
     def _process_actions(self, raw_actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """
-        Deduplicates and structures raw captured browser events into high-level Robot Framework steps.
-        """
         steps = []
         i = 0
         n = len(raw_actions)
@@ -88,7 +83,8 @@ class RoutineConverter:
 
             if event_type == "navigate":
                 url = self._clean_single_line(curr.get("page_url") or "")
-                if url and url != "about:blank":
+                # Only emit Go To for initial page load if not already opened by Setup
+                if url and url != "about:blank" and not steps:
                     steps.append({
                         "keyword": "Go To",
                         "selector": None,
@@ -97,7 +93,6 @@ class RoutineConverter:
                     })
             elif event_type in ["input", "change"]:
                 if tag in ["INPUT", "TEXTAREA", "SELECT"]:
-                    # Consolidate consecutive inputs on the same input element into one Fill Text step
                     final_val = val
                     j = i + 1
                     while j < n and raw_actions[j].get("event_type") in ["input", "change"]:
@@ -116,7 +111,6 @@ class RoutineConverter:
                         "comment": f"Fill input field '{elem_name}'"
                     })
                 else:
-                    # Non-input elements (buttons, links, custom divs) emitting change -> Click
                     elem_label = self._clean_single_line(text or elem.get("tag") or selector)
                     steps.append({
                         "keyword": "Click",
@@ -152,13 +146,14 @@ class RoutineConverter:
             "*** Settings ***",
             f"Documentation    Recorded test block routine for '{clean_routine_name}'.",
             "Library          Browser",
+            "Library          ../libraries/visual_hud.py",
             "",
             "*** Variables ***",
             f"${{{clean_var_name}_START_URL}}    {start_url}",
+            "${ACTION_DELAY}                    150ms",
             ""
         ]
 
-        # Generate variable selectors
         selectors_dict = {}
         var_count = 1
         for step in steps:
@@ -190,10 +185,12 @@ class RoutineConverter:
                 lines.append(f"    Go To    {step.get('url')}")
             else:
                 var_selector = selectors_dict.get(step["selector"], f'"{step["selector"]}"')
-                lines.append(f"    ${{is_visible}}=    Run Keyword And Return Status    Wait For Elements State    {var_selector}    visible    timeout=3s")
-                lines.append(f"    IF    ${{is_visible}}")
+                lines.append(f"    ${{is_ready}}=    Run Keyword And Return Status    Wait For Elements State    {var_selector}    visible    timeout=3s")
+                lines.append(f"    IF    ${{is_ready}}")
+
                 if kw == "Fill Text":
-                    lines.append(f"        Fill Text    {var_selector}    {step.get('value', '')}")
+                    val = step.get('value', '')
+                    lines.append(f"        Fill Text    {var_selector}    {val}")
                 elif kw == "Click":
                     lines.append(f"        ${{click_ok}}=    Run Keyword And Return Status    Click    {var_selector}")
                     lines.append(f"        IF    not ${{click_ok}}")
@@ -205,20 +202,21 @@ class RoutineConverter:
                     lines.append(f"        Run Keyword And Ignore Error    {kw}    {var_selector}")
                 lines.append(f"    END")
 
-            lines.append("    Sleep    200ms")
+            lines.append("    Sleep    ${ACTION_DELAY}")
 
         return "\n".join(lines) + "\n"
 
     def _generate_test_content(self, routine_name: str) -> str:
         clean_routine_name = self._clean_single_line(routine_name)
         kw_name = clean_routine_name.replace("_", " ").replace("-", " ").title()
-        
+        clean_var_name = clean_routine_name.upper().replace("-", "_").replace(" ", "_")
+
         lines = [
             "*** Settings ***",
             f"Documentation    Automated test execution suite for recorded routine '{clean_routine_name}'.",
             "Resource         ../resources/common.resource",
             f"Resource         ../resources/page_objects/{clean_routine_name}.resource",
-            "Test Setup       Setup Web Test Browser",
+            f"Test Setup       Setup Web Test Browser    ${{{clean_var_name}_START_URL}}",
             "Test Teardown    Teardown Web Test Browser",
             "",
             "*** Test Cases ***",

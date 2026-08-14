@@ -2,7 +2,7 @@
 Documentation    Automated test execution suite for recorded routine 'test'.
 Resource         ../resources/common.resource
 Resource         ../resources/page_objects/test.resource
-Test Setup       Setup Web Test Browser
+Test Setup       Setup Web Test Browser    ${TEST_START_URL}
 Test Teardown    Teardown Web Test Browser
 
 *** Test Cases ***

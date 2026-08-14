@@ -38,6 +38,18 @@ class TestRoutineRecorder(unittest.TestCase):
         self.assertIn("__PY_WEB_TESTER_EVENT__", js_code)
         self.assertIn("emitEvent", js_code)
 
+    def test_record_routine_url_kwarg_alias(self):
+        recorder = RoutineRecorder(
+            output_dir=str(self.output_dir),
+            resources_dir=str(self.resources_dir),
+            tests_dir=str(self.tests_dir)
+        )
+        # Verify method signature accepts both url= and start_url= without raising TypeError
+        import inspect
+        sig = inspect.signature(recorder.record_routine)
+        self.assertIn("start_url", sig.parameters)
+        self.assertIn("url", sig.parameters)
+
 
     def test_json_to_resource_and_test_conversion(self):
         sample_json_data = {
