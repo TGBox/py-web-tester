@@ -49,6 +49,26 @@ class StepListener:
     def __init__(self):
         self.state = execution_state
         self.step_count = 0
+        self.test_start_time = time.time()
+
+    def start_test(self, data: Any, result: Any):
+        self.test_start_time = time.time()
+        self.test_name = getattr(data, 'name', '')
+
+    def end_test(self, data: Any, result: Any):
+        duration_ms = int((time.time() - getattr(self, 'test_start_time', time.time())) * 1000)
+        test_name = getattr(data, 'name', '')
+        longname = getattr(data, 'longname', '')
+        parent_name = getattr(getattr(data, 'parent', None), 'name', '')
+
+        if self.state.callback:
+            self.state.callback("test_end", {
+                "test_name": test_name,
+                "parent_name": parent_name,
+                "longname": longname,
+                "duration_ms": duration_ms,
+                "status": getattr(result, 'status', 'PASS')
+            })
 
     def start_keyword(self, data: Any, result: Any):
         # Ignore internal setup/teardown keywords

@@ -3,15 +3,17 @@ Main PySide6 Window for py-web-tester Desktop Application.
 Features:
 - Header bar with "+ Neue Routine definieren" wizard trigger, search bar, and tag filter.
 - 3 Tab Views: "Einzelne Routinen", "Routinen-Gruppen", "Gesamt-Tests / Suiten".
+- Selection checkboxes for both Routines and Routine Groups.
+- Execution benchmark timing comparison column (Original manual baseline duration vs last automated test duration, speedup factor, and timestamp).
+- Standardized German date formatting: "14.08.2026, 19:08 Uhr" across all creation dates and execution logs.
 - Direct opening of generated HTML test reports (report.html / log.html) in the default web browser.
 - Generous auto-sizing for all table headers, labels, buttons, and combo boxes to avoid text truncation.
-- Small creation date badge display for all routines.
 - Bottom Execution Control Bar:
   * Headless / Headed toggle switch.
   * Speed mode selection: Maximal (Instant ready), 2x Speed, Normal, Slow-Mo slider, Manual step-by-step.
   * Visual mouse pointer and bottom Keystroke HUD enabled for Headed tests.
   * Control buttons ("Start", "Nächster Schritt", "Stopp", "📊 Bericht öffnen").
-  * Real-time Log Console Drawer.
+  * Real-time Log Console Drawer with automatic duration comparison tables.
 """
 
 import sys
@@ -33,7 +35,7 @@ from gui.group_dialog import GroupDialog
 from gui.suite_dialog import SuiteDialog
 from gui.execution_controller import ExecutionControllerThread
 
-from libraries.routine_manager import RoutineManager
+from libraries.routine_manager import RoutineManager, format_datetime_de
 from libraries.routine_converter import RoutineConverter
 
 class MainWindow(QMainWindow):
@@ -259,9 +261,9 @@ class MainWindow(QMainWindow):
         layout.addLayout(top_bar)
 
         self.routines_table = QTableWidget()
-        self.routines_table.setColumnCount(7)
+        self.routines_table.setColumnCount(8)
         self.routines_table.setHorizontalHeaderLabels([
-            "Auswahl", "Routinen-Name", "Erstellungsdatum", "Ziel-URL", "Schritte", "Tags", "Aktion"
+            "Auswahl", "Routinen-Name", "Erstellungsdatum", "Ziel-URL", "Schritte", "Dauer (Aufnahme ➔ Letzter Test)", "Tags", "Aktion"
         ])
         
         # Configure Header Section Resize Modes to prevent clipping
@@ -273,6 +275,7 @@ class MainWindow(QMainWindow):
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(6, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(7, QHeaderView.ResizeToContents)
         
         self.routines_table.setSelectionBehavior(QTableWidget.SelectRows)
         layout.addWidget(self.routines_table)
@@ -289,21 +292,28 @@ class MainWindow(QMainWindow):
         new_group_btn.setMinimumWidth(230)
         new_group_btn.clicked.connect(self._open_new_group_dialog)
         top_bar.addWidget(new_group_btn)
+
+        self.run_selected_groups_btn = QPushButton("▶ Markierte Gruppen ausführen")
+        self.run_selected_groups_btn.setMinimumWidth(210)
+        self.run_selected_groups_btn.clicked.connect(self._run_selected_groups)
+        top_bar.addWidget(self.run_selected_groups_btn)
+
         top_bar.addStretch()
         layout.addLayout(top_bar)
 
         self.groups_table = QTableWidget()
-        self.groups_table.setColumnCount(5)
+        self.groups_table.setColumnCount(6)
         self.groups_table.setHorizontalHeaderLabels([
-            "Gruppen-Name", "Anzahl Routinen", "Enthaltene Routinen", "Erstellt am", "Aktion"
+            "Auswahl", "Gruppen-Name", "Anzahl Routinen", "Enthaltene Routinen", "Erstellt am", "Aktion"
         ])
 
         header = self.groups_table.horizontalHeader()
         header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QHeaderView.Stretch)
-        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.Stretch)
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
 
         layout.addWidget(self.groups_table)
 
@@ -373,10 +383,33 @@ class MainWindow(QMainWindow):
 
         for idx, r in enumerate(routines):
             name = r.get("routine_name", "")
-            date_str = r.get("formatted_date", "")
+            date_str = r.get("formatted_date", format_datetime_de(r.get("recorded_at")))
             url = r.get("start_url", "")
             actions_count = r.get("total_actions", len(r.get("actions", [])))
             tags = ", ".join(r.get("tags", []))
+
+            # Format original manual duration vs automated execution duration and last run timestamp
+            rec_ms = r.get("duration_ms", 0)
+            rec_sec = rec_ms / 1000.0
+            if rec_sec >= 60:
+                rec_str = f"⏱ {int(rec_sec // 60)}m {int(rec_sec % 60)}s"
+            else:
+                rec_str = f"⏱ {rec_sec:.1f}s"
+
+            last_exec = r.get("last_execution")
+            if last_exec:
+                auto_ms = last_exec.get("auto_duration_ms", 0)
+                auto_sec = auto_ms / 1000.0
+                factor = last_exec.get("speedup_factor", 1.0)
+                last_time_str = last_exec.get("formatted_date", format_datetime_de(last_exec.get("timestamp")))
+                if auto_sec >= 60:
+                    auto_str = f"{int(auto_sec // 60)}m {int(auto_sec % 60)}s"
+                else:
+                    auto_str = f"{auto_sec:.1f}s"
+                
+                timing_display = f"{rec_str}  ➔  ⚡ {auto_str} ({factor}x)\n[Zuletzt am {last_time_str}]"
+            else:
+                timing_display = f"{rec_str} (Manuell)\n[Noch nicht ausgeführt]"
 
             chk = QCheckBox()
             chk_widget = QWidget()
@@ -395,7 +428,14 @@ class MainWindow(QMainWindow):
 
             self.routines_table.setItem(idx, 3, QTableWidgetItem(url))
             self.routines_table.setItem(idx, 4, QTableWidgetItem(f"{actions_count} Aktionen"))
-            self.routines_table.setItem(idx, 5, QTableWidgetItem(tags))
+
+            timing_item = QTableWidgetItem(timing_display)
+            timing_item.setTextAlignment(Qt.AlignCenter)
+            if last_exec:
+                timing_item.setForeground(Qt.GlobalColor.green)
+            self.routines_table.setItem(idx, 5, timing_item)
+
+            self.routines_table.setItem(idx, 6, QTableWidgetItem(tags))
 
             btn_widget = QWidget()
             btn_layout = QHBoxLayout(btn_widget)
@@ -419,7 +459,7 @@ class MainWindow(QMainWindow):
             del_btn.clicked.connect(lambda _, rname=name: self._delete_routine(rname))
             btn_layout.addWidget(del_btn)
 
-            self.routines_table.setCellWidget(idx, 6, btn_widget)
+            self.routines_table.setCellWidget(idx, 7, btn_widget)
 
     def _refresh_groups_table(self):
         groups = self.manager.list_groups()
@@ -429,12 +469,24 @@ class MainWindow(QMainWindow):
             gname = g.get("group_name", "")
             rcount = g.get("routine_count", len(g.get("routine_names", [])))
             rlist = ", ".join(g.get("routine_names", []))
-            cdate = str(g.get("created_at", ""))[:16]
+            cdate = format_datetime_de(g.get("created_at", ""))
 
-            self.groups_table.setItem(idx, 0, QTableWidgetItem(gname))
-            self.groups_table.setItem(idx, 1, QTableWidgetItem(f"{rcount} Routinen"))
-            self.groups_table.setItem(idx, 2, QTableWidgetItem(rlist))
-            self.groups_table.setItem(idx, 3, QTableWidgetItem(cdate))
+            chk = QCheckBox()
+            chk_widget = QWidget()
+            chk_layout = QHBoxLayout(chk_widget)
+            chk_layout.addWidget(chk)
+            chk_layout.setAlignment(Qt.AlignCenter)
+            chk_layout.setContentsMargins(0,0,0,0)
+            self.groups_table.setCellWidget(idx, 0, chk_widget)
+
+            self.groups_table.setItem(idx, 1, QTableWidgetItem(gname))
+            self.groups_table.setItem(idx, 2, QTableWidgetItem(f"{rcount} Routinen"))
+            self.groups_table.setItem(idx, 3, QTableWidgetItem(rlist))
+
+            cdate_item = QTableWidgetItem(cdate)
+            cdate_item.setTextAlignment(Qt.AlignCenter)
+            cdate_item.setForeground(Qt.GlobalColor.darkGray)
+            self.groups_table.setItem(idx, 4, cdate_item)
 
             btn_widget = QWidget()
             btn_layout = QHBoxLayout(btn_widget)
@@ -458,7 +510,7 @@ class MainWindow(QMainWindow):
             del_btn.clicked.connect(lambda _, gname=gname: self._delete_group(gname))
             btn_layout.addWidget(del_btn)
 
-            self.groups_table.setCellWidget(idx, 4, btn_widget)
+            self.groups_table.setCellWidget(idx, 5, btn_widget)
 
     def _refresh_suites_table(self):
         suites = self.manager.list_suites()
@@ -468,12 +520,16 @@ class MainWindow(QMainWindow):
             sname = s.get("suite_name", "")
             icount = s.get("total_items", len(s.get("items", [])))
             desc = s.get("description", "")
-            cdate = str(s.get("created_at", ""))[:16]
+            cdate = format_datetime_de(s.get("created_at", ""))
 
             self.suites_table.setItem(idx, 0, QTableWidgetItem(sname))
             self.suites_table.setItem(idx, 1, QTableWidgetItem(f"{icount} Elemente"))
             self.suites_table.setItem(idx, 2, QTableWidgetItem(desc))
-            self.suites_table.setItem(idx, 3, QTableWidgetItem(cdate))
+
+            cdate_item = QTableWidgetItem(cdate)
+            cdate_item.setTextAlignment(Qt.AlignCenter)
+            cdate_item.setForeground(Qt.GlobalColor.darkGray)
+            self.suites_table.setItem(idx, 3, cdate_item)
 
             btn_widget = QWidget()
             btn_layout = QHBoxLayout(btn_widget)
@@ -596,6 +652,16 @@ class MainWindow(QMainWindow):
                     names.append(self.routines_table.item(idx, 1).text())
         return names
 
+    def _get_checked_group_names(self) -> List[str]:
+        names = []
+        for idx in range(self.groups_table.rowCount()):
+            widget = self.groups_table.cellWidget(idx, 0)
+            if widget:
+                chk = widget.findChild(QCheckBox)
+                if chk and chk.isChecked():
+                    names.append(self.groups_table.item(idx, 1).text())
+        return names
+
     # -------------------------------------------------------------------------
     # TEST EXECUTION ENGINE INTEGRATION
     # -------------------------------------------------------------------------
@@ -626,6 +692,21 @@ class MainWindow(QMainWindow):
         files = self._get_execution_files_for_routines(names)
         self._start_execution_for_files(files)
 
+    def _run_selected_groups(self):
+        gnames = self._get_checked_group_names()
+        if not gnames:
+            QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie in der Gruppen-Tabelle mindestens eine Gruppe aus.")
+            return
+
+        routine_names = []
+        for gname in gnames:
+            grp = self.manager.get_group(gname)
+            if grp:
+                routine_names.extend(grp.get("routine_names", []))
+
+        files = self._get_execution_files_for_routines(routine_names)
+        self._start_execution_for_files(files)
+
     def _run_group(self, group: dict):
         rnames = group.get("routine_names", [])
         files = self._get_execution_files_for_routines(rnames)
@@ -651,14 +732,18 @@ class MainWindow(QMainWindow):
         if curr_tab == 0:
             self._run_selected_routines()
         elif curr_tab == 1:
-            curr_row = self.groups_table.currentRow()
-            if curr_row >= 0:
-                gname = self.groups_table.item(curr_row, 0).text()
-                grp = self.manager.get_group(gname)
-                if grp:
-                    self._run_group(grp)
+            checked_groups = self._get_checked_group_names()
+            if checked_groups:
+                self._run_selected_groups()
             else:
-                QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie eine Gruppe in der Tabelle aus.")
+                curr_row = self.groups_table.currentRow()
+                if curr_row >= 0:
+                    gname = self.groups_table.item(curr_row, 1).text()
+                    grp = self.manager.get_group(gname)
+                    if grp:
+                        self._run_group(grp)
+                else:
+                    QMessageBox.warning(self, "Keine Auswahl", "Bitte wählen Sie eine Gruppe in der Tabelle aus.")
         elif curr_tab == 2:
             curr_row = self.suites_table.currentRow()
             if curr_row >= 0:
@@ -732,6 +817,9 @@ class MainWindow(QMainWindow):
         self.run_btn.setEnabled(True)
         self.stop_btn.setEnabled(False)
         self.next_step_btn.setEnabled(False)
+
+        # Refresh all views so the new timing benchmark results update in tables
+        self.refresh_all_views()
 
         if success:
             self.status_label.setText("Status: Testausführung ERFOLGREICH beendet! (Klicken Sie auf '📊 Testbericht öffnen', um Ergebnisse anzuzeigen)")

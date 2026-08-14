@@ -2,14 +2,14 @@
 Execution Controller QThread for py-web-tester PySide6 GUI.
 Runs Robot Framework test suites asynchronously without blocking the UI.
 Integrates real-time log capturing, progress updates, speed control (Maximal 0ms, 2x Speed, Normal, Slow-Mo, Manual),
-and step-by-step manual stepping.
+step-by-step manual stepping, and execution benchmark timing comparisons (Original recorded duration vs Automated run time).
 """
 
 import sys
 import io
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Dict, Any
 from PySide6.QtCore import QThread, Signal, Slot
 import robot
 
@@ -44,6 +44,7 @@ class ExecutionControllerThread(QThread):
         self.headless = headless
         self.speed_mode = speed_mode
         self.slowmo_ms = slowmo_ms
+        self.routine_benchmarks: List[Dict[str, Any]] = []
 
     def _get_action_delay_ms(self) -> int:
         if self.speed_mode == "MAX":
@@ -67,6 +68,7 @@ class ExecutionControllerThread(QThread):
         execution_state.set_slowmo(delay_ms)
         execution_state.set_manual_mode(manual_mode)
         execution_state.callback = self._listener_callback
+        self.routine_benchmarks.clear()
 
         output_dir = Path("results").resolve()
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -112,9 +114,27 @@ class ExecutionControllerThread(QThread):
             sys.stderr = orig_stderr
             execution_state.reset()
 
+        # Emit Benchmark comparison summary to log if benchmarks were recorded
+        if self.routine_benchmarks:
+            self.log_signal.emit("\n================================================================================")
+            self.log_signal.emit("📊 ROUTINEN-LAUFZEIT & BENCHMARK-VERGLEICH")
+            self.log_signal.emit("--------------------------------------------------------------------------------")
+            for bm in self.routine_benchmarks:
+                rname = bm["routine_name"]
+                st = bm["exec_stats"]
+                rec_s = st["recorded_duration_ms"] / 1000.0
+                auto_s = st["auto_duration_ms"] / 1000.0
+                factor = st["speedup_factor"]
+                savings = st["savings_pct"]
+                self.log_signal.emit(f"• Routine '{rname}':")
+                self.log_signal.emit(f"  - Originale Aufnahme (Manuelle Interaktion) : {rec_s:.2f} s")
+                self.log_signal.emit(f"  - Automatisierte Test-Ausführung          : {auto_s:.2f} s")
+                self.log_signal.emit(f"  - Vergleich & Zeitersparnis                : {factor}x schneller (+{savings}% Zeitersparnis)")
+            self.log_signal.emit("================================================================================\n")
+
         success = (exit_code == 0)
         summary = f"Testausführung beendet (Exit Code: {exit_code}). Berichte in 'results/' gespeichert."
-        self.log_signal.emit(f"\n=== {summary} ===\n")
+        self.log_signal.emit(f"=== {summary} ===\n")
         self.finished_signal.emit(success, summary)
 
     def _listener_callback(self, event_type: str, data: dict):
@@ -122,6 +142,53 @@ class ExecutionControllerThread(QThread):
             self.progress_signal.emit(data.get("step", 0), data.get("keyword", ""))
         elif event_type == "waiting_for_step":
             self.step_waiting_signal.emit(data.get("step", 0), data.get("keyword", ""))
+        elif event_type == "test_end":
+            duration_ms = data.get("duration_ms", 0)
+            status = data.get("status", "PASS")
+            test_name = data.get("test_name", "")
+            parent_name = data.get("parent_name", "")
+            longname = data.get("longname", "")
+
+            from libraries.routine_manager import RoutineManager
+            mgr = RoutineManager()
+            all_routines = mgr.list_routines()
+
+            matched_routine = None
+
+            # 1. Match from parent_name (e.g. "Test Qwer" or "test_qwer")
+            if parent_name:
+                p_clean = parent_name.replace("Test ", "").replace("test_", "").strip().lower()
+                for r in all_routines:
+                    r_name = r.get("routine_name", "").lower()
+                    if r_name == p_clean:
+                        matched_routine = r.get("routine_name")
+                        break
+
+            # 2. Match from test_name (e.g. "Verify Recorded Routine Block Qwer")
+            if not matched_routine and test_name:
+                t_clean = test_name.replace("Verify Recorded Routine Block ", "").strip().lower()
+                for r in all_routines:
+                    r_name = r.get("routine_name", "").lower()
+                    if r_name == t_clean or r_name in t_clean:
+                        matched_routine = r.get("routine_name")
+                        break
+
+            # 3. Match from longname or test_file_paths fallback
+            if not matched_routine and longname:
+                l_clean = longname.lower()
+                for r in all_routines:
+                    r_name = r.get("routine_name", "").lower()
+                    if r_name in l_clean:
+                        matched_routine = r.get("routine_name")
+                        break
+
+            if matched_routine:
+                exec_stats = mgr.update_routine_execution_stats(matched_routine, duration_ms, status)
+                if exec_stats:
+                    self.routine_benchmarks.append({
+                        "routine_name": matched_routine,
+                        "exec_stats": exec_stats
+                    })
 
     @Slot(int)
     def update_slowmo(self, ms: int):

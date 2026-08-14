@@ -10,6 +10,19 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
+def format_datetime_de(val: Any) -> str:
+    """Formats an ISO timestamp or datetime into '14.08.2026, 19:08 Uhr' German format."""
+    if not val:
+        return "-"
+    try:
+        if isinstance(val, (int, float)):
+            dt = datetime.fromtimestamp(val)
+        else:
+            dt = datetime.fromisoformat(str(val))
+        return dt.strftime("%d.%m.%Y, %H:%M Uhr")
+    except Exception:
+        return str(val)[:16]
+
 class RoutineManager:
     def __init__(
         self,
@@ -64,12 +77,11 @@ class RoutineManager:
         if "recorded_at" not in data:
             data["recorded_at"] = datetime.fromtimestamp(file_path.stat().st_mtime).isoformat()
 
-        # Format creation date cleanly for UI display (e.g., "14.08.2026 17:30")
-        try:
-            dt = datetime.fromisoformat(data["recorded_at"])
-            data["formatted_date"] = dt.strftime("%d.%m.%Y %H:%M")
-        except Exception:
-            data["formatted_date"] = str(data["recorded_at"])[:16]
+        # Format creation date cleanly for UI display (e.g., "14.08.2026, 19:08 Uhr")
+        data["formatted_date"] = format_datetime_de(data["recorded_at"])
+
+        if "last_execution" in data and isinstance(data["last_execution"], dict):
+            data["last_execution"]["formatted_date"] = format_datetime_de(data["last_execution"].get("timestamp"))
 
         return data
 
@@ -123,13 +135,49 @@ class RoutineManager:
         
         # Remove helper keys before saving
         save_data = dict(data)
-        save_data.pop("filename", None)
-        save_data.pop("formatted_date", None)
-
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(save_data, f, indent=2, ensure_ascii=False)
 
         return True
+
+    def update_routine_execution_stats(
+        self,
+        routine_name: str,
+        auto_duration_ms: int,
+        status: str = "PASS"
+    ) -> Optional[Dict[str, Any]]:
+        """Updates last execution time stats and benchmark comparisons for a routine."""
+        data = self.get_routine(routine_name)
+        if not data:
+            return None
+
+        recorded_ms = data.get("duration_ms", 0)
+        speedup = round(recorded_ms / auto_duration_ms, 2) if (auto_duration_ms > 0 and recorded_ms > 0) else 1.0
+        savings_pct = round((1.0 - (auto_duration_ms / recorded_ms)) * 100, 1) if (recorded_ms > 0 and auto_duration_ms > 0) else 0.0
+
+        last_exec = {
+            "timestamp": datetime.now().isoformat(),
+            "auto_duration_ms": auto_duration_ms,
+            "recorded_duration_ms": recorded_ms,
+            "speedup_factor": speedup,
+            "savings_pct": savings_pct,
+            "status": status
+        }
+
+        data["last_execution"] = last_exec
+        
+        filename = data.get("filename")
+        if filename:
+            file_path = self.routines_dir / filename
+            save_data = dict(data)
+            save_data.pop("filename", None)
+            save_data.pop("formatted_date", None)
+
+            with open(file_path, "w", encoding="utf-8") as f:
+                json.dump(save_data, f, indent=2, ensure_ascii=False)
+
+        return last_exec
+
 
     def delete_routine(self, filename_or_name: str) -> bool:
         """Deletes a routine JSON file."""
