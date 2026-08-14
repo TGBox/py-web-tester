@@ -1,2 +1,18 @@
-.venv
-__pycache__
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Robot Framework Output & Test Results
+results/
+log.html
+report.html
+output.xml
+browser/
+browser_video/
+browser_screenshot/
+
+# IDE / System
+.idea/
+.vscode/
+.DS_Store
