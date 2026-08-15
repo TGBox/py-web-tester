@@ -16,3 +16,12 @@ browser_screenshot/
 .idea/
 .vscode/
 .DS_Store
+
+# Inhalt der Ordner für Routinen, Gruppen und Testsuites
+routines/**.*
+suites/**.*
+groups/**.*
+
+# Ressourcen wie Page Objekt Informationen. Sind spezifisch für die Tests.
+resources/**.*
+resources/page_objects/**.*

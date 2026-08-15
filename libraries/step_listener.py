@@ -71,8 +71,16 @@ class StepListener:
             })
 
     def start_keyword(self, data: Any, result: Any):
-        # Ignore internal setup/teardown keywords
         kw_name = data.name.strip()
+        args = list(data.args) if hasattr(data, "args") else []
+
+        # Unwrap BuiltIn wrapper keywords (e.g. Run Keyword And Ignore Error)
+        if kw_name.startswith("BuiltIn.Run Keyword"):
+            if args:
+                kw_name = str(args[0])
+                args = args[1:]
+
+        # Ignore internal setup/teardown/hud keywords
         if kw_name.startswith("BuiltIn.") or kw_name.startswith("Browser.Close") or kw_name.startswith("Browser.New"):
             return
 
@@ -84,19 +92,25 @@ class StepListener:
             headless_var = BuiltIn().get_variable_value("${HEADLESS}", "TRUE")
             is_headed = str(headless_var).upper() in ["FALSE", "0", "OFF", "NO"]
         except Exception:
-            is_headed = False
+            is_headed = True  # Default to headed in GUI runs if not specified
 
         if is_headed:
             try:
                 from libraries.visual_hud import visual_hud
                 hud_instance = visual_hud()
-                hud_instance.inject_visual_hud()
 
-                # If first arg is a selector, glide visual pointer to it
-                if hasattr(data, "args") and data.args:
-                    first_arg = str(data.args[0])
+                if "Show Keystroke Overlay" in kw_name:
+                    if args:
+                        hud_instance.show_keystroke_overlay(str(args[0]))
+                elif "Animate Visual Pointer" in kw_name:
+                    if args:
+                        hud_instance.animate_visual_pointer(str(args[0]))
+                elif args:
+                    first_arg = str(args[0])
                     if not first_arg.startswith("http") and not first_arg.isdigit() and len(first_arg) > 1:
                         hud_instance.animate_visual_pointer(first_arg)
+                    if len(args) > 1 and ("Fill" in kw_name or "Type" in kw_name):
+                        hud_instance.show_keystroke_overlay(f'Eingabe: "{args[1]}"')
             except Exception:
                 pass
 
@@ -105,7 +119,7 @@ class StepListener:
             self.state.callback("step_start", {
                 "step": self.step_count,
                 "keyword": kw_name,
-                "args": list(data.args) if hasattr(data, "args") else []
+                "args": args
             })
 
         # Apply Slow-Mo delay if set

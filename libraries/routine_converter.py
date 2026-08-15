@@ -75,11 +75,19 @@ class RoutineConverter:
             event_type = curr.get("event_type", "").lower()
             elem = curr.get("element") or {}
             raw_selector = elem.get("selector") or elem.get("xpath") or "css=body"
+            text = self._clean_single_line(elem.get("text") or "")
+            tag = elem.get("tag", "").upper()
+
+            if "object Object" in raw_selector or "#\\[object" in raw_selector:
+                if text:
+                    tag_str = tag.lower() if tag else "mat-option"
+                    raw_selector = f"{tag_str}:has-text(\"{text}\")"
+                else:
+                    raw_selector = tag.lower() if tag else "css=body"
+
             selector = self._clean_single_line(raw_selector) or "css=body"
             val = self._clean_single_line(curr.get("value") or "")
-            text = self._clean_single_line(elem.get("text") or "")
             coords = elem.get("elem_coords") or {}
-            tag = elem.get("tag", "").upper()
 
             if event_type == "navigate":
                 url = self._clean_single_line(curr.get("page_url") or "")
@@ -139,9 +147,10 @@ class RoutineConverter:
 
     def _generate_resource_content(self, routine_name: str, start_url: str, steps: List[Dict[str, Any]]) -> str:
         clean_routine_name = self._clean_single_line(routine_name)
-        kw_name = clean_routine_name.replace("_", " ").replace("-", " ").title()
+        kw_name = re.sub(r"\s+", " ", clean_routine_name.replace("_", " ").replace("-", " ")).strip().title()
         raw_var_name = clean_routine_name.upper().replace("-", "_").replace(" ", "_")
-        clean_var_name = re.sub(r'_+', '_', raw_var_name).strip('_')
+        clean_var_name = re.sub(r'[^A-Z0-9_]', '_', raw_var_name)
+        clean_var_name = re.sub(r'_+', '_', clean_var_name).strip('_')
 
         lines = [
             "*** Settings ***",
@@ -188,11 +197,16 @@ class RoutineConverter:
                 var_selector = selectors_dict.get(step["selector"], f'"{step["selector"]}"')
                 lines.append(f"    Run Keyword And Ignore Error    Wait For Elements State    {var_selector}    visible    timeout=5s")
                 lines.append(f"    Run Keyword And Ignore Error    Animate Visual Pointer To Element    {var_selector}")
+                lines.append("    Sleep    150ms")
 
                 if kw == "Fill Text":
                     val = step.get('value', '')
                     lines.append(f"    Run Keyword And Ignore Error    Show Keystroke Overlay    Eingabe: \"{val}\"")
+                    lines.append(f"    Run Keyword And Ignore Error    Click    {var_selector}")
                     lines.append(f"    ${{fill_ok}}=    Run Keyword And Return Status    Fill Text    {var_selector}    {val}")
+                    lines.append(f"    IF    not ${{fill_ok}}")
+                    lines.append(f"        Run Keyword And Ignore Error    Type Text    {var_selector}    {val}")
+                    lines.append(f"    END")
                 elif kw == "Click":
                     lines.append(f"    ${{click_ok}}=    Run Keyword And Return Status    Click    {var_selector}")
                     lines.append(f"    IF    not ${{click_ok}}")
@@ -209,8 +223,10 @@ class RoutineConverter:
 
     def _generate_test_content(self, routine_name: str) -> str:
         clean_routine_name = self._clean_single_line(routine_name)
-        kw_name = clean_routine_name.replace("_", " ").replace("-", " ").title()
-        clean_var_name = clean_routine_name.upper().replace("-", "_").replace(" ", "_")
+        kw_name = re.sub(r"\s+", " ", clean_routine_name.replace("_", " ").replace("-", " ")).strip().title()
+        raw_var_name = clean_routine_name.upper().replace("-", "_").replace(" ", "_")
+        clean_var_name = re.sub(r'[^A-Z0-9_]', '_', raw_var_name)
+        clean_var_name = re.sub(r'_+', '_', clean_var_name).strip('_')
 
         lines = [
             "*** Settings ***",

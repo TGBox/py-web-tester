@@ -114,7 +114,21 @@ class RoutineRecorder:
                 if (!el || !el.getAttribute) return '';
                 try {
                     const id = el.getAttribute('id');
-                    return (typeof id === 'string') ? id.trim() : '';
+                    if (typeof id === 'string') {
+                        const trimmed = id.trim();
+                        // Reject dynamic framework IDs (mat-input-0, mat-option-1, ng-, cdk-) and junk object IDs
+                        if (
+                            trimmed &&
+                            !trimmed.includes('[object') &&
+                            !trimmed.includes('object Object') &&
+                            !trimmed.match(/^[0-9]/) &&
+                            !trimmed.includes(' ') &&
+                            !trimmed.match(/^(mat-input-|mat-option-|mat-select-|mat-autocomplete-|mat-checkbox-|mat-radio-|mat-tooltip-|ng-|cdk-)/i)
+                        ) {
+                            return trimmed;
+                        }
+                    }
+                    return '';
                 } catch(e) { return ''; }
             }
 
@@ -130,7 +144,7 @@ class RoutineRecorder:
                 if (!el || el.nodeType !== Node.ELEMENT_NODE) return '';
                 try {
                     const id = getSafeId(el);
-                    if (id && !id.match(/^\\d/) && !id.includes(':')) {
+                    if (id && !id.includes(':')) {
                         return `#${CSS.escape(id)}`;
                     }
 
@@ -153,14 +167,15 @@ class RoutineRecorder:
                     if (type && el.tagName === 'INPUT') return `input[type="${type}"]`;
 
                     const text = (el.innerText || el.textContent || '').replace(/[\\r\\n\\t]+/g, ' ').trim();
-                    if (text && text.length > 0 && text.length < 35 && ['BUTTON', 'A', 'SPAN', 'LABEL', 'H1', 'H2', 'H3', 'LI'].includes(el.tagName)) {
+                    const tagUpper = (el.tagName || '').toUpperCase();
+                    if (text && text.length > 0 && text.length < 50 && ['BUTTON', 'A', 'SPAN', 'LABEL', 'H1', 'H2', 'H3', 'LI', 'MAT-OPTION', 'OPTION', 'DIV', 'P', 'TD'].includes(tagUpper)) {
                         return `${el.tagName.toLowerCase()}:has-text("${text.replace(/"/g, '\\"')}")`;
                     }
 
                     const cls = getSafeClass(el);
                     if (cls) {
                         const validClasses = cls.split(/\\s+/)
-                            .filter(c => c && !c.includes(':') && !c.match(/^\\d/))
+                            .filter(c => c && !c.includes(':') && !c.match(/^\\d/) && !c.includes('ng-') && !c.includes('[object'))
                             .slice(0, 2);
                         if (validClasses.length > 0) {
                             const classSelector = `${el.tagName.toLowerCase()}.${validClasses.map(c => CSS.escape(c)).join('.')}`;
@@ -177,7 +192,7 @@ class RoutineRecorder:
                     while (current && current.nodeType === Node.ELEMENT_NODE && current.tagName !== 'BODY') {
                         let selector = current.tagName.toLowerCase();
                         const currId = getSafeId(current);
-                        if (currId && !currId.match(/^\\d/)) {
+                        if (currId) {
                             selector += `#${CSS.escape(currId)}`;
                             path.unshift(selector);
                             break;
@@ -397,33 +412,7 @@ class RoutineRecorder:
                     }, 1000);
                 }
 
-                // 2. Glowing Visual Mouse Pointer Cursor
-                if (!document.getElementById('py-web-tester-cursor')) {
-                    const cursor = document.createElement('div');
-                    cursor.id = 'py-web-tester-cursor';
-                    cursor.style.cssText = `
-                        position: fixed !important;
-                        top: -50px;
-                        left: -50px;
-                        width: 24px !important;
-                        height: 24px !important;
-                        border-radius: 50% !important;
-                        background: rgba(255, 0, 110, 0.85) !important;
-                        border: 2px solid #ffffff !important;
-                        box-shadow: 0 0 14px rgba(255, 0, 110, 0.95), 0 0 6px #000 !important;
-                        pointer-events: none !important;
-                        z-index: 2147483647 !important;
-                        transition: left 0.1s ease-out, top 0.1s ease-out, transform 0.1s ease !important;
-                        transform: translate(-50%, -50%) !important;
-                        display: block !important;
-                    `;
-                    const dot = document.createElement('div');
-                    dot.style.cssText = 'width:6px; height:6px; background:#fff; border-radius:50%; margin:7px auto;';
-                    cursor.appendChild(dot);
-                    parent.appendChild(cursor);
-                }
-
-                // 3. Bottom Keystroke HUD Bar Overlay
+                // 2. Bottom Keystroke HUD Bar Overlay
                 if (!document.getElementById('py-web-tester-keystroke-hud')) {
                     const keystrokeHud = document.createElement('div');
                     keystrokeHud.id = 'py-web-tester-keystroke-hud';
@@ -523,13 +512,9 @@ class RoutineRecorder:
             }, true);
 
             // Record Mouse & Click Events
-            ['mousemove', 'click', 'dblclick', 'contextmenu'].forEach(eventType => {
+            ['click', 'dblclick', 'contextmenu'].forEach(eventType => {
                 window.addEventListener(eventType, function(e) {
                     try {
-                        moveVisualCursor(e.clientX, e.clientY);
-
-                        if (eventType === 'mousemove') return;
-
                         createClickRipple(e.clientX, e.clientY);
 
                         const target = (e.composedPath && e.composedPath()[0]) || e.target;
