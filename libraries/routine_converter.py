@@ -126,13 +126,29 @@ class RoutineConverter:
                         "coords": coords,
                         "comment": f"Click element '{elem_label}'"
                     })
-            elif event_type in ["click", "dblclick", "contextmenu"]:
+            elif event_type == "dblclick":
+                elem_label = self._clean_single_line(text or elem.get("tag") or selector)
+                # Remove preceding single Click steps on same or child selector to prevent delay before dblclick
+                while steps and steps[-1].get("keyword") == "Click":
+                    prev_sel = steps[-1].get("selector", "")
+                    if prev_sel == selector or selector in prev_sel or prev_sel in selector:
+                        steps.pop()
+                    else:
+                        break
+
+                steps.append({
+                    "keyword": "Dblclick",
+                    "selector": selector,
+                    "coords": coords,
+                    "comment": f"Doppelklick auf Element '{elem_label}'"
+                })
+            elif event_type in ["click", "contextmenu"]:
                 elem_label = self._clean_single_line(text or elem.get("tag") or selector)
                 steps.append({
                     "keyword": "Click",
                     "selector": selector,
                     "coords": coords,
-                    "comment": f"Click element '{elem_label}'"
+                    "comment": f"Klick auf Element '{elem_label}'"
                 })
             elif event_type == "scroll":
                 steps.append({
@@ -203,9 +219,14 @@ class RoutineConverter:
                     val = step.get('value', '')
                     lines.append(f"    Run Keyword And Ignore Error    Show Keystroke Overlay    Eingabe: \"{val}\"")
                     lines.append(f"    Run Keyword And Ignore Error    Click    {var_selector}")
-                    lines.append(f"    ${{fill_ok}}=    Run Keyword And Return Status    Fill Text    {var_selector}    {val}")
-                    lines.append(f"    IF    not ${{fill_ok}}")
-                    lines.append(f"        Run Keyword And Ignore Error    Type Text    {var_selector}    {val}")
+                    lines.append(f"    ${{type_ok}}=    Run Keyword And Return Status    Type Text    {var_selector}    {val}    delay=40ms")
+                    lines.append(f"    IF    not ${{type_ok}}")
+                    lines.append(f"        Run Keyword And Ignore Error    Fill Text    {var_selector}    {val}")
+                    lines.append(f"    END")
+                elif kw == "Dblclick":
+                    lines.append(f"    ${{dbl_ok}}=    Run Keyword And Return Status    Click    {var_selector}    click_count=2")
+                    lines.append(f"    IF    not ${{dbl_ok}}")
+                    lines.append(f"        Run Keyword And Ignore Error    Evaluate JavaScript    {var_selector}    (el) => {{ if(el) {{ el.dispatchEvent(new MouseEvent('mousedown', {{bubbles: true, detail: 1}})); el.dispatchEvent(new MouseEvent('mouseup', {{bubbles: true, detail: 1}})); el.dispatchEvent(new MouseEvent('click', {{bubbles: true, detail: 1}})); el.dispatchEvent(new MouseEvent('mousedown', {{bubbles: true, detail: 2}})); el.dispatchEvent(new MouseEvent('mouseup', {{bubbles: true, detail: 2}})); el.dispatchEvent(new MouseEvent('click', {{bubbles: true, detail: 2}})); el.dispatchEvent(new MouseEvent('dblclick', {{bubbles: true, detail: 2}})); }} }}")
                     lines.append(f"    END")
                 elif kw == "Click":
                     lines.append(f"    ${{click_ok}}=    Run Keyword And Return Status    Click    {var_selector}")

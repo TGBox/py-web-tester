@@ -1,17 +1,20 @@
-{"level":"info","time":"2026-08-15T08:38:32.603Z","seq":1,"component":"browser-library","msg":"Listening on 127.0.0.1:61772"}
-{"level":"info","time":"2026-08-15T08:38:32.825Z","seq":2,"component":"browser-library","event_kind":"grpc","action":"newBrowser","status":"started"}
-{"level":"info","time":"2026-08-15T08:38:32.939Z","seq":3,"component":"browser-library","msg":"Adding browser to stack: chromium, version: 151.0.7922.34"}
-{"level":"info","time":"2026-08-15T08:38:32.940Z","seq":4,"component":"browser-library","msg":"Adding 0 contexts to browser"}
-{"level":"info","time":"2026-08-15T08:38:32.940Z","seq":5,"component":"browser-library","event_kind":"grpc","action":"newBrowser","status":"succeeded"}
-{"level":"info","time":"2026-08-15T08:38:32.941Z","seq":6,"component":"browser-library","event_kind":"grpc","action":"newPage","status":"started"}
-{"level":"info","time":"2026-08-15T08:38:32.941Z","seq":7,"component":"browser-library","msg":"currentBrowser: {\"_contextStack\":[],\"browser\":{\"_type\":\"Browser\",\"_guid\":\"browser@27fdf560d5786ce6bacdc9b5008d1f2d\"},\"name\":\"chromium\",\"id\":\"browser=474d6590-41d0-4b6e-b3fa-f38a040ba53d\",\"headless\":false}"}
-{"level":"info","time":"2026-08-15T08:38:32.947Z","seq":8,"component":"browser-library","msg":"Setting default timeout for context context=6c9faa46-c821-47f7-aaaa-18f0cd2fdbd2 to 10000"}
-{"level":"info","time":"2026-08-15T08:38:32.947Z","seq":9,"component":"browser-library","msg":"Changed active context: context=6c9faa46-c821-47f7-aaaa-18f0cd2fdbd2"}
-{"level":"info","time":"2026-08-15T08:38:33.000Z","seq":10,"component":"browser-library","msg":"Video path: undefined"}
-{"level":"info","time":"2026-08-15T08:38:33.000Z","seq":11,"component":"browser-library","msg":"Changed active page"}
-{"level":"info","time":"2026-08-15T08:38:34.217Z","seq":12,"component":"browser-library","event_kind":"grpc","action":"newPage","status":"succeeded"}
-{"level":"info","time":"2026-08-15T08:38:36.219Z","seq":13,"component":"browser-library","event_kind":"grpc","action":"closeBrowser","status":"started"}
-{"level":"info","time":"2026-08-15T08:38:36.225Z","seq":14,"component":"browser-library","msg":"Removed page=557d5a92-5be4-4921-856a-36d397b8259f from context=6c9faa46-c821-47f7-aaaa-18f0cd2fdbd2 page stack"}
-{"level":"info","time":"2026-08-15T08:38:36.354Z","seq":15,"component":"browser-library","event_kind":"grpc","action":"closeBrowser","status":"succeeded"}
-{"level":"info","time":"2026-08-15T08:38:36.355Z","seq":16,"component":"browser-library","event_kind":"grpc","action":"closeAllBrowsers","status":"started"}
-{"level":"info","time":"2026-08-15T08:38:36.355Z","seq":17,"component":"browser-library","event_kind":"grpc","action":"closeAllBrowsers","status":"succeeded"}
+{"level":"info","time":"2026-08-15T09:24:07.418Z","seq":1,"component":"browser-library","msg":"Listening on 127.0.0.1:62683"}
+{"level":"info","time":"2026-08-15T09:24:07.656Z","seq":2,"component":"browser-library","event_kind":"grpc","action":"newBrowser","status":"started"}
+{"level":"info","time":"2026-08-15T09:24:07.699Z","seq":3,"component":"browser-library","msg":"Adding browser to stack: chromium, version: 151.0.7922.34"}
+{"level":"info","time":"2026-08-15T09:24:07.699Z","seq":4,"component":"browser-library","msg":"Adding 0 contexts to browser"}
+{"level":"info","time":"2026-08-15T09:24:07.699Z","seq":5,"component":"browser-library","event_kind":"grpc","action":"newBrowser","status":"succeeded"}
+{"level":"info","time":"2026-08-15T09:24:07.702Z","seq":6,"component":"browser-library","event_kind":"grpc","action":"newPage","status":"started"}
+{"level":"info","time":"2026-08-15T09:24:07.702Z","seq":7,"component":"browser-library","msg":"currentBrowser: {\"_contextStack\":[],\"browser\":{\"_type\":\"Browser\",\"_guid\":\"browser@cf71fcc51a53e0dddb06e2fda28250c1\"},\"name\":\"chromium\",\"id\":\"browser=80bc5cc3-982b-42d9-9c22-dfc627e2770c\",\"headless\":true}"}
+{"level":"info","time":"2026-08-15T09:24:07.706Z","seq":8,"component":"browser-library","msg":"Setting default timeout for context context=feb4c43b-19da-4289-a62b-22802fe2321f to 10000"}
+{"level":"info","time":"2026-08-15T09:24:07.706Z","seq":9,"component":"browser-library","msg":"Changed active context: context=feb4c43b-19da-4289-a62b-22802fe2321f"}
+{"level":"info","time":"2026-08-15T09:24:07.741Z","seq":10,"component":"browser-library","msg":"Video path: undefined"}
+{"level":"info","time":"2026-08-15T09:24:07.741Z","seq":11,"component":"browser-library","msg":"Changed active page"}
+{"level":"info","time":"2026-08-15T09:24:10.235Z","seq":12,"component":"browser-library","event_kind":"grpc","action":"newPage","status":"succeeded"}
+{"level":"info","time":"2026-08-15T09:24:10.237Z","seq":13,"component":"browser-library","event_kind":"grpc","action":"evaluateJavascript","status":"started"}
+{"level":"info","time":"2026-08-15T09:24:10.237Z","seq":14,"component":"browser-library","msg":"Strict mode is enabled, find Locator with h1 in page."}
+{"level":"info","time":"2026-08-15T09:24:10.261Z","seq":15,"component":"browser-library","event_kind":"grpc","action":"evaluateJavascript","status":"succeeded"}
+{"level":"info","time":"2026-08-15T09:24:10.262Z","seq":16,"component":"browser-library","event_kind":"grpc","action":"closeBrowser","status":"started"}
+{"level":"info","time":"2026-08-15T09:24:10.264Z","seq":17,"component":"browser-library","msg":"Removed page=af4ea9b6-3dc8-4102-9ea1-952f16702244 from context=feb4c43b-19da-4289-a62b-22802fe2321f page stack"}
+{"level":"info","time":"2026-08-15T09:24:10.281Z","seq":18,"component":"browser-library","event_kind":"grpc","action":"closeBrowser","status":"succeeded"}
+{"level":"info","time":"2026-08-15T09:24:10.282Z","seq":19,"component":"browser-library","event_kind":"grpc","action":"closeAllBrowsers","status":"started"}
+{"level":"info","time":"2026-08-15T09:24:10.282Z","seq":20,"component":"browser-library","event_kind":"grpc","action":"closeAllBrowsers","status":"succeeded"}
