@@ -24,4 +24,4 @@ groups/**.*
 
 # Ressourcen wie Page Objekt Informationen. Sind spezifisch für die Tests.
 resources/**.*
-resources/page_objects/**.*
+resources/page_objects/**.resource
