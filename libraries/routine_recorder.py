@@ -105,7 +105,15 @@ class RoutineRecorder:
             } catch(e) {}
 
             function emitStop() {
+                if (window.__PY_RECORDER_STOPPED__) return;
+                window.__PY_RECORDER_STOPPED__ = true;
                 try {
+                    const btn = document.getElementById('py-hud-stop-btn');
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.textContent = "STOPPING...";
+                        btn.style.opacity = "0.5";
+                    }
                     console.debug("__PY_WEB_TESTER_STOP__");
                 } catch(e) {}
             }
@@ -160,7 +168,11 @@ class RoutineRecorder:
                     }
                 }
 
+                const rawTag = (target.tagName || '').toUpperCase();
+                const isInnerTag = ['MAT-ICON', 'SVG', 'PATH', 'SPAN', 'I', 'EM', 'IMG'].includes(rawTag);
+
                 for (let el of candidates) {
+                    if (isInnerTag && el === target) continue;
                     const tag = (el.tagName || '').toUpperCase();
                     const role = (el.getAttribute ? el.getAttribute('role') : '') || '';
                     const onclick = el.getAttribute ? el.getAttribute('onclick') : null;
@@ -570,16 +582,30 @@ class RoutineRecorder:
             ['click', 'dblclick', 'contextmenu'].forEach(eventType => {
                 window.addEventListener(eventType, function(e) {
                     try {
+                        const path = e.composedPath ? e.composedPath() : [];
+                        for (let el of path) {
+                            if (el && el.id === 'py-hud-stop-btn') {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                emitStop();
+                                return;
+                            }
+                            if (el && el.id && (el.id === 'py-web-tester-recorder-hud' || el.id === 'py-web-tester-keystroke-hud')) {
+                                e.stopPropagation();
+                                return;
+                            }
+                        }
+
                         createClickRipple(e.clientX, e.clientY);
 
-                        let rawTarget = (e.composedPath && e.composedPath()[0]) || e.target;
+                        let rawTarget = path[0] || e.target;
                         if (!rawTarget) return;
 
                         const recHud = document.getElementById('py-web-tester-recorder-hud');
                         if (recHud && (recHud === rawTarget || recHud.contains(rawTarget))) return;
 
-                        const path = e.composedPath ? e.composedPath() : null;
                         const target = findInteractiveParent(rawTarget, path) || rawTarget;
+                        if (target && target.id && (target.id === 'py-web-tester-recorder-hud' || target.id === 'py-hud-stop-btn')) return;
 
                         if (lastPendingInputPayload) {
                             emitEvent(lastPendingInputPayload);
@@ -620,8 +646,7 @@ class RoutineRecorder:
                 }, true);
             });
 
-            // Record Input & Change Events
-            let inputTimer = null;
+            // Record Input & Change Events (Form Inputs Only)
             ['input', 'change', 'blur'].forEach(eventType => {
                 window.addEventListener(eventType, function(e) {
                     try {
@@ -631,7 +656,15 @@ class RoutineRecorder:
                         const recHud = document.getElementById('py-web-tester-recorder-hud');
                         if (recHud && (recHud === target || recHud.contains(target))) return;
 
-                        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+                        const tagUpper = (target.tagName || '').toUpperCase();
+                        const isInputTag = ['INPUT', 'TEXTAREA', 'SELECT', 'MAT-SELECT'].includes(tagUpper) || target.isContentEditable;
+
+                        // Ignore change/blur on non-form elements (buttons, links, layout containers)
+                        if (!isInputTag && (eventType === 'change' || eventType === 'blur')) {
+                            return;
+                        }
+
+                        if (isInputTag) {
                             const val = target.value || target.innerText || '';
                             const fieldName = target.placeholder || target.name || target.id || 'Eingabefeld';
                             showKeystrokeOverlay(`[${fieldName}]: "${val}"`);
@@ -648,7 +681,7 @@ class RoutineRecorder:
                         }
 
                         lastPendingInputPayload = {
-                            event_type: eventType === 'blur' ? 'change' : eventType,
+                            event_type: 'change',
                             timestamp_iso: new Date().toISOString(),
                             timestamp_ms: Date.now(),
                             value: target.value !== undefined ? String(target.value) : null,
@@ -658,17 +691,8 @@ class RoutineRecorder:
                         };
 
                         if (eventType === 'change' || eventType === 'blur') {
-                            clearTimeout(inputTimer);
                             emitEvent(lastPendingInputPayload);
                             lastPendingInputPayload = null;
-                        } else {
-                            clearTimeout(inputTimer);
-                            inputTimer = setTimeout(() => {
-                                if (lastPendingInputPayload) {
-                                    emitEvent(lastPendingInputPayload);
-                                    lastPendingInputPayload = null;
-                                }
-                            }, 200);
                         }
                     } catch (globalInputErr) {
                         console.error("Input handler error:", globalInputErr);
@@ -772,14 +796,14 @@ class RoutineRecorder:
                     self.stop_requested = True
                     self.is_recording = False
 
-            # Attach console listener to every page opened in context
-            context.on("page", lambda new_p: new_p.on("console", on_console_message))
+            # Attach console listener to every page opened in context (without duplicate registration)
+            def attach_page_listeners(p):
+                try:
+                    p.on("console", on_console_message)
+                except Exception:
+                    pass
 
-            # Inject script on every new document
-            context.add_init_script(self.get_js_recorder_script())
-
-            page = context.new_page()
-            page.on("console", on_console_message)
+            context.on("page", attach_page_listeners)
 
             # Automatic navigation listener: Only record NAVIGATE for initial load or manual URL changes
             def on_frame_navigated(frame):
@@ -797,29 +821,54 @@ class RoutineRecorder:
                                 "elapsed_ms": elapsed_ms,
                                 "delta_ms": elapsed_ms,
                                 "page_url": url_nav,
-                                "page_title": page.title() if not page.is_closed() else "",
+                                "page_title": "",
                                 "element": None
                             }
                             self.recorded_events.append(nav_event)
                             print(f"  [REC #{nav_event['action_id']:02d}] NAVIGATE -> {url_nav}")
 
+            # Inject script on every new document
+            context.add_init_script(self.get_js_recorder_script())
+
+            page = context.new_page()
             page.on("framenavigated", on_frame_navigated)
             page.goto(start_url)
 
-            # Wait loop until user clicks STOP or time expires
+            # Wait loop until user clicks STOP or browser is closed
             loop_start = time.time()
             try:
-                while not self.stop_requested and page.is_closed() is False:
-                    page.wait_for_timeout(200)
+                while not self.stop_requested:
+                    time.sleep(0.1)
                     if timeout_seconds > 0 and (time.time() - loop_start) > timeout_seconds:
                         print(f"Timeout reached ({timeout_seconds}s). Stopping recording.")
+                        break
+                    try:
+                        if page.is_closed():
+                            break
+                    except Exception:
                         break
             except Exception:
                 pass
 
             try:
-                if not page.is_closed():
-                    page.close()
+                for p_item in list(context.pages):
+                    try:
+                        p_item.evaluate("window.close()")
+                    except Exception:
+                        pass
+                    try:
+                        p_item.close()
+                    except Exception:
+                        pass
+            except Exception:
+                pass
+
+            try:
+                context.close()
+            except Exception:
+                pass
+
+            try:
                 browser.close()
             except Exception:
                 pass

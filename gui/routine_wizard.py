@@ -25,21 +25,22 @@ class RecorderThread(QThread):
     finished_signal = Signal(dict)
     error_signal = Signal(str)
 
-    def __init__(self, routine_name: str, target_url: str):
-        super().__init__()
+    def __init__(self, parent: Optional[QWidget], routine_name: str, target_url: str):
+        super().__init__(parent)
         self.routine_name = routine_name
         self.target_url = target_url
+        self.recorder: Optional[RoutineRecorder] = None
 
     def run(self):
         try:
-            recorder = RoutineRecorder()
-            data = recorder.record_routine(
+            self.recorder = RoutineRecorder()
+            data = self.recorder.record_routine(
                 routine_name=self.routine_name,
                 start_url=self.target_url
             )
             if not data:
-                data = recorder.get_last_trace()
-            self.finished_signal.emit(data)
+                data = self.recorder.get_last_trace()
+            self.finished_signal.emit(data or {})
         except Exception as e:
             self.error_signal.emit(str(e))
 
@@ -240,6 +241,22 @@ class RoutineWizardDialog(QDialog):
     # RECORDING & SAVING LOGIC
     # -------------------------------------------------------------------------
 
+    def closeEvent(self, event):
+        if self.recorder_thread and self.recorder_thread.isRunning():
+            if self.recorder_thread.recorder:
+                self.recorder_thread.recorder.stop_requested = True
+            self.recorder_thread.quit()
+            self.recorder_thread.wait(2000)
+        super().closeEvent(event)
+
+    def reject(self):
+        if self.recorder_thread and self.recorder_thread.isRunning():
+            if self.recorder_thread.recorder:
+                self.recorder_thread.recorder.stop_requested = True
+            self.recorder_thread.quit()
+            self.recorder_thread.wait(2000)
+        super().reject()
+
     def _start_browser_recording(self):
         routine_name = self.name_edit.text().strip()
         url = self.url_edit.text().strip()
@@ -248,7 +265,7 @@ class RoutineWizardDialog(QDialog):
         self.record_status_label.setText("Status: Browser wird geöffnet... Bitte Interaktionen im Browser durchführen!")
         self.record_status_label.setStyleSheet("color: #f9e2af; font-weight: bold;")
 
-        self.recorder_thread = RecorderThread(routine_name, url)
+        self.recorder_thread = RecorderThread(self, routine_name, url)
         self.recorder_thread.finished_signal.connect(self._on_recording_finished)
         self.recorder_thread.error_signal.connect(self._on_recording_error)
         self.recorder_thread.start()
