@@ -12,7 +12,7 @@ Setup Web Test Browser
     New Context        viewport={'width': 1280, 'height': 720}
     New Page           ${url}
     Set Browser Timeout    ${TIMEOUT}
-    IF    $HEADLESS is False or str($HEADLESS).upper() == 'FALSE'
+    IF    "${HEADLESS}".upper() == "FALSE" or "${HEADLESS}" == "0"
         Run Keyword And Ignore Error    Inject Visual Pointer And Keystroke HUD
     END
 
