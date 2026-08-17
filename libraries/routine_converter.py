@@ -89,6 +89,8 @@ class RoutineConverter:
             val = self._clean_single_line(curr.get("value") or "")
             coords = elem.get("elem_coords") or {}
 
+            custom_desc = self._clean_single_line(curr.get("description") or curr.get("custom_description") or curr.get("comment") or "")
+
             if event_type == "navigate":
                 url = self._clean_single_line(curr.get("page_url") or "")
                 # Only emit Go To for initial page load if not already opened by Setup
@@ -97,7 +99,7 @@ class RoutineConverter:
                         "keyword": "Go To",
                         "selector": None,
                         "url": url,
-                        "comment": f"Navigate to '{url}'"
+                        "comment": custom_desc or f"Navigate to '{url}'"
                     })
             elif event_type in ["input", "change"]:
                 if tag in ["INPUT", "TEXTAREA", "SELECT"]:
@@ -116,7 +118,7 @@ class RoutineConverter:
                         "keyword": "Fill Text",
                         "selector": selector,
                         "value": final_val,
-                        "comment": f"Fill input field '{elem_name}'"
+                        "comment": custom_desc or f"Eingabe in Feld '{elem_name}'"
                     })
                 else:
                     elem_label = self._clean_single_line(text or elem.get("tag") or selector)
@@ -124,7 +126,7 @@ class RoutineConverter:
                         "keyword": "Click",
                         "selector": selector,
                         "coords": coords,
-                        "comment": f"Click element '{elem_label}'"
+                        "comment": custom_desc or f"Klick auf Element '{elem_label}'"
                     })
             elif event_type == "dblclick":
                 elem_label = self._clean_single_line(text or elem.get("tag") or selector)
@@ -140,7 +142,7 @@ class RoutineConverter:
                     "keyword": "Dblclick",
                     "selector": selector,
                     "coords": coords,
-                    "comment": f"Doppelklick auf Element '{elem_label}'"
+                    "comment": custom_desc or f"Doppelklick auf Element '{elem_label}'"
                 })
             elif event_type in ["click", "contextmenu"]:
                 elem_label = self._clean_single_line(text or elem.get("tag") or selector)
@@ -148,13 +150,13 @@ class RoutineConverter:
                     "keyword": "Click",
                     "selector": selector,
                     "coords": coords,
-                    "comment": f"Klick auf Element '{elem_label}'"
+                    "comment": custom_desc or f"Klick auf Element '{elem_label}'"
                 })
             elif event_type == "scroll":
                 steps.append({
                     "keyword": "Scroll To",
                     "selector": selector,
-                    "comment": f"Scroll to element '{selector}'"
+                    "comment": custom_desc or f"Scroll zu Element '{selector}'"
                 })
 
             i += 1
@@ -202,12 +204,15 @@ class RoutineConverter:
             lines.append("    Log    No interactive steps recorded.")
             return "\n".join(lines) + "\n"
 
+        total_steps = len(steps)
         for idx, step in enumerate(steps, 1):
             kw = step["keyword"]
             comment = step.get("comment", "")
 
             lines.append(f"    # Step {idx}: {comment}")
+            lines.append(f"    Log    [SCHRITT {idx}/{total_steps}] 📝 {comment}    console=True")
             if kw == "Go To":
+                lines.append(f"    Run Keyword And Ignore Error    Show Keystroke Overlay    Navigiere: {step.get('url')}")
                 lines.append(f"    Go To    {step.get('url')}")
             else:
                 var_selector = selectors_dict.get(step["selector"], f'"{step["selector"]}"')
@@ -217,7 +222,7 @@ class RoutineConverter:
 
                 if kw == "Fill Text":
                     val = step.get('value', '')
-                    lines.append(f"    Run Keyword And Ignore Error    Show Keystroke Overlay    Eingabe: \"{val}\"")
+                    lines.append(f"    Run Keyword And Ignore Error    Show Keystroke Overlay    {comment} -> \"{val}\"")
                     lines.append(f"    Run Keyword And Ignore Error    Click    {var_selector}")
                     lines.append(f"    ${{type_ok}}=    Run Keyword And Return Status    Type Text    {var_selector}    {val}    delay=40ms")
                     lines.append(f"    IF    not ${{type_ok}}")

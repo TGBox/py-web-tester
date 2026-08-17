@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
 from libraries.routine_recorder import RoutineRecorder
 from libraries.routine_converter import RoutineConverter
 from libraries.routine_manager import RoutineManager
+from gui.step_table_widget import StepTableWidget
 
 class RecorderThread(QThread):
     finished_signal = Signal(dict)
@@ -51,8 +52,8 @@ class RoutineWizardDialog(QDialog):
         self.converter = RoutineConverter()
         
         self.setWindowTitle("Neue Testroutine definieren - Wizard")
-        self.resize(780, 540)
-        self.setMinimumSize(680, 480)
+        self.resize(840, 580)
+        self.setMinimumSize(720, 500)
 
         self.recorded_trace_data = None
         self.recorder_thread = None
@@ -172,21 +173,12 @@ class RoutineWizardDialog(QDialog):
         widget = QWidget()
         layout = QVBoxLayout(widget)
 
-        self.summary_label = QLabel("Aufgenommene Interaktionen:")
+        self.summary_label = QLabel("Aufgenommene Interaktionen (Schritte bearbeiten, löschen & beschreiben):")
         self.summary_label.setWordWrap(True)
         layout.addWidget(self.summary_label)
 
-        self.preview_table = QTableWidget()
-        self.preview_table.setColumnCount(4)
-        self.preview_table.setHorizontalHeaderLabels(["#", "Event", "Element / Selector", "Wert / Text"])
-        
-        header = self.preview_table.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(2, QHeaderView.Stretch)
-        header.setSectionResizeMode(3, QHeaderView.Stretch)
-
-        layout.addWidget(self.preview_table)
+        self.step_table = StepTableWidget()
+        layout.addWidget(self.step_table)
 
         return widget
 
@@ -286,21 +278,11 @@ class RoutineWizardDialog(QDialog):
             return
 
         actions = self.recorded_trace_data.get("actions", [])
-        self.preview_table.setRowCount(len(actions))
-
-        for idx, act in enumerate(actions):
-            elem = act.get("element") or {}
-            sel = elem.get("selector") or act.get("page_url") or ""
-            val = act.get("value") or elem.get("text") or ""
-
-            self.preview_table.setItem(idx, 0, QTableWidgetItem(str(act.get("action_id", idx + 1))))
-            self.preview_table.setItem(idx, 1, QTableWidgetItem(str(act.get("event_type", ""))))
-            self.preview_table.setItem(idx, 2, QTableWidgetItem(str(sel)))
-            self.preview_table.setItem(idx, 3, QTableWidgetItem(str(val)))
+        self.step_table.set_actions(actions)
 
         duration_sec = round(self.recorded_trace_data.get("duration_ms", 0) / 1000.0, 1)
         self.summary_label.setText(
-            f"Vorschau der aufgenommenen Routine '{self.name_edit.text()}': "
+            f"Vorschau & Bearbeitung der Routine '{self.name_edit.text()}': "
             f"{len(actions)} Aktionen ({duration_sec}s Dauer)."
         )
 
@@ -311,7 +293,8 @@ class RoutineWizardDialog(QDialog):
         tags_raw = self.tags_edit.text().strip()
         tags = [t.strip() for t in tags_raw.split(",") if t.strip()]
 
-        actions = self.recorded_trace_data.get("actions", []) if self.recorded_trace_data else []
+        actions = self.step_table.get_actions()
+        duration_ms = self.recorded_trace_data.get("duration_ms", 0) if self.recorded_trace_data else 0
         duration_ms = self.recorded_trace_data.get("duration_ms", 0) if self.recorded_trace_data else 0
 
         # Save JSON routine file

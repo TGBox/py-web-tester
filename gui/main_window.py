@@ -32,6 +32,7 @@ from PySide6.QtWidgets import (
 
 from gui.theme import DARK_THEME_QSS
 from gui.routine_wizard import RoutineWizardDialog
+from gui.routine_editor_dialog import RoutineEditorDialog
 from gui.group_dialog import GroupDialog
 from gui.suite_dialog import SuiteDialog
 from gui.execution_controller import ExecutionControllerThread
@@ -475,6 +476,13 @@ class MainWindow(QMainWindow):
             run_btn.clicked.connect(lambda _, rname=name: self._run_single_routine(rname))
             btn_layout.addWidget(run_btn)
 
+            edit_steps_btn = QPushButton("✏ Schritte")
+            edit_steps_btn.setToolTip("Aktionsschritte dieser Routine bearbeiten, löschen & beschreiben")
+            edit_steps_btn.setStyleSheet("background-color: #f9e2af; color: #11111b; padding: 4px 8px; font-weight: bold;")
+            edit_steps_btn.setMinimumWidth(85)
+            edit_steps_btn.clicked.connect(lambda _, rname=name: self._open_routine_editor(rname))
+            btn_layout.addWidget(edit_steps_btn)
+
             report_btn = QPushButton("📊 Bericht")
             report_btn.setStyleSheet("background-color: #89b4fa; color: #11111b; padding: 4px 8px; font-weight: bold;")
             report_btn.setMinimumWidth(85)
@@ -632,6 +640,11 @@ class MainWindow(QMainWindow):
         wizard = RoutineWizardDialog(self, manager=self.manager)
         wizard.wizard_completed_signal.connect(lambda _: self.refresh_all_views())
         wizard.exec()
+
+    def _open_routine_editor(self, routine_name: str):
+        dialog = RoutineEditorDialog(routine_name=routine_name, parent=self, manager=self.manager)
+        dialog.routine_updated_signal.connect(lambda _: self.refresh_all_views())
+        dialog.exec()
 
     def _open_new_group_dialog(self):
         dialog = GroupDialog(self, manager=self.manager)

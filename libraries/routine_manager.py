@@ -135,6 +135,33 @@ class RoutineManager:
         
         # Remove helper keys before saving
         save_data = dict(data)
+        save_data.pop("filename", None)
+        save_data.pop("formatted_date", None)
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(save_data, f, indent=2, ensure_ascii=False)
+
+        return True
+
+    def update_routine_actions(
+        self,
+        routine_name: str,
+        actions: List[Dict[str, Any]]
+    ) -> bool:
+        """Updates the action sequence and total_actions count of an existing routine JSON."""
+        data = self.get_routine(routine_name)
+        if not data:
+            return False
+
+        data["actions"] = actions
+        data["total_actions"] = len(actions)
+
+        filename = data.get("filename") or f"{routine_name}.json"
+        file_path = self.routines_dir / filename
+
+        save_data = dict(data)
+        save_data.pop("filename", None)
+        save_data.pop("formatted_date", None)
+
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(save_data, f, indent=2, ensure_ascii=False)
 
