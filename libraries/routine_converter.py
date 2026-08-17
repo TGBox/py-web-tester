@@ -178,7 +178,7 @@ class RoutineConverter:
             "",
             "*** Variables ***",
             f"${{{clean_var_name}_START_URL}}    {start_url}",
-            "${ACTION_DELAY}                    300ms",
+            "${ACTION_DELAY}                    50ms",
             ""
         ]
 
@@ -219,23 +219,26 @@ class RoutineConverter:
                 var_selector = selectors_dict.get(step["selector"], f'"{step["selector"]}"')
                 lines.append(f"    Run Keyword And Ignore Error    Wait For Elements State    {var_selector}    visible    timeout=5s")
                 lines.append(f"    Run Keyword And Ignore Error    Animate Visual Pointer To Element    {var_selector}")
-                lines.append("    Sleep    150ms")
+                lines.append("    Sleep    ${ACTION_DELAY}")
 
                 if kw == "Fill Text":
                     val = step.get('value', '')
                     lines.append(f"    Run Keyword And Ignore Error    Show Keystroke Overlay    {comment} -> \"{val}\"")
+                    lines.append("    Run Keyword And Ignore Error    Trigger Visual Click Effect")
                     lines.append(f"    Run Keyword And Ignore Error    Click    {var_selector}")
                     lines.append(f"    ${{type_ok}}=    Run Keyword And Return Status    Type Text    {var_selector}    {val}    delay=40ms")
                     lines.append(f"    IF    not ${{type_ok}}")
                     lines.append(f"        Run Keyword And Ignore Error    Fill Text    {var_selector}    {val}")
                     lines.append(f"    END")
                 elif kw == "Dblclick":
+                    lines.append("    Run Keyword And Ignore Error    Trigger Visual Click Effect")
                     lines.append(f"    ${{dbl_ok}}=    Run Keyword And Return Status    Click    {var_selector}    click_count=2")
                     lines.append(f"    IF    not ${{dbl_ok}}")
                     lines.append(f"        Run Keyword And Ignore Error    Evaluate JavaScript    {var_selector}    (el) => {{ if(el) {{ el.dispatchEvent(new MouseEvent('mousedown', {{bubbles: true, detail: 1}})); el.dispatchEvent(new MouseEvent('mouseup', {{bubbles: true, detail: 1}})); el.dispatchEvent(new MouseEvent('click', {{bubbles: true, detail: 1}})); el.dispatchEvent(new MouseEvent('mousedown', {{bubbles: true, detail: 2}})); el.dispatchEvent(new MouseEvent('mouseup', {{bubbles: true, detail: 2}})); el.dispatchEvent(new MouseEvent('click', {{bubbles: true, detail: 2}})); el.dispatchEvent(new MouseEvent('dblclick', {{bubbles: true, detail: 2}})); }} }}")
                     lines.append(f"    END")
                 elif kw == "Click":
                     lines.append(f"    Run Keyword And Ignore Error    Show Keystroke Overlay    {comment}")
+                    lines.append("    Run Keyword And Ignore Error    Trigger Visual Click Effect")
                     lines.append(f"    ${{click_ok}}=    Run Keyword And Return Status    Click    {var_selector}")
                     lines.append(f"    IF    not ${{click_ok}}")
                     lines.append(f"        Run Keyword And Ignore Error    Click    {var_selector}    force=True")
@@ -243,6 +246,7 @@ class RoutineConverter:
                 elif kw == "Scroll To":
                     lines.append(f"    Run Keyword And Ignore Error    Scroll To    {var_selector}")
                 else:
+                    lines.append("    Run Keyword And Ignore Error    Trigger Visual Click Effect")
                     lines.append(f"    Run Keyword And Ignore Error    {kw}    {var_selector}")
 
             lines.append("    Sleep    ${ACTION_DELAY}")

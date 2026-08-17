@@ -50,14 +50,14 @@ class ExecutionControllerThread(QThread):
         if self.speed_mode == "MAX":
             return 0
         elif self.speed_mode == "2X":
-            return 50
+            return 20
         elif self.speed_mode == "NORMAL":
-            return 150
+            return 50
         elif self.speed_mode == "SLOWMO":
             return self.slowmo_ms
         elif self.speed_mode == "MANUAL":
             return 0
-        return 150
+        return 50
 
     def run(self):
         delay_ms = self._get_action_delay_ms()

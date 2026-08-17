@@ -1,9 +1,9 @@
 (A) 2026-08-15 Mauszeiger wird nicht visualisiert im Wiedergabemodus. +Refactoring @code
 (A) 2026-08-15 Tastatureingabeoverlay wird nicht angezeigt im Wiedergabemodus. +Refactoring @code
-(B) 2026-08-15 After Klick Pause reduzieren. +Refactoring @code
 (B) 2026-08-15 Interaktives und dynamisches Einstellen der Geschwindigkeit während der Wiedergabe ermöglichen. +Refactoring @code
 (B) 2026-08-15 Browserfenster in dem die Wiedergabe abgespielt wird, sollte sich schließen, wenn die Ausführung des Tests gestoppt wurde. +Refactoring @code
 (B) 2026-08-17 Wenn die Aufnahme der Benutzereingaben läuft, werden manchmal nicht alle Aktionen richtig erkannt. +Refactoring @code
+x 2026-08-17 2026-08-17 (B) 2026-08-15 After Klick Pause reduzieren. +Refactoring @code
 x 2026-08-17 2026-08-17 (B) Wenn die Wiedergabe der Tests läuft, sollten in dem Ausgabefenster alle Aktionen einzeln aufgeführt werden, damit man währenddessen dort kontrollieren kann, was gerade passiert. +Refactoring @code
 x 2026-08-17 2026-08-17 (B) Wenn man nach der Aufnahme die einzelnen Schritte kontrolliert, dann sollte es dort möglich sein, einzelne Aktionen aus dieser Liste zu löschen. +Refactoring @code
 x 2026-08-17 2026-08-17 (B) Wenn man nach der Aufnahme die einzelnen Schritte kontrolliert, sollte es möglich sein, für jede Aktion, bzw. für eine Gruppe von Aktionen eine Beschreibung zu hinterlegen, welche dann später ausgegeben wird, während diese Aktion durchgeführt wird. +Refactoring @code

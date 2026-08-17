@@ -44,7 +44,7 @@ class visual_hud:
         if (!cursor) {{
             cursor = document.createElement('div');
             cursor.id = 'py-web-tester-cursor';
-            cursor.style.cssText = 'position: fixed !important; top: 100px; left: 100px; width: 28px !important; height: 28px !important; pointer-events: none !important; z-index: 2147483647 !important; transition: left 0.22s ease-out, top 0.22s ease-out, transform 0.15s ease !important; transform: translate(0, 0) !important; display: block !important; opacity: 1 !important; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.65)) !important;';
+            cursor.style.cssText = 'position: fixed !important; top: 0px !important; left: 0px !important; width: 28px !important; height: 28px !important; pointer-events: none !important; z-index: 2147483647 !important; transition: transform 0.16s cubic-bezier(0.25, 1, 0.5, 1) !important; transform-origin: 0 0 !important; transform: translate(100px, 100px) !important; display: block !important; opacity: 1 !important; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.65)) !important;';
             cursor.innerHTML = '{CURSOR_SVG}';
             parent.appendChild(cursor);
         }}
@@ -124,6 +124,33 @@ class visual_hud:
         except Exception:
             pass
 
+    @keyword("Trigger Visual Click Effect")
+    def trigger_visual_click_effect(self):
+        """Triggers click pulse effect on visual HUD mouse cursor."""
+        try:
+            browser_lib = BuiltIn().get_library_instance("Browser")
+            if not self._has_active_page(browser_lib):
+                return
+            js_code = """
+            (function() {
+                const cursor = document.getElementById('py-web-tester-cursor');
+                if (cursor) {
+                    const currentTransform = cursor.style.transform || '';
+                    cursor.style.setProperty('filter', 'drop-shadow(0 0 10px #f43f5e) brightness(1.3)', 'important');
+                    cursor.style.setProperty('transform', currentTransform + ' scale(0.82)', 'important');
+                    setTimeout(() => {
+                        if (cursor) {
+                            cursor.style.setProperty('filter', 'drop-shadow(0 4px 8px rgba(0,0,0,0.65))', 'important');
+                            cursor.style.setProperty('transform', currentTransform, 'important');
+                        }
+                    }, 180);
+                }
+            })();
+            """
+            browser_lib.evaluate_javascript(None, js_code)
+        except Exception:
+            pass
+
     def _move_cursor_to_coords(self, browser_lib, x: int, y: int):
         """Moves cursor to explicit (x, y) coordinates and triggers a click pulse animation."""
         try:
@@ -133,26 +160,20 @@ class visual_hud:
             (function() {{
                 const cursor = document.getElementById('py-web-tester-cursor');
                 if (cursor) {{
-                    cursor.style.setProperty('left', '{x}px', 'important');
-                    cursor.style.setProperty('top', '{y}px', 'important');
+                    cursor.style.setProperty('transform', 'translate({x}px, {y}px)', 'important');
                     cursor.style.setProperty('display', 'block', 'important');
                     cursor.style.setProperty('opacity', '1', 'important');
-
-                    cursor.style.setProperty('transform', 'scale(0.85)', 'important');
-                    setTimeout(() => {{
-                        if (cursor) cursor.style.setProperty('transform', 'scale(1)', 'important');
-                    }}, 150);
                 }}
 
                 const ripple = document.createElement('div');
-                ripple.style.cssText = 'position: fixed !important; left: {x}px !important; top: {y}px !important; width: 14px !important; height: 14px !important; border-radius: 50% !important; border: 2.5px solid #38bdf8 !important; background: rgba(56, 189, 248, 0.4) !important; pointer-events: none !important; z-index: 2147483646 !important; transform: translate(-50%, -50%) scale(1) !important; transition: transform 0.45s ease-out, opacity 0.45s ease-out !important;';
+                ripple.style.cssText = 'position: fixed !important; left: {x}px !important; top: {y}px !important; width: 14px !important; height: 14px !important; border-radius: 50% !important; border: 2.5px solid #f43f5e !important; background: rgba(244, 63, 94, 0.4) !important; pointer-events: none !important; z-index: 2147483646 !important; transform: translate(-50%, -50%) scale(1) !important; transition: transform 0.4s ease-out, opacity 0.4s ease-out !important;';
                 const parent = document.body || document.documentElement;
                 if (parent) parent.appendChild(ripple);
                 requestAnimationFrame(() => {{
-                    ripple.style.transform = 'translate(-50%, -50%) scale(4)';
+                    ripple.style.transform = 'translate(-50%, -50%) scale(3.5)';
                     ripple.style.opacity = '0';
                 }});
-                setTimeout(() => {{ ripple.remove(); }}, 500);
+                setTimeout(() => {{ ripple.remove(); }}, 450);
             }})();
             """
             browser_lib.evaluate_javascript(None, js_code)
@@ -161,7 +182,7 @@ class visual_hud:
 
     @keyword("Animate Visual Pointer To Element")
     def animate_visual_pointer(self, selector: str):
-        """Glides the visual mouse pointer to the center of the given element selector using getBoundingClientRect() dynamic bounds."""
+        """Glides the visual mouse pointer to the center of the given element selector using get_boundingbox() dynamic bounds."""
         try:
             browser_lib = BuiltIn().get_library_instance("Browser")
             if not self._has_active_page(browser_lib):
@@ -171,27 +192,43 @@ class visual_hud:
             if not selector or selector == "None" or selector == "about:blank":
                 return
 
-            # Step 1: Playwright selector resolution + getBoundingClientRect via element handle
             x, y = None, None
-            js_rect_code = """(element) => {
-                if (!element) return null;
-                const rect = element.getBoundingClientRect();
-                if (rect.width > 0 || rect.height > 0) {
-                    const targetX = Math.round(rect.left + rect.width / 2);
-                    const targetY = Math.round(rect.top + rect.height / 2);
-                    return { x: targetX, y: targetY };
-                }
-                return null;
-            }"""
+
+            # Step 1: Server-side Playwright get_boundingbox API call
             try:
-                res = browser_lib.evaluate_javascript(selector, js_rect_code)
-                if res and isinstance(res, dict):
-                    x = res.get("x")
-                    y = res.get("y")
+                bbox = browser_lib.get_boundingbox(selector, allow_hidden=True)
+                if bbox and isinstance(bbox, dict):
+                    bw = bbox.get("width", 0)
+                    bh = bbox.get("height", 0)
+                    bx = bbox.get("x", 0)
+                    by = bbox.get("y", 0)
+                    if bw > 0 or bh > 0:
+                        x = round(bx + bw / 2)
+                        y = round(by + bh / 2)
             except Exception:
                 pass
 
-            # Step 2: Fallback to document JS parser if selector is custom or complex
+            # Step 2: Playwright evaluate_javascript with element handle fallback
+            if x is None or y is None:
+                js_rect_code = """(element) => {
+                    if (!element) return null;
+                    const rect = element.getBoundingClientRect();
+                    if (rect.width > 0 || rect.height > 0) {
+                        const targetX = Math.round(rect.left + rect.width / 2);
+                        const targetY = Math.round(rect.top + rect.height / 2);
+                        return { x: targetX, y: targetY };
+                    }
+                    return null;
+                }"""
+                try:
+                    res = browser_lib.evaluate_javascript(selector, js_rect_code)
+                    if res and isinstance(res, dict):
+                        x = res.get("x")
+                        y = res.get("y")
+                except Exception:
+                    pass
+
+            # Step 3: Document JS parser fallback for custom selectors
             if x is None or y is None:
                 js_code = f"""
                 (function() {{
