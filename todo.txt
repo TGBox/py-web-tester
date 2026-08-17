@@ -3,3 +3,5 @@
 (B) 2026-08-15 After Klick Pause reduzieren. +Refactoring @code
 (B) 2026-08-15 Interaktives und dynamisches Einstellen der Geschwindigkeit während der Wiedergabe ermöglichen. +Refactoring @code
 (B) 2026-08-15 Browserfenster in dem die Wiedergabe abgespielt wird, sollte sich schließen, wenn die Ausführung des Tests gestoppt wurde. +Refactoring @code
+(B) 2026-08-17 Wenn die Aufnahme der Benutzereingaben läuft, werden manchmal nicht alle Aktionen richtig erkannt. +Refactoring @code
+(B) 2026-08-17 Wenn die Wiedergabe der Tests läuft, sollten in dem Ausgabefenster alle Aktionen einzeln aufgeführt werden, damit man währenddessen dort kontrollieren kann, was gerade passiert. +Refactoring @code

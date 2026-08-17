@@ -28,3 +28,6 @@ resources/page_objects/**.resource
 
 # Variablen/Zugangsdaten/etc.
 variables/**.*
+
+# Tests.
+tests/**.robot
