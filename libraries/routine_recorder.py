@@ -140,6 +140,45 @@ class RoutineRecorder:
                 } catch(e) { return ''; }
             }
 
+            function findInteractiveParent(target, path) {
+                if (!target) return null;
+                const candidates = [];
+                if (path && Array.isArray(path)) {
+                    for (let node of path) {
+                        if (node && node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'BODY' && node.tagName !== 'HTML') {
+                            candidates.push(node);
+                        }
+                    }
+                }
+                if (candidates.length === 0) {
+                    let curr = target;
+                    let depth = 0;
+                    while (curr && curr.nodeType === Node.ELEMENT_NODE && curr.tagName !== 'BODY' && depth < 5) {
+                        candidates.push(curr);
+                        curr = curr.parentElement;
+                        depth++;
+                    }
+                }
+
+                for (let el of candidates) {
+                    const tag = (el.tagName || '').toUpperCase();
+                    const role = (el.getAttribute ? el.getAttribute('role') : '') || '';
+                    const onclick = el.getAttribute ? el.getAttribute('onclick') : null;
+                    const cls = getSafeClass(el);
+
+                    if (
+                        ['BUTTON', 'A', 'MAT-OPTION', 'MAT-SELECT', 'SELECT', 'OPTION', 'INPUT'].includes(tag) ||
+                        ['button', 'option', 'select', 'combobox', 'menuitem', 'tab'].includes(role.toLowerCase()) ||
+                        tag.startsWith('MAT-') ||
+                        onclick ||
+                        (cls && (cls.includes('btn') || cls.includes('button') || cls.includes('mat-option') || cls.includes('nav-item') || cls.includes('menu-item')))
+                    ) {
+                        return el;
+                    }
+                }
+                return target;
+            }
+
             function getCssSelector(el) {
                 if (!el || el.nodeType !== Node.ELEMENT_NODE) return '';
                 try {
@@ -151,6 +190,20 @@ class RoutineRecorder:
                     const testId = el.getAttribute ? (el.getAttribute('data-testid') || el.getAttribute('data-test') || el.getAttribute('data-cy')) : null;
                     if (testId) return `[data-testid="${testId}"]`;
 
+                    const tagUpper = (el.tagName || '').toUpperCase();
+                    const text = (el.innerText || el.textContent || '').replace(/[\\r\\n\\t]+/g, ' ').trim();
+
+                    if (tagUpper === 'MAT-OPTION' && text) {
+                        return `mat-option:has-text("${text.replace(/"/g, '\\"')}")`;
+                    }
+                    const role = el.getAttribute ? el.getAttribute('role') : null;
+                    if (role === 'option' && text) {
+                        return `[role="option"]:has-text("${text.replace(/"/g, '\\"')}")`;
+                    }
+                    if (role === 'menuitem' && text) {
+                        return `[role="menuitem"]:has-text("${text.replace(/"/g, '\\"')}")`;
+                    }
+
                     const name = el.getAttribute ? el.getAttribute('name') : null;
                     if (name) return `${el.tagName.toLowerCase()}[name="${name}"]`;
 
@@ -160,15 +213,12 @@ class RoutineRecorder:
                     const ariaLabel = el.getAttribute ? el.getAttribute('aria-label') : null;
                     if (ariaLabel) return `${el.tagName.toLowerCase()}[aria-label="${ariaLabel}"]`;
 
-                    const role = el.getAttribute ? el.getAttribute('role') : null;
                     if (role) return `${el.tagName.toLowerCase()}[role="${role}"]`;
 
                     const type = el.getAttribute ? el.getAttribute('type') : null;
                     if (type && el.tagName === 'INPUT') return `input[type="${type}"]`;
 
-                    const text = (el.innerText || el.textContent || '').replace(/[\\r\\n\\t]+/g, ' ').trim();
-                    const tagUpper = (el.tagName || '').toUpperCase();
-                    if (text && text.length > 0 && text.length < 50 && ['BUTTON', 'A', 'SPAN', 'LABEL', 'H1', 'H2', 'H3', 'LI', 'MAT-OPTION', 'OPTION', 'DIV', 'P', 'TD'].includes(tagUpper)) {
+                    if (text && text.length > 0 && text.length < 60 && ['BUTTON', 'A', 'SPAN', 'LABEL', 'H1', 'H2', 'H3', 'LI', 'MAT-OPTION', 'OPTION', 'DIV', 'P', 'TD'].includes(tagUpper)) {
                         return `${el.tagName.toLowerCase()}:has-text("${text.replace(/"/g, '\\"')}")`;
                     }
 
@@ -509,6 +559,10 @@ class RoutineRecorder:
                     emitStop();
                 } else if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Escape' || e.key.startsWith('Arrow')) {
                     showKeystrokeOverlay(`[Taste gedrückt]: ${e.key}`);
+                    if (lastPendingInputPayload) {
+                        emitEvent(lastPendingInputPayload);
+                        lastPendingInputPayload = null;
+                    }
                 }
             }, true);
 
@@ -518,11 +572,14 @@ class RoutineRecorder:
                     try {
                         createClickRipple(e.clientX, e.clientY);
 
-                        const target = (e.composedPath && e.composedPath()[0]) || e.target;
-                        if (!target) return;
+                        let rawTarget = (e.composedPath && e.composedPath()[0]) || e.target;
+                        if (!rawTarget) return;
 
                         const recHud = document.getElementById('py-web-tester-recorder-hud');
-                        if (recHud && (recHud === target || recHud.contains(target))) return;
+                        if (recHud && (recHud === rawTarget || recHud.contains(rawTarget))) return;
+
+                        const path = e.composedPath ? e.composedPath() : null;
+                        const target = findInteractiveParent(rawTarget, path) || rawTarget;
 
                         if (lastPendingInputPayload) {
                             emitEvent(lastPendingInputPayload);
