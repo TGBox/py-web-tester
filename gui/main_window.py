@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from PySide6.QtCore import Qt, QUrl, Slot
-from PySide6.QtGui import QDesktopServices
+from PySide6.QtGui import QDesktopServices, QTextCursor
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit,
     QPushButton, QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView,
@@ -949,7 +949,13 @@ class MainWindow(QMainWindow):
 
     @Slot(str)
     def _append_log(self, text: str):
-        self.log_console.append(text.rstrip())
+        if not text:
+            return
+        if "<" in text and ">" in text:
+            self.log_console.appendHtml(text)
+        else:
+            self.log_console.appendPlainText(text)
+        self.log_console.moveCursor(QTextCursor.End)
 
     @Slot(int, str)
     def _on_progress_update(self, step: int, keyword: str):

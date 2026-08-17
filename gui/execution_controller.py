@@ -18,13 +18,24 @@ from libraries.step_listener import execution_state, StepListener
 class StdoutRedirector:
     def __init__(self, callback):
         self.callback = callback
+        self.buffer = ""
 
     def write(self, text):
-        if text:
-            self.callback(text)
+        if not text:
+            return
+        self.buffer += text
+        while "\n" in self.buffer:
+            line, self.buffer = self.buffer.split("\n", 1)
+            line_str = line.rstrip("\r")
+            if line_str:
+                self.callback(line_str)
 
     def flush(self):
-        pass
+        if self.buffer:
+            line_str = self.buffer.rstrip("\r\n")
+            if line_str:
+                self.callback(line_str)
+            self.buffer = ""
 
 class ExecutionControllerThread(QThread):
     progress_signal = Signal(int, str)      # step_count, current_keyword
@@ -110,6 +121,7 @@ class ExecutionControllerThread(QThread):
         except Exception as e:
             self.log_signal.emit(f"\n[FEHLER] Testausführung fehlgeschlagen: {e}\n")
         finally:
+            redirector.flush()
             sys.stdout = orig_stdout
             sys.stderr = orig_stderr
             execution_state.reset()
@@ -139,9 +151,26 @@ class ExecutionControllerThread(QThread):
 
     def _listener_callback(self, event_type: str, data: dict):
         if event_type == "step_start":
-            self.progress_signal.emit(data.get("step", 0), data.get("keyword", ""))
+            step = data.get("step", 0)
+            kw = data.get("keyword", "")
+            args = data.get("args", [])
+            args_clean = [str(a) for a in args if str(a) and not str(a).startswith("${")]
+            args_str = f" <i>('{', '.join(args_clean)}')</i>" if args_clean else ""
+            self.progress_signal.emit(step, kw)
+            self.log_signal.emit(f"<b>[SCHRITT {step}]</b> 📝 <code>{kw}</code>{args_str}")
+        elif event_type == "step_end":
+            step = data.get("step", 0)
+            kw = data.get("keyword", "")
+            status = data.get("status", "PASS")
+            if status == "PASS":
+                self.log_signal.emit(f"&nbsp;&nbsp;<span style='color: #a6e3a1;'>✔ Schritt {step} ({kw}) erfolgreich</span>")
+            else:
+                self.log_signal.emit(f"&nbsp;&nbsp;<span style='color: #f38ba8;'>❌ Schritt {step} ({kw}) FEHLGESCHLAGEN</span>")
         elif event_type == "waiting_for_step":
-            self.step_waiting_signal.emit(data.get("step", 0), data.get("keyword", ""))
+            step = data.get("step", 0)
+            kw = data.get("keyword", "")
+            self.step_waiting_signal.emit(step, kw)
+            self.log_signal.emit(f"<span style='color: #f9e2af;'>⏸ PAUSIERT bei Schritt {step} ('{kw}') — Warten auf 'Nächster Schritt'...</span>")
         elif event_type == "test_end":
             duration_ms = data.get("duration_ms", 0)
             status = data.get("status", "PASS")
