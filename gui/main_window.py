@@ -975,9 +975,9 @@ class MainWindow(QMainWindow):
 
     def _stop_execution(self):
         if self.execution_thread and self.execution_thread.isRunning():
-            self.execution_thread.terminate()
-            self.status_label.setText("Status: Ausführung vom Benutzer abgebrochen.")
+            self.status_label.setText("Status: Schließe Browser und breche Ausführung ab...")
             self.status_label.setStyleSheet("color: #f38ba8; font-weight: bold;")
+            self.execution_thread.stop_execution()
             self.run_btn.setEnabled(True)
             self.stop_btn.setEnabled(False)
             self.next_step_btn.setEnabled(False)

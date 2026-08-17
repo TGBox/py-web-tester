@@ -16,6 +16,7 @@ class ExecutionState:
         self.slowmo_ms: int = 0
         self.manual_mode: bool = False
         self.paused: bool = False
+        self.stop_requested: bool = False
         self.step_event = threading.Event()
         self.step_event.set()  # Default to open (non-blocking)
         self.callback = None
@@ -34,10 +35,16 @@ class ExecutionState:
         """Releases lock for one step."""
         self.step_event.set()
 
+    def request_stop(self):
+        """Sets stop_requested flag and unblocks any waiting step locks."""
+        self.stop_requested = True
+        self.step_event.set()
+
     def reset(self):
         self.slowmo_ms = 0
         self.manual_mode = False
         self.paused = False
+        self.stop_requested = False
         self.step_event.set()
 
 # Singleton execution state instance
@@ -71,6 +78,16 @@ class StepListener:
             })
 
     def start_keyword(self, data: Any, result: Any):
+        # Check if stop was requested by GUI user
+        if self.state.stop_requested:
+            try:
+                from robot.libraries.BuiltIn import BuiltIn
+                BuiltIn().run_keyword("Close Browser", "ALL")
+            except Exception:
+                pass
+            from robot.errors import FatalError
+            raise FatalError("Ausführung vom Benutzer abgebrochen.")
+
         kw_name = data.name.strip()
         args = list(data.args) if hasattr(data, "args") else []
 

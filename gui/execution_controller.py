@@ -228,3 +228,11 @@ class ExecutionControllerThread(QThread):
     @Slot()
     def trigger_next_step(self):
         execution_state.next_step()
+
+    @Slot()
+    def stop_execution(self):
+        """Requests graceful teardown and browser closure, falling back to terminate if unresponsive."""
+        execution_state.request_stop()
+        if not self.wait(1500):
+            self.terminate()
+            self.wait(500)
