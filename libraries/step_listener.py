@@ -96,21 +96,34 @@ class StepListener:
 
         if is_headed:
             try:
+                from robot.libraries.BuiltIn import BuiltIn
                 from libraries.visual_hud import visual_hud
                 hud_instance = visual_hud()
 
+                resolved_args = []
+                for a in args:
+                    str_a = str(a)
+                    if str_a.startswith("${") and str_a.endswith("}"):
+                        try:
+                            val = BuiltIn().get_variable_value(str_a)
+                            if val is not None:
+                                str_a = str(val)
+                        except Exception:
+                            pass
+                    resolved_args.append(str_a)
+
                 if "Show Keystroke Overlay" in kw_name:
-                    if args:
-                        hud_instance.show_keystroke_overlay(str(args[0]))
+                    if resolved_args:
+                        hud_instance.show_keystroke_overlay(resolved_args[0])
                 elif "Animate Visual Pointer" in kw_name:
-                    if args:
-                        hud_instance.animate_visual_pointer(str(args[0]))
-                elif args:
-                    first_arg = str(args[0])
+                    if resolved_args:
+                        hud_instance.animate_visual_pointer(resolved_args[0])
+                elif resolved_args and kw_name in ["Click", "Fill Text", "Type Text", "Dblclick", "Scroll To"]:
+                    first_arg = resolved_args[0]
                     if not first_arg.startswith("http") and not first_arg.isdigit() and len(first_arg) > 1:
                         hud_instance.animate_visual_pointer(first_arg)
-                    if len(args) > 1 and ("Fill" in kw_name or "Type" in kw_name):
-                        hud_instance.show_keystroke_overlay(f'Eingabe: "{args[1]}"')
+                    if len(resolved_args) > 1 and ("Fill" in kw_name or "Type" in kw_name):
+                        hud_instance.show_keystroke_overlay(f'Eingabe: "{resolved_args[1]}"')
             except Exception:
                 pass
 

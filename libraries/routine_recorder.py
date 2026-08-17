@@ -430,6 +430,7 @@ class RoutineRecorder:
                         font-size: 15px !important;
                         font-weight: bold !important;
                         box-shadow: 0 10px 30px rgba(0,0,0,0.7) !important;
+                        pointer-events: none !important;
                         z-index: 2147483647 !important;
                         display: none !important;
                         align-items: center !important;
