@@ -179,6 +179,12 @@ class MainWindow(QMainWindow):
         self.next_step_btn.clicked.connect(self._trigger_next_step)
         ctrl_row.addWidget(self.next_step_btn)
 
+        self.pause_btn = QPushButton("⏸ Pausieren")
+        self.pause_btn.setEnabled(False)
+        self.pause_btn.setMinimumWidth(130)
+        self.pause_btn.clicked.connect(self._toggle_pause_execution)
+        ctrl_row.addWidget(self.pause_btn)
+
         self.stop_btn = QPushButton("⏹ Stopp")
         self.stop_btn.setEnabled(False)
         self.stop_btn.setMinimumWidth(100)
@@ -621,6 +627,20 @@ class MainWindow(QMainWindow):
         is_slowmo = (mode_code == "SLOWMO")
         self.slowmo_label.setVisible(is_slowmo)
         self.slowmo_slider.setVisible(is_slowmo)
+        if self.execution_thread and self.execution_thread.isRunning():
+            self.execution_thread.update_speed_mode(mode_code, self.slowmo_slider.value())
+
+    def _toggle_pause_execution(self):
+        if self.execution_thread and self.execution_thread.isRunning():
+            is_paused = self.execution_thread.toggle_pause()
+            if is_paused:
+                self.pause_btn.setText("▶ Fortsetzen")
+                self.status_label.setText("Status: PAUSIERT — Ausführung angehalten.")
+                self.status_label.setStyleSheet("color: #f9e2af; font-weight: bold;")
+            else:
+                self.pause_btn.setText("⏸ Pausieren")
+                self.status_label.setText("Status: Ausführung wird fortgesetzt...")
+                self.status_label.setStyleSheet("color: #a6e3a1; font-weight: bold;")
 
     def _on_slider_value_changed(self, value: int):
         self.slowmo_label.setText(f"Verzögerung: {value}ms")
@@ -930,6 +950,8 @@ class MainWindow(QMainWindow):
 
         self.run_btn.setEnabled(False)
         self.stop_btn.setEnabled(True)
+        self.pause_btn.setEnabled(True)
+        self.pause_btn.setText("⏸ Pausieren")
         self.next_step_btn.setEnabled(is_manual)
         self.log_console.clear()
         self.log_console.setVisible(True)
@@ -980,12 +1002,16 @@ class MainWindow(QMainWindow):
             self.execution_thread.stop_execution()
             self.run_btn.setEnabled(True)
             self.stop_btn.setEnabled(False)
+            self.pause_btn.setEnabled(False)
+            self.pause_btn.setText("⏸ Pausieren")
             self.next_step_btn.setEnabled(False)
 
     @Slot(bool, str)
     def _on_execution_finished(self, success: bool, summary: str):
         self.run_btn.setEnabled(True)
         self.stop_btn.setEnabled(False)
+        self.pause_btn.setEnabled(False)
+        self.pause_btn.setText("⏸ Pausieren")
         self.next_step_btn.setEnabled(False)
 
         # Refresh all views so the new timing benchmark results update in tables

@@ -19,6 +19,8 @@ class ExecutionState:
         self.stop_requested: bool = False
         self.step_event = threading.Event()
         self.step_event.set()  # Default to open (non-blocking)
+        self.pause_event = threading.Event()
+        self.pause_event.set()  # Default to open (non-blocking)
         self.callback = None
 
     def set_slowmo(self, ms: int):
@@ -31,14 +33,28 @@ class ExecutionState:
         else:
             self.step_event.clear()
 
+    def set_paused(self, paused: bool):
+        self.paused = paused
+        if paused:
+            self.pause_event.clear()
+        else:
+            self.pause_event.set()
+
+    def toggle_pause(self) -> bool:
+        self.set_paused(not self.paused)
+        return self.paused
+
     def next_step(self):
         """Releases lock for one step."""
         self.step_event.set()
+        if self.paused:
+            self.pause_event.set()
 
     def request_stop(self):
         """Sets stop_requested flag and unblocks any waiting step locks."""
         self.stop_requested = True
         self.step_event.set()
+        self.pause_event.set()
 
     def reset(self):
         self.slowmo_ms = 0
@@ -46,6 +62,7 @@ class ExecutionState:
         self.paused = False
         self.stop_requested = False
         self.step_event.set()
+        self.pause_event.set()
 
 # Singleton execution state instance
 execution_state = ExecutionState()
@@ -155,6 +172,26 @@ class StepListener:
         # Apply Slow-Mo delay if set
         if self.state.slowmo_ms > 0:
             time.sleep(self.state.slowmo_ms / 1000.0)
+
+        # Handle Paused Mode
+        if self.state.paused:
+            if self.state.callback:
+                self.state.callback("waiting_for_step", {
+                    "step": self.step_count,
+                    "keyword": f"PAUSIERT: {kw_name}"
+                })
+            while self.state.paused and not self.state.stop_requested:
+                self.state.pause_event.wait(timeout=0.1)
+
+        # Check if stop requested while paused
+        if self.state.stop_requested:
+            try:
+                from robot.libraries.BuiltIn import BuiltIn
+                BuiltIn().run_keyword("Close Browser", "ALL")
+            except Exception:
+                pass
+            from robot.errors import FatalError
+            raise FatalError("Ausführung vom Benutzer abgebrochen.")
 
         # Handle Manual Step-by-Step Mode
         if self.state.manual_mode:

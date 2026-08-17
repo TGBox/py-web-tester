@@ -225,6 +225,30 @@ class ExecutionControllerThread(QThread):
         if self.speed_mode == "SLOWMO":
             execution_state.set_slowmo(ms)
 
+    @Slot(str, int)
+    def update_speed_mode(self, mode_code: str, slowmo_ms: int = 500):
+        self.speed_mode = mode_code
+        self.slowmo_ms = slowmo_ms
+
+        if mode_code == "MAX":
+            execution_state.set_slowmo(0)
+            execution_state.set_manual_mode(False)
+        elif mode_code == "2X":
+            execution_state.set_slowmo(20)
+            execution_state.set_manual_mode(False)
+        elif mode_code == "NORMAL":
+            execution_state.set_slowmo(50)
+            execution_state.set_manual_mode(False)
+        elif mode_code == "SLOWMO":
+            execution_state.set_slowmo(slowmo_ms)
+            execution_state.set_manual_mode(False)
+        elif mode_code == "MANUAL":
+            execution_state.set_manual_mode(True)
+
+    @Slot()
+    def toggle_pause(self) -> bool:
+        return execution_state.toggle_pause()
+
     @Slot()
     def trigger_next_step(self):
         execution_state.next_step()
