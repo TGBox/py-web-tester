@@ -23,7 +23,8 @@ suites/**.*
 groups/**.*
 
 # Ressourcen wie Page Objekt Informationen. Sind spezifisch für die Tests.
-resources/**.*
+resources/*
+!resources/common.resource
 resources/page_objects/**.resource
 
 # Variablen/Zugangsdaten/etc.
