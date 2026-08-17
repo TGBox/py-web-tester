@@ -118,11 +118,11 @@ class StepListener:
                 elif "Animate Visual Pointer" in kw_name:
                     if resolved_args:
                         hud_instance.animate_visual_pointer(resolved_args[0])
-                elif resolved_args and kw_name in ["Click", "Fill Text", "Type Text", "Dblclick", "Scroll To"]:
+                elif resolved_args and any(k in kw_name for k in ["Click", "Fill", "Type", "Dblclick", "Scroll", "Klick", "Eingabe", "Doppelklick"]):
                     first_arg = resolved_args[0]
                     if not first_arg.startswith("http") and not first_arg.isdigit() and len(first_arg) > 1:
                         hud_instance.animate_visual_pointer(first_arg)
-                    if len(resolved_args) > 1 and ("Fill" in kw_name or "Type" in kw_name):
+                    if len(resolved_args) > 1 and any(f in kw_name for f in ["Fill", "Type", "Eingabe"]):
                         hud_instance.show_keystroke_overlay(f'Eingabe: "{resolved_args[1]}"')
             except Exception:
                 pass

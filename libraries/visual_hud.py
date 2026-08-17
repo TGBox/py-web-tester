@@ -171,22 +171,27 @@ class visual_hud:
             if not selector or selector == "None" or selector == "about:blank":
                 return
 
-            # Step 1: Server-side Playwright get_bounding_box (100% accurate for Playwright selectors)
+            # Step 1: Playwright selector resolution + getBoundingClientRect via element handle
             x, y = None, None
+            js_rect_code = """(element) => {
+                if (!element) return null;
+                const rect = element.getBoundingClientRect();
+                if (rect.width > 0 || rect.height > 0) {
+                    const targetX = Math.round(rect.left + rect.width / 2);
+                    const targetY = Math.round(rect.top + rect.height / 2);
+                    return { x: targetX, y: targetY };
+                }
+                return null;
+            }"""
             try:
-                bbox = browser_lib.get_bounding_box(selector)
-                if bbox and isinstance(bbox, dict):
-                    bw = bbox.get("width", 0)
-                    bh = bbox.get("height", 0)
-                    bx = bbox.get("x", 0)
-                    by = bbox.get("y", 0)
-                    if bw > 0 and bh > 0:
-                        x = round(bx + bw / 2)
-                        y = round(by + bh / 2)
+                res = browser_lib.evaluate_javascript(selector, js_rect_code)
+                if res and isinstance(res, dict):
+                    x = res.get("x")
+                    y = res.get("y")
             except Exception:
                 pass
 
-            # Step 2: Fallback to Browser JS Selector resolution if bounding_box returned None
+            # Step 2: Fallback to document JS parser if selector is custom or complex
             if x is None or y is None:
                 js_code = f"""
                 (function() {{
